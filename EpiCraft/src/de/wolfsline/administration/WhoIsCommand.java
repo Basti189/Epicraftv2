@@ -82,7 +82,7 @@ public class WhoIsCommand implements CommandExecutor{
 					p.sendMessage(ChatColor.RED + "Dieser Spieler ist auf dem Server nicht bekannt!");
 					return true;
 				}
-				SimpleDateFormat formatter = new SimpleDateFormat("dd:MM:yyy HH:mm:ss");
+				SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyy HH:mm:ss");
 				long firstPlayed = offPlayer.getFirstPlayed();
 				long lastPlayed = offPlayer.getLastPlayed();
 				Date dateFirstPlayed = new Date(firstPlayed);

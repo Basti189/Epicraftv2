@@ -135,8 +135,14 @@ public class HorseListener implements CommandExecutor, Listener{
 		if(event.getEntity() instanceof Horse){
 			Horse horse = (Horse) event.getEntity();
 			if(!horse.getOwner().getName().equalsIgnoreCase(p.getName())){
+				if(p.hasPermission("epicraft.horse.team") || p.isOp()){
+					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Zugriff auf das Maultier von " + horse.getOwner().getName() + " gewährt!");
+					plugin.api.sendLog("[Epicraft - Pferd] " + p.getName() + " hat Zugriff auf das Maultier von " + horse.getOwner().getName() + " erhalten");
+					return;
+				}
 				event.setCancelled(true);
 				p.sendMessage(plugin.namespace + ChatColor.RED + "Zugriff auf das Maultier von " + horse.getOwner().getName() + " verweigert!");
+				plugin.api.sendLog("[Epicraft - Pferd] " + p.getName() + " versucht auf das Maultier von " + horse.getOwner().getName() + " zuzugreifen");
 			}
 		}
 	}

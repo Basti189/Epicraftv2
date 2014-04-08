@@ -33,13 +33,7 @@ public class SpawnCommand implements CommandExecutor{
 				plugin.api.sendLog("[Epicraft - Spawn] " + p.getName() + " sitzt in einem " + p.getVehicle().getType().toString() + " und kann nicht teleportiert werden");
 				return true;
 			}
-			if(p.getLocation().getWorld() == Bukkit.getServer().getWorld("Survival_nether"))
-				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "mvtp " + p.getName() + " Survival");
-			else if(p.getLocation().getWorld() == Bukkit.getServer().getWorld("Minemap"))
-				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "mvtp " + p.getName() + " Survival");
-			else
-				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "mvtp " + p.getName() + " Survival");
-				//p.teleport(Bukkit.getServer().getWorld("Survival").getSpawnLocation());
+			p.teleport(Bukkit.getServer().getWorld("world").getSpawnLocation());
 			p.sendMessage(plugin.namespace + ChatColor.WHITE + "Willkommen am Spawn!");
 			plugin.api.sendLog("[Epicraft - Spawn] " + p.getName() + " hat sich zum Spawn teleportiert");
 			return true;

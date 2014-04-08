@@ -125,6 +125,8 @@ public class Epicraft extends JavaPlugin{
 		ShowSystemSign systemSign = new ShowSystemSign(this);
 		RestrictionCommand restriction = new RestrictionCommand(this);
 		RestartCommand restart = new RestartCommand(this);
+		ChatListener myChat = new ChatListener(this);
+		
 		
 		PlayerBLock pb = new PlayerBLock();
 		
@@ -134,6 +136,7 @@ public class Epicraft extends JavaPlugin{
 		this.getCommand("restart").setExecutor(restart);
 		this.getCommand("sign").setExecutor(new de.wolfsline.gs.SignCommand(this));
 		this.getCommand("ep").setExecutor(new QuestSignCommand(this, qsl));
+		this.getCommand("channel").setExecutor(myChat);
 		this.getCommand("warn").setExecutor(restriction);
 		this.getCommand("kick").setExecutor(new de.wolfsline.restriction.KickCommand(this));
 		this.getCommand("ban").setExecutor(new de.wolfsline.restriction.BanCommand(this));
@@ -179,7 +182,7 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(new de.wolfsline.gs.SignListener(this), this);
 		pm.registerEvents(new de.wolfsline.Time.SignListener(this), this);
 		pm.registerEvents(qsl, this);
-		pm.registerEvents(new ChatListener(this), this);
+		pm.registerEvents(myChat, this);
 		pm.registerEvents(new ColorSignListener(), this);
 		pm.registerEvents(new de.wolfsline.reward.SignListener(this), this);
 		pm.registerEvents(gun, this);

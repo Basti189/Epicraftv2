@@ -245,6 +245,17 @@ commands:
     description: Informationen ueber den Spieler
     usage: /whois
 
+  channel:
+    description: Channel im Chat wechseln
+    usage: /channel
+    permissions: epicraft.chat.channel
+
+  permission:
+    description: Verwaltung der Rechte der Spieler
+    aliases: [p, per, perm]
+    usage: /permission [set] [Spieler] [Gruppe]
+    permissions: epicraft.permission.use
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft
