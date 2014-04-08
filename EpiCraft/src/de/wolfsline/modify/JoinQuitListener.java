@@ -23,7 +23,7 @@ import de.wolfsline.helpClasses.EpicraftPlayer;
 
 public class JoinQuitListener implements Listener {
 	
-	File file = new File("plugins/EpiCraft/players.yml");
+	File file = new File("plugins/Epicraft/players.yml");
 	FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 	List<String> list = cfg.getStringList("Spieler");
 	private Epicraft plugin;
@@ -38,7 +38,7 @@ public class JoinQuitListener implements Listener {
 	public void onPlayerLoginEvent(PlayerLoginEvent event){
 		Player p = event.getPlayer();
 		if(p.isBanned()){
-			String banReason = "$4Du wurdest gebannt!\n\n$fInformationen findest du bei uns im Forum unter\nhttp://forum.epicraft.de";
+			String banReason = "$4Du wurdest gebannt!\n\n$fInformationen findest du bei uns im Forum unter\nhttp://forum.Epicraft.de";
 			event.setResult(Result.KICK_BANNED);
 			event.setKickMessage(ChatColor.translateAlternateColorCodes('$', banReason));
 		}
@@ -50,8 +50,8 @@ public class JoinQuitListener implements Listener {
 		if(list == null)
 			list = new ArrayList<String>();
 		if(!list.contains(p.getName())){
-			e.setJoinMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server betreten  ***\nDies ist sein erster Besuch auf EpiCraft");
-			e.getPlayer().sendMessage(plugin.namespace + ChatColor.WHITE + "Herzlich Willkommen auf EpiCraft " + e.getPlayer().getName() + "!");
+			e.setJoinMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server betreten  ***\nDies ist sein erster Besuch auf Epicraft");
+			e.getPlayer().sendMessage(plugin.namespace + ChatColor.WHITE + "Herzlich Willkommen auf Epicraft " + e.getPlayer().getName() + "!");
 			plugin.api.sendLog("[Epicraft - Login] " + p.getName() + " hat sich eingeloggt");
 			plugin.api.sendLog("[Epicraft - Login] Dies ist sein erster Besuch");
 			list.add(p.getName());
@@ -89,32 +89,32 @@ public class JoinQuitListener implements Listener {
 		}
 		p.setDisplayName(name);
 		p.setPlayerListName(name);
-		if(p.hasPermission("epicraft.chat.admin")){
+		if(p.hasPermission("Epicraft.chat.admin")){
 			p.setPlayerListName(ChatColor.DARK_RED + name);
 			return;
 		}
-		else if(p.hasPermission("epicraft.chat.moderator")){
+		else if(p.hasPermission("Epicraft.chat.moderator")){
 			p.setPlayerListName(ChatColor.DARK_GREEN + name);
 			return;
 		}
-		else if(p.hasPermission("epicraft.chat.guard")){
+		else if(p.hasPermission("Epicraft.chat.guard")){
 			p.setPlayerListName(ChatColor.DARK_PURPLE + name);
 			return;
 
 		}
-		else if(p.hasPermission("epicraft.chat.stammi")){
+		else if(p.hasPermission("Epicraft.chat.stammi")){
 			p.setPlayerListName(ChatColor.BLUE + name);
 			return;
 		}
-		else if(p.hasPermission("epicraft.chat.spieler")){
+		else if(p.hasPermission("Epicraft.chat.spieler")){
 			p.setPlayerListName(ChatColor.DARK_BLUE + name);
 			return;
 		}
-		else if(p.hasPermission("epicraft.chat.gast")){
+		else if(p.hasPermission("Epicraft.chat.gast")){
 			p.setPlayerListName(ChatColor.AQUA + name);
 			return;
 		}
-		else if(p.hasPermission("epicraft.chat.inhaftierter")){
+		else if(p.hasPermission("Epicraft.chat.inhaftierter")){
 			p.setPlayerListName(ChatColor.GREEN + name);
 			return;
 		}

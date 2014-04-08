@@ -102,6 +102,7 @@ public class Epicraft extends JavaPlugin{
 		//Logger log = Bukkit.getServer().getLogger();
 		//log.addHandler(new EventAPI());
 		api = new EventAPI();
+		pManager = new PermissionManager(this);
 		this.sql = new MySQL();
 		this.setupEconomy();
 		

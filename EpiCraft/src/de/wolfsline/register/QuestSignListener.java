@@ -3,7 +3,6 @@ package de.wolfsline.register;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -32,7 +31,7 @@ public class QuestSignListener implements Listener{
 	private String[] Questions = {"Frage1:","Frage2:","Frage3:","Frage4:","Frage5:","Frage6:","Frage7:","Frage8:","Frage9:","Frage10:"};
 	private String[][] Answer;
 	private Location start, raum;
-	File file = new File("plugins/EpiCraft/", "QuestSignLocation.yml");
+	File file = new File("plugins/Epicraft/", "QuestSignLocation.yml");
 	FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 	
 	public QuestSignListener(Epicraft plugin) {

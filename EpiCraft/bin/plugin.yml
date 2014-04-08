@@ -2,7 +2,7 @@ name: Epicraft
 version: 1.7.4
 author: Sebastian Wolf
 description: Plugin fuer EpiCraft
-main: de.wolfsline.EpiCraft.EpiCraft
+main: de.wolfsline.Epicraft.Epicraft
 softdepend: [MultiVerse, multiverse-core, Vault, WorldGuard, Votifier]
 load: startup
 database: true

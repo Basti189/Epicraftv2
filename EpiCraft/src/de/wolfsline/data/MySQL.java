@@ -20,7 +20,7 @@ public class MySQL {
 	private Connection conn;
 	
 	public MySQL(){
-		File file = new File("plugins/EpiCraft/", "database.yml");
+		File file = new File("plugins/Epicraft/", "database.yml");
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 		
 		String db = "database.";
