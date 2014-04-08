@@ -1,0 +1,167 @@
+name: EpiCraft
+version: 1.5.2
+author: Sebastian Wolf
+description: Plugin fuer EpiCraft
+main: de.wolfsline.EpiCraft.EpiCraft
+softdepend: [MultiVerse, multiverse-core, Vault, WorldGuard]
+
+commands:
+  spawn:
+    description: Teleportiert dich zum Spawn
+    usage: /spawn
+    permission: epicraft.spawn.use
+    
+  gs:
+    description: Kaufe und Verwalte dein Grundstueck
+    usage: /gs neu <Name>, + <x> <y>, help
+    permissions: 
+     - epicraft.gs.use
+     - epicraft.gs.remove
+     - epicraft.gs.warp
+
+  restart:
+    description: Startet den Server neu
+    usage: /restart
+    permissions: 
+     - epicraft.restart.use
+
+  sign:
+    description: Ermöglicht dir das automatische Beschriften deiner Schilder an der Grundstücksgrenze
+    usgage: /sign
+    permissions:
+     - epicraft.gs.sign
+     - epicraft.sign.mod
+     - epicraft.sign.guard
+     - epicraft.register.gast
+ 
+  ep:
+    description: Server einstellungen
+    usage: /ep
+    permissions:
+     - epicraft.ep.use
+
+#  warn:
+#    description: Benutzerverwaltung
+#    usage: /warn
+#    permissions:
+#      - epicraft.restriction.use
+  kick:
+    description: Kickt einen Spieler vom Server
+    usage: /kick <spieler> <Grund>
+    permissions:
+      - epictraft.restriction.team
+#  ban:
+#    description: Bannt einen Spieler vom Server
+#    usage: /ban <spieler> <Grund>
+#    permissions:
+#      - epicraft.restriction.team.ban
+
+  home:
+    description: Bannt einen Spieler vom Server
+    aliases: [sethome, listhome, delhome]
+    usage: /home, sethome <name>
+    permissions:
+      - epicraft.home.one
+      - epicraft.home.multiple
+
+  bank:
+    description: Banksystem von Epicraft
+    usage: /bank <ez, az, all> <item> <anzahl>
+    permissions:
+      - epicraft.bank.use
+      - epicraft.bank.mod
+      - epicraft.bank.admin
+
+  hide:
+    description: Macht dich unsichtbar, bzw. sichtbar
+    aliases: [unhide]
+    usage: /hide, unhide
+    permissions:
+      - epicraft.hide.use
+      
+  invsee:
+    descripton: Zeigt den Inventarinhalt eines Spielers
+    usage: /invsee <spieler>
+    permissions:
+      - epicraft.inv.use
+
+  lightning:
+    description: Blitzt einen Spieler
+    usage: /lightning <spieler>
+    permissions:
+      - epicraft.lightning.use
+
+  gun:
+    description: Neue Gun ja nein
+    usage: /gun
+    permissions:
+     - epicraft.gun.create
+
+  grenade:
+    description: Platziert TNT
+    usage: /grenade
+    permissions:
+     - epicraft.greande.use
+ 
+  ensee:
+    descripton: Zeigt den Enderchestinhalt eines Spielers
+    usage: /ensee <spieler>
+    permissions:
+      - epicraft.enderchest.use
+
+  jail:
+    description: Gefängnissystem
+    aliases: [setjail, tpjail, unjail]
+    usage: /jail <spieler>
+    permissions:
+      - epicraft.jail.use
+      - epicraft.jail.info
+      - epicraft.jail.create
+
+  chat:
+    descripton: Chatnachricht erzwingen
+    usage: /chat <spieler>
+
+  head:
+    descripton: Setze Helm
+    usage: /head 
+
+  login:
+    descripton: Registrieren und Einloggen
+    usage: /login <passwort>, register <passwort> <passwort>
+    aliases: [l, email, register, cp, changepw]
+
+  msg:
+    description: Flüstert eine Nachricht
+    aliases: [w,r]
+    usage: /msg <Spieler> <Nachticht>
+
+  support:
+    description: Wechselt dein Inventar
+    aliases: [sp]
+    usage: /support, sp
+    permissions:
+     - epicraft.inv.switch
+
+  onlinetime:
+    description: Zeigt die Spielzeit an
+    aliases: [ot]
+    usage: /onlinetime
+    permissions:
+     - epicraft.time.look
+
+#  map:
+#    description: Map
+#    usage: /map
+
+  pvp:
+    description: PVP aktivieren, deaktivieren
+    usage: /pvp
+    permissions:
+     - epicraft.pvp.use
+
+  fly:
+    description: Aktiviert fliegen
+    usage: /fly [speed]
+    permissions:
+     - epicraft.fly.use
