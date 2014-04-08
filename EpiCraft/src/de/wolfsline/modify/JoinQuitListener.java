@@ -3,14 +3,10 @@ package de.wolfsline.modify;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -23,15 +19,17 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import de.wolfsline.Epicraft.Epicraft;
-import de.wolfsline.helpClasses.myPlayer;
+import de.wolfsline.helpClasses.EpicraftPlayer;
 
-public class JoinQuitListener implements Listener{
+public class JoinQuitListener implements Listener {
+	
 	File file = new File("plugins/EpiCraft/players.yml");
 	FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 	List<String> list = cfg.getStringList("Spieler");
 	private Epicraft plugin;
 	
 	private boolean isKickEvent = false;
+	
 	public JoinQuitListener(Epicraft plugin) {
 		this.plugin = plugin;
 	}
@@ -67,17 +65,19 @@ public class JoinQuitListener implements Listener{
 		else{
 			e.setJoinMessage("");
 			for(Player player : Bukkit.getServer().getOnlinePlayers()){
-				for(myPlayer playerSettings : this.plugin.player){
-					if(playerSettings.username.equalsIgnoreCase(player.getName())){
-						if(playerSettings.eventMessages)
-							player.sendMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server betreten  ***");
-						break;
-					}
+				EpicraftPlayer playerSettings = plugin.pManager.getEpicraftPlayer(player.getName());
+				if(playerSettings == null)
+					continue;
+				if(playerSettings.username.equalsIgnoreCase(player.getName())){
+					if(playerSettings.eventMessages)
+						player.sendMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server betreten  ***");
+					break;
 				}
 			}
 			plugin.api.sendLog("[Epicraft - Login] " + p.getName() + " hat sich eingeloggt");
 		}
-		setDisplayName(p);
+		plugin.pManager.triggerEpicraftPlayerList(p, true);
+		//setDisplayName(p);
 	}
 	
 	private void setDisplayName(Player p){
@@ -123,6 +123,7 @@ public class JoinQuitListener implements Listener{
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e){
 		e.setQuitMessage("");
+		plugin.pManager.triggerEpicraftPlayerList(e.getPlayer(), false);
 		if(isKickEvent){
 			isKickEvent = false;
 			return;
@@ -130,12 +131,13 @@ public class JoinQuitListener implements Listener{
 			
 		Player p = e.getPlayer();
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
-			for(myPlayer playerSettings : this.plugin.player){
-				if(playerSettings.username.equalsIgnoreCase(player.getName())){
-					if(playerSettings.eventMessages)
-						player.sendMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server verlassen  ***");
-					break;
-				}
+			EpicraftPlayer playerSettings = plugin.pManager.getEpicraftPlayer(player.getName());
+			if(playerSettings == null)
+				continue;
+			if(playerSettings.username.equalsIgnoreCase(player.getName())){
+				if(playerSettings.eventMessages)
+					player.sendMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server verlassen  ***");
+				break;
 			}
 		}
 		plugin.api.sendLog("[Epicraft - Logout] " + p.getName() + " hat sich ausgeloggt");
@@ -147,14 +149,14 @@ public class JoinQuitListener implements Listener{
 		Player p = e.getPlayer();
 		e.setLeaveMessage("");
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
-			for(myPlayer playerSettings : this.plugin.player){
-				if(playerSettings.username.equalsIgnoreCase(player.getName())){
-					if(playerSettings.eventMessages)
-						player.sendMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server unfreiwillig verlassen  ***");
-					break;
-				}
+			EpicraftPlayer playerSettings = plugin.pManager.getEpicraftPlayer(player.getName());
+			if(playerSettings == null)
+				continue;
+			if(playerSettings.username.equalsIgnoreCase(player.getName())){
+				if(playerSettings.eventMessages)
+					player.sendMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server unfreiwillig verlassen  ***");
+				break;
 			}
-			
 		}
 	}
 }

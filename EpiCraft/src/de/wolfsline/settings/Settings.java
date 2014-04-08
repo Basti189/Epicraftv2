@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.wolfsline.Epicraft.Epicraft;
-import de.wolfsline.helpClasses.myPlayer;
+import de.wolfsline.helpClasses.EpicraftPlayer;
 
 public class Settings implements CommandExecutor, Listener{
 	
@@ -55,12 +55,11 @@ public class Settings implements CommandExecutor, Listener{
 	
 	private void openInv(Player p){
 		int lines = 1;
-		myPlayer player = null;
-		for(myPlayer tmp : this.plugin.player){
-			if(tmp.username.equalsIgnoreCase(p.getName())){
-				player = tmp;
-				break;
-			}	
+		EpicraftPlayer player = plugin.pManager.getEpicraftPlayer(p.getName());
+		if(player == null){
+			p.sendMessage(plugin.namespace + ChatColor.RED + "Deine Einstellungen können nicht aufgerufen werden!");
+			p.sendMessage(plugin.namespace + ChatColor.RED + "Besteht das Problem weiterhin, wende dich bitte an einen Teamler");
+			return;
 		}
 		Inventory inv = Bukkit.createInventory(null, lines*9, "Einstellungen");
 		ItemMeta meta = null;
@@ -163,13 +162,11 @@ public class Settings implements CommandExecutor, Listener{
 					ItemStack stack = event.getCurrentItem();
 					ItemMeta meta = stack.getItemMeta();
 					List<String> tmpList = new ArrayList<String>();
-					myPlayer player = null;
-					for(myPlayer tmp : this.plugin.player){
-						if(tmp.username.equalsIgnoreCase(p.getName())){
-							player = tmp;
-							break;
-						}
-							
+					EpicraftPlayer player = plugin.pManager.getEpicraftPlayer(p.getName());
+					if(player == null){
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Deine Einstellungen können nicht verändert werden!");
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Besteht das Problem weiterhin, wende dich bitte an einen Teamler");
+						return;
 					}
 					if(slot == 0){ //Eventnachrichten
 						if(player.eventMessages){

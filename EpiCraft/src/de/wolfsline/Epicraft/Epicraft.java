@@ -1,8 +1,6 @@
 package de.wolfsline.Epicraft;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import net.milkbowl.vault.economy.Economy;
 
@@ -32,9 +30,7 @@ import de.wolfsline.administration.SpawnCommand;
 import de.wolfsline.administration.TeleportCommand;
 import de.wolfsline.administration.TimePlayer;
 import de.wolfsline.administration.UnHideCommand;
-import de.wolfsline.administration.WalkCommand;
 import de.wolfsline.administration.WhoIsCommand;
-import de.wolfsline.chestbanksystem.ChestBanksystem;
 import de.wolfsline.data.MySQL;
 import de.wolfsline.epimaster.EpiMaster;
 import de.wolfsline.forfun.ChatFakerCommand;
@@ -47,14 +43,12 @@ import de.wolfsline.forfun.VelocityShooter;
 import de.wolfsline.game.ArenaSignListener;
 import de.wolfsline.game.GameSignListener;
 import de.wolfsline.gs.GSCommand;
-import de.wolfsline.helpClasses.myPlayer;
 import de.wolfsline.home.HomeCommand;
 import de.wolfsline.info.TimeCommand;
 import de.wolfsline.info.infoCommand;
-import de.wolfsline.message.OfflineMessages;
+import de.wolfsline.message.ChatListener;
 import de.wolfsline.message.WhisperExecuter;
 import de.wolfsline.modify.BedListener;
-import de.wolfsline.modify.ChatListener;
 import de.wolfsline.modify.ColorSignListener;
 import de.wolfsline.modify.CommandListener;
 import de.wolfsline.modify.DeathListener;
@@ -84,11 +78,10 @@ public class Epicraft extends JavaPlugin{
 	private int restartTask;
 	public HashMap<String, Boolean> signmap;
 	public static Economy economy = null;
-	public final static String namespace = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] ";
-	public final static String error = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] " + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!";
-	public final static String namespaceBeta = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster - Beta" + ChatColor.GOLD + "] ";;
+	public final String namespace = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] ";
+	public final String error = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] " + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!";
+	public final String namespaceBeta = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster - Beta" + ChatColor.GOLD + "] ";;
 	private InvSwitcherCommand invswitch;
-	public List<myPlayer> player = new ArrayList<myPlayer>();
 	
 	private MySQL sql;
 	public EventAPI api;
@@ -111,7 +104,7 @@ public class Epicraft extends JavaPlugin{
 		api = new EventAPI();
 		this.sql = new MySQL();
 		this.setupEconomy();
-		ChestBanksystem bank = new ChestBanksystem(this);
+		
 		QuestSignListener qsl = new QuestSignListener(this);
 		GunListener gun = new GunListener(this);
 		AuthCommand auth = new AuthCommand(this);
@@ -126,9 +119,8 @@ public class Epicraft extends JavaPlugin{
 		invswitch = new InvSwitcherCommand(this);
 		HorseListener horse = new HorseListener(this);
 		Settings set = new Settings(this);
-		SkullPlayer skp = new SkullPlayer();
+		SkullPlayer skp = new SkullPlayer(this);
 		VoteListener voteListener = new VoteListener(this);
-		OfflineMessages offlineMessages = new OfflineMessages(this);
 		ShowSystemSign systemSign = new ShowSystemSign(this);
 		RestrictionCommand restriction = new RestrictionCommand(this);
 		RestartCommand restart = new RestartCommand(this);
@@ -145,7 +137,6 @@ public class Epicraft extends JavaPlugin{
 		this.getCommand("kick").setExecutor(new de.wolfsline.restriction.KickCommand(this));
 		this.getCommand("ban").setExecutor(new de.wolfsline.restriction.BanCommand(this));
 		this.getCommand("home").setExecutor(new HomeCommand(this));
-		this.getCommand("bank").setExecutor(bank);
         this.getCommand("invsee").setExecutor(new de.wolfsline.administration.InventarCommand(this));
         this.getCommand("lightning").setExecutor(new LightningCommand());
         this.getCommand("gun").setExecutor(gun);
@@ -164,7 +155,6 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("debug").setExecutor(debugCommand);
         this.getCommand("me").setExecutor(new MECommand());
         this.getCommand("tp").setExecutor(new TeleportCommand(this));
-        this.getCommand("walk").setExecutor(new WalkCommand(this));
         this.getCommand("settings").setExecutor(set);
         this.getCommand("secure").setExecutor(chestPasswort);
         this.getCommand("horse").setExecutor(horse);
@@ -175,11 +165,12 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("uhr").setExecutor(new TimeCommand(this));
         this.getCommand("skull").setExecutor(skp);
         this.getCommand("vote").setExecutor(voteListener);
-        this.getCommand("msg").setExecutor(offlineMessages);
         this.getCommand("block").setExecutor(pb);
         this.getCommand("chest").setExecutor(new ChestAccess(this));
         this.getCommand("whois").setExecutor(new WhoIsCommand(this));
-		PluginManager pm = this.getServer().getPluginManager();;
+        
+		PluginManager pm = this.getServer().getPluginManager();
+		
 		pm.registerEvents(jqlistener, this);
 		pm.registerEvents(new ArenaSignListener(), this);
 		pm.registerEvents(new BedListener(this), this);
@@ -194,7 +185,6 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(new CommandListener(this), this);
 		pm.registerEvents(auth, this);
 		pm.registerEvents(unhide, this);
-		pm.registerEvents(bank, this);
 		pm.registerEvents(gs, this);
 		pm.registerEvents(invswitch, this);
 		pm.registerEvents(timeplayer, this);
@@ -216,7 +206,6 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(systemSign, this);
 		pm.registerEvents(skp, this);
 		pm.registerEvents(voteListener, this);
-		pm.registerEvents(offlineMessages, this);
 		pm.registerEvents(new SignLift(this), this);
 		pm.registerEvents(pb, this);
 		pm.registerEvents(new EpiMaster(this), this);
@@ -226,8 +215,7 @@ public class Epicraft extends JavaPlugin{
 	}
 	
 	public MySQL getMySQL(){
-		this.sql.closeConnection();
-		this.sql = new MySQL();
+		this.sql.getConnection();
 		return this.sql;
 	}
 	

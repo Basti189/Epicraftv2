@@ -21,7 +21,7 @@ import com.vexsoftware.votifier.model.VotifierEvent;
 
 import de.wolfsline.Epicraft.Epicraft;
 import de.wolfsline.data.MySQL;
-import de.wolfsline.helpClasses.myPlayer;
+import de.wolfsline.helpClasses.EpicraftPlayer;
 
 public class VoteListener implements CommandExecutor, Listener{
 	
@@ -47,13 +47,7 @@ public class VoteListener implements CommandExecutor, Listener{
 	public void onVotifierEvent(VotifierEvent event){
 		Vote vote = event.getVote();
 		Player p = Bukkit.getServer().getPlayer(vote.getUsername());
-		myPlayer player = null;
-		for(myPlayer tmp : this.plugin.player){
-			if(tmp.username.equalsIgnoreCase(vote.getUsername())){
-				player = tmp;
-				break;
-			}
-		}
+		EpicraftPlayer player = plugin.pManager.getEpicraftPlayer(vote.getUsername());
 		if(p != null){
 			p.sendMessage(plugin.namespace + ChatColor.WHITE + "Vielen Dank für deinen Vote!");
 			if(player == null){

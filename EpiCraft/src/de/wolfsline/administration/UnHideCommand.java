@@ -1,7 +1,6 @@
 package de.wolfsline.administration;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import de.wolfsline.Epicraft.Epicraft;
 

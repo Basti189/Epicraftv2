@@ -62,6 +62,8 @@ public class MySQL {
 	}
 	
 	public Connection getConnection(){
+		if(!this.hasConnection())
+			this.openConnection();
 		return conn;
 	}
 	

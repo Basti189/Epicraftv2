@@ -4,11 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +31,7 @@ public class KillCounter implements Listener{
 				return;
 			if(killer.getWorld().getName().equalsIgnoreCase("Games"))
 				return;
-			String mob = e.getEntityType().getName();
+			String mob = e.getEntityType().name();
 			updateDatabase(killer, mob);
 		}
 		catch(Exception ex){

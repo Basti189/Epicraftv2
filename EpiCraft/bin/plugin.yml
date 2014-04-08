@@ -35,7 +35,7 @@ commands:
      - epicraft.sign.mod
      - epicraft.sign.guard
      - epicraft.register.gast
- 
+
   ep:
     description: Server einstellungen
     usage: /ep
@@ -65,14 +65,6 @@ commands:
     permissions:
       - epicraft.home.one
       - epicraft.home.multiple
-
-  bank:
-    description: Banksystem von Epicraft
-    usage: /bank <ez, az, all> <item> <anzahl>
-    permissions:
-      - epicraft.bank.use
-      - epicraft.bank.mod
-      - epicraft.bank.admin
 
   hide:
     description: Macht dich unsichtbar, bzw. sichtbar
@@ -135,8 +127,8 @@ commands:
 
   w:
     description: Flüstert eine Nachricht
-    aliases: [w,r,a]
-    usage: /r <Spieler> <Nachticht>
+    aliases: [w,r,a, msg]
+    usage: /w <Spieler> <Nachticht>
 
   support:
     description: Wechselt dein Inventar
@@ -168,12 +160,6 @@ commands:
     permissions:
      - epicraft.fly.use
 
-  walk:
-    description: Gehgeschwindigkeit
-    usage: /walk speed
-    permissions:
-     - epicraft.walk.use
-
   ts:
     description: Info TS
     aliases: [ts3, teamspeak]
@@ -185,7 +171,8 @@ commands:
 
   settings:
     description: Einstellungen
-    usage: /settings login
+    aliases: [set, einst, einstellungen]
+    usage: /settings
 
   me:
     description: Wichtige Nachricht
@@ -211,17 +198,6 @@ commands:
     usage: /horse <Spieler>
     permissions:
       - epicraft.horse.setowner
-
-  app:
-    description: Informationen zu den Androidusern
-    usage: /app [kick] <Spieler>
-    permissions:
-      - epicraft.app.use
-      - epicraft.app.team
-
-  msg:
-    description: Internes Mailsystem
-    usage: /msg <Spieler> <Nachricht>
 
   api:
     description: Zugriff auf die EventAPI von Epicraft
