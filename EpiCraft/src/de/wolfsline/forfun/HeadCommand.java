@@ -16,6 +16,7 @@ import de.wolfsline.Epicraft.Epicraft;
 public class HeadCommand implements CommandExecutor{
 
 	private Epicraft plugin;
+	
 	public HeadCommand(Epicraft plugin) {
 		this.plugin = plugin;
 	}
@@ -39,14 +40,6 @@ public class HeadCommand implements CommandExecutor{
 		}
 		else if(args.length == 1){
 			String name = args[0];
-			if(name.length() < 2){
-				p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte gib mind. 3 Zeichen ein");
-				return true;
-			}
-			else if(name.length() > 16){
-				p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte gib max. 16 Zeichen ein");
-				return true;
-			}
 			ItemStack stackSkull = new ItemStack(Material.SKULL_ITEM, 1,(byte) 3);
             SkullMeta metaSkull = (SkullMeta) stackSkull.getItemMeta();
             metaSkull.setOwner(name);
