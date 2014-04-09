@@ -27,7 +27,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import de.wolfsline.Epicraft.Epicraft;
@@ -233,6 +232,7 @@ public class ChestPassword implements CommandExecutor, Listener{
         
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void readData() throws IOException, ClassNotFoundException{
 		File file = new File("plugins/EpiCraft/", "ChestPassword.dat");
 		FileInputStream f = new FileInputStream(file);
