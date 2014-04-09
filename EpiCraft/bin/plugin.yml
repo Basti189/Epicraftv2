@@ -205,10 +205,6 @@ commands:
     description: zu DEBUGzwecken
     usage: /epicraft
 
-  system:
-    description: Systemzeug
-    usage: /system
-
 #  sky:
 #    description: Aktiviert fliegen
 #    usage: /sky [speed]

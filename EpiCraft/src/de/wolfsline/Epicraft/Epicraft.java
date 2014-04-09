@@ -68,7 +68,6 @@ import de.wolfsline.security.IronGolemDropControll;
 import de.wolfsline.security.MapSizeControll;
 import de.wolfsline.settings.Settings;
 import de.wolfsline.statistics.KillCounter;
-import de.wolfsline.system.ShowSystemSign;
 import de.wolfsline.teleport.SignLift;
 import de.wolfsline.worldgenerator.CleanRoomChunkGenerator;
 
@@ -120,7 +119,6 @@ public class Epicraft extends JavaPlugin{
 		Settings set = new Settings(this);
 		SkullPlayer skp = new SkullPlayer(this);
 		VoteListener voteListener = new VoteListener(this);
-		ShowSystemSign systemSign = new ShowSystemSign(this);
 		RestrictionCommand restriction = new RestrictionCommand(this);
 		RestartCommand restart = new RestartCommand(this);
 		SignName sign = new SignName(this);
@@ -167,7 +165,6 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("horse").setExecutor(horse);
         this.getCommand("api").setExecutor(api);
         this.getCommand("epicraft").setExecutor(new DEBUGCLASS(this));
-        this.getCommand("system").setExecutor(systemSign);
         this.getCommand("jump").setExecutor(new VelocityShooter());
         this.getCommand("uhr").setExecutor(new TimeCommand(this));
         this.getCommand("skull").setExecutor(skp);
@@ -209,7 +206,6 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(restriction, this);
 		pm.registerEvents(api, this);
 		pm.registerEvents(new CreatureSpawnListener(), this);
-		pm.registerEvents(systemSign, this);
 		pm.registerEvents(skp, this);
 		pm.registerEvents(voteListener, this);
 		pm.registerEvents(new SignLift(this), this);
