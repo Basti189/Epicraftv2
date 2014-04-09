@@ -45,6 +45,7 @@ import de.wolfsline.forfun.VelocityShooter;
 import de.wolfsline.game.ArenaSignListener;
 import de.wolfsline.game.GameSignListener;
 import de.wolfsline.gs.GSCommand;
+import de.wolfsline.gs.SignName;
 import de.wolfsline.home.HomeCommand;
 import de.wolfsline.info.TimeCommand;
 import de.wolfsline.info.infoCommand;
@@ -78,7 +79,6 @@ import de.wolfsline.worldgenerator.CleanRoomChunkGenerator;
 public class Epicraft extends JavaPlugin{
 	private int messageTask;
 	private int restartTask;
-	public HashMap<String, Boolean> signmap;
 	public static Economy economy = null;
 	public final String namespace = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] ";
 	public final String error = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] " + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!";
@@ -127,6 +127,7 @@ public class Epicraft extends JavaPlugin{
 		ShowSystemSign systemSign = new ShowSystemSign(this);
 		RestrictionCommand restriction = new RestrictionCommand(this);
 		RestartCommand restart = new RestartCommand(this);
+		SignName sign = new SignName(this);
 		ChatListener myChat = new ChatListener(this);
 		
 		//TEST
@@ -140,7 +141,7 @@ public class Epicraft extends JavaPlugin{
 		this.getCommand("gs").setExecutor(gs);
 		this.getCommand("hide").setExecutor(unhide);
 		this.getCommand("restart").setExecutor(restart);
-		this.getCommand("sign").setExecutor(new de.wolfsline.gs.SignCommand(this));
+		this.getCommand("sign").setExecutor(sign);
 		this.getCommand("ep").setExecutor(new QuestSignCommand(this, qsl));
 		this.getCommand("channel").setExecutor(myChat);
 		this.getCommand("warn").setExecutor(restriction);
@@ -185,7 +186,7 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(new ArenaSignListener(), this);
 		pm.registerEvents(new BedListener(this), this);
 		pm.registerEvents(new GameSignListener(this), this);
-		pm.registerEvents(new de.wolfsline.gs.SignListener(this), this);
+		pm.registerEvents(sign, this);
 		pm.registerEvents(new de.wolfsline.Time.SignListener(this), this);
 		pm.registerEvents(qsl, this);
 		pm.registerEvents(myChat, this);

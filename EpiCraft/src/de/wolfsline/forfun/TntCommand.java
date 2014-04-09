@@ -25,7 +25,7 @@ public class TntCommand implements CommandExecutor{
 		}
 		Player p = (Player) cs;
 		if(!(p.hasPermission("epicraft.grenade.use") || p.isOp())){
-			p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
+			p.sendMessage(plugin.error);
 			return true;
 		}
 		if(args.length == 0){
