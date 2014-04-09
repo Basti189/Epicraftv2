@@ -138,6 +138,8 @@ public class ChatListener implements Listener, CommandExecutor{
 		String timeStamp = sdf.format(new Date());
 		
 		//Rufe Spieler auf dem Server ab
+		if(!mapChannel.containsKey(p.getName()))
+			mapChannel.put(p.getName(), 0);
 		int channel = mapChannel.get(p.getName());
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
 			//Einstellung des Spielers aufrufen

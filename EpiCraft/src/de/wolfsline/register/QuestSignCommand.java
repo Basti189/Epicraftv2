@@ -33,12 +33,12 @@ public class QuestSignCommand implements CommandExecutor{
 		if(args.length == 2){
 			if(args[0].equalsIgnoreCase("pos")){
 				if(args[1].equalsIgnoreCase("start")){
-					p.sendMessage("Setzte Start");
+					p.sendMessage(plugin.namespace + "Startpunkt für Fragebogen gesetzt");
 					this.qsl.setStartLocation(p);
 					return true;
 				}
 				else if(args[1].equalsIgnoreCase("raum")){
-					p.sendMessage("Setzte Raum");
+					p.sendMessage(plugin.namespace + "Raum für Fragebogen gesetzt");
 					this.qsl.setRaumLocation(p);
 					return true;
 				}

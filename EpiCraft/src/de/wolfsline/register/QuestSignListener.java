@@ -113,7 +113,7 @@ public class QuestSignListener implements Listener{
 		Player p = e.getPlayer();
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
 			if(e.getClickedBlock().getState() instanceof Sign){
-				if(!p.hasPermission("epicraft.register.gast")){
+				if(!p.hasPermission("epicraft.permission.gast")){
 					return;
 				}
 				Sign sign = (Sign) e.getClickedBlock().getState();
@@ -169,9 +169,17 @@ public class QuestSignListener implements Listener{
 		if(i == 10){
 			if(qn.questionAllRight(p)){
 				map.remove(p.getName());
-				p.teleport(Bukkit.getServer().getWorld(WORLD).getSpawnLocation());
-				p.kickPlayer(ChatColor.WHITE + "Glückwunsch! Du hast alle Fragen richtig beantwortet\nDu gehörst nun zu den Spielern");
-				Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " gehört nun zu den Spielern!");
+				p.teleport(this.start);
+				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Glückwunsch! Du hast alle Fragen richtig beantwortet\nDu gehörst nun zu den Spielern");
+				for(Player player : Bukkit.getServer().getOnlinePlayers()){
+					if(player.getName().equals(p.getName()))
+						continue;
+					EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(player.getName());
+					if(epiPlayer == null)
+						continue;
+					if(epiPlayer.eventMessages)
+						player.sendMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " gehört nun zu den Spielern!");
+				}
 				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "permission set " + p.getName() + " Spieler");
 				plugin.api.sendLog("[Epicraft - Fragebogen] " + p.getName() + " hat den Fragebogen bestanden und gehört nun zu den Spielern");
 				return;
@@ -231,7 +239,7 @@ public class QuestSignListener implements Listener{
 		}	
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void PlayerLogoutEvent(PlayerQuitEvent event){
 		Player p = event.getPlayer();
 		if(!map.containsKey(p.getName()))
@@ -245,10 +253,4 @@ public class QuestSignListener implements Listener{
 		}
 		plugin.api.sendLog("[Epicraft - Fragebogen] " + p.getName() + " hat sich ausgeloggt und wurde aus dem Fragebogen geworfen");
 	}
-	
-	/*@EventHandler
-	public void ChatEvent(AsyncPlayerChatEvent event){
-		for(Entry<String, Integer> e : map.entrySet())
-			event.getRecipients().remove(Bukkit.getPlayer(e.getKey()));
-	}*/
 }

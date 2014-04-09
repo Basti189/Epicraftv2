@@ -36,11 +36,9 @@ commands:
      - epicraft.sign.guard
      - epicraft.register.gast
 
-  ep:
-    description: Server einstellungen
-    usage: /ep
-    permissions:
-     - epicraft.ep.use
+  fragebogen:
+    description: Fragebogeneinstellungen
+    usage: /fragebogen
 
   warn:
     description: Benutzerverwaltung

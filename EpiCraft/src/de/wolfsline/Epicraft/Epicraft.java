@@ -139,7 +139,7 @@ public class Epicraft extends JavaPlugin{
 		this.getCommand("hide").setExecutor(unhide);
 		this.getCommand("restart").setExecutor(restart);
 		this.getCommand("sign").setExecutor(sign);
-		this.getCommand("ep").setExecutor(new QuestSignCommand(this, qsl));
+		this.getCommand("fragebogen").setExecutor(new QuestSignCommand(this, qsl));
 		this.getCommand("channel").setExecutor(myChat);
 		this.getCommand("warn").setExecutor(restriction);
 		this.getCommand("kick").setExecutor(new de.wolfsline.restriction.KickCommand(this));
