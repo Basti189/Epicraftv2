@@ -13,14 +13,10 @@ import org.bukkit.entity.LeashHitch;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerLeashEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerUnleashEntityEvent;
-
-import de.wolfsline.DEBUG.PlayerBLock;
 import de.wolfsline.Epicraft.Epicraft;
 
 public class HorseListener implements CommandExecutor, Listener{
@@ -41,8 +37,8 @@ public class HorseListener implements CommandExecutor, Listener{
 		}
 		Player p = (Player) cs;
 		if(!p.hasPermission("epicraft.horse.setowner")){
-			p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
-			plugin.api.sendLog("[Epicraft - Pferd] " + p.getName() + " hat versucht auf den Horse-Befehl zuzugreifen");
+			p.sendMessage(plugin.error);
+			plugin.api.sendLog("[Epicraft - Pferd] " + p.getName() + " hat versucht auf den Befehl zuzugreifen");
 			return true;
 		}
 		if(args.length == 1){
@@ -83,7 +79,7 @@ public class HorseListener implements CommandExecutor, Listener{
 				}
 			}
 			else{
-				if(p.hasPermission("epicraft.horse.team") || p.isOp()){
+				if(p.hasPermission("epicraft.permission.guard") || p.hasPermission("epicraft.permission.moderator") || p.hasPermission("epicraft.permission.admin") || p.isOp()){
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Zugriff auf das Maultier von " + tamer.getName() + " gewährt!");
 					plugin.api.sendLog("[Epicraft - Pferd] " + p.getName() + " hat Zugriff auf das Maultier von " + tamer.getName() + " erhalten");
 					if(map.containsKey(p.getName())){
@@ -135,7 +131,7 @@ public class HorseListener implements CommandExecutor, Listener{
 		if(event.getEntity() instanceof Horse){
 			Horse horse = (Horse) event.getEntity();
 			if(!horse.getOwner().getName().equalsIgnoreCase(p.getName())){
-				if(p.hasPermission("epicraft.horse.team") || p.isOp()){
+				if(p.hasPermission("epicraft.permission.guard") || p.hasPermission("epicraft.permission.moderator") || p.hasPermission("epicraft.permission.admin") || p.isOp()){
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Zugriff auf das Maultier von " + horse.getOwner().getName() + " gewährt!");
 					plugin.api.sendLog("[Epicraft - Pferd] " + p.getName() + " hat Zugriff auf das Maultier von " + horse.getOwner().getName() + " erhalten");
 					return;
