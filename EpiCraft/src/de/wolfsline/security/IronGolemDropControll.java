@@ -15,9 +15,9 @@ public class IronGolemDropControll implements Listener{
 	@EventHandler
 	public void onIronGolemDeathEvent(EntityDeathEvent event){
 		if(event.getEntity() instanceof IronGolem){
-			IronGolem golem = (IronGolem) event.getEntity();
-			//if(golem.isPlayerCreated())
-				//return;
+			/*IronGolem golem = (IronGolem) event.getEntity();
+			if(golem.isPlayerCreated())
+				return;*/
 			List<ItemStack> drop = event.getDrops();
 			Iterator<ItemStack> it = drop.iterator();
 			while(it.hasNext()){
