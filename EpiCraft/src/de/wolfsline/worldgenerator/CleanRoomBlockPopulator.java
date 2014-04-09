@@ -8,13 +8,13 @@ import org.bukkit.generator.BlockPopulator;
 
 public class CleanRoomBlockPopulator extends BlockPopulator{
 
-	byte[] layerDataValues;
-    protected CleanRoomBlockPopulator(byte[] layerDataValues)
-    {
+	private byte[] layerDataValues;
+	
+    protected CleanRoomBlockPopulator(byte[] layerDataValues){
         this.layerDataValues = layerDataValues;
     }
 
-    public void populate(World world, Random random, Chunk chunk)
+	public void populate(World world, Random random, Chunk chunk)
     {
         if (layerDataValues != null)
         {

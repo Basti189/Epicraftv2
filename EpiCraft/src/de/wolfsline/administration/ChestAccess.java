@@ -33,7 +33,7 @@ public class ChestAccess implements CommandExecutor{
 		Block block = p.getTargetBlock(null, 200).getLocation().getBlock();
 		if(block.getState() instanceof Chest){
 			Chest chest = ((Chest) block.getState());
-			p.openInventory(chest.getBlockInventory());
+			p.openInventory(chest.getInventory()); //Vorher getBlockInventory
 			this.plugin.api.sendLog("[Epicraft - Kistenzugiff] " + p.getName() + " greift auf eine Kiste zu");
 			return true;
 		}

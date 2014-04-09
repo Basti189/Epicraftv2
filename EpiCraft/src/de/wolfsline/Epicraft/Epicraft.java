@@ -6,6 +6,7 @@ import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -32,6 +33,7 @@ import de.wolfsline.administration.TimePlayer;
 import de.wolfsline.administration.UnHideCommand;
 import de.wolfsline.administration.WhoIsCommand;
 import de.wolfsline.data.MySQL;
+import de.wolfsline.disco.Disco;
 import de.wolfsline.epimaster.EpiMaster;
 import de.wolfsline.forfun.ChatFakerCommand;
 import de.wolfsline.forfun.GunListener;
@@ -80,7 +82,7 @@ public class Epicraft extends JavaPlugin{
 	public static Economy economy = null;
 	public final String namespace = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] ";
 	public final String error = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] " + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!";
-	public final String namespaceBeta = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster - Beta" + ChatColor.GOLD + "] ";;
+	public final String namespaceBeta = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster - Beta" + ChatColor.GOLD + "] ";
 	private InvSwitcherCommand invswitch;
 	
 	private MySQL sql;
@@ -126,6 +128,10 @@ public class Epicraft extends JavaPlugin{
 		RestrictionCommand restriction = new RestrictionCommand(this);
 		RestartCommand restart = new RestartCommand(this);
 		ChatListener myChat = new ChatListener(this);
+		
+		//TEST
+		Disco disco = new Disco(this);
+		this.getCommand("disco").setExecutor(disco);
 		
 		
 		PlayerBLock pb = new PlayerBLock();
@@ -214,6 +220,13 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(pb, this);
 		pm.registerEvents(new EpiMaster(this), this);
 		pm.registerEvents(restart, this);
+		
+		pm.registerEvents(disco, this);
+		
+		for(Player player : Bukkit.getServer().getOnlinePlayers()){
+			pManager.triggerEpicraftPlayerList(player, true);
+		}
+		
 		this.messageTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new TimeRunnable(), 0L, 2*20L);
 		System.out.println("[Epicraft] Epicraft wurde gestartet");
 	}
@@ -228,7 +241,6 @@ public class Epicraft extends JavaPlugin{
         if (economyProvider != null) {
             economy = economyProvider.getProvider();
         }
-
         return (economy != null);
     }
 	

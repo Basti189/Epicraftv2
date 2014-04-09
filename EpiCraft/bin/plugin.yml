@@ -256,6 +256,9 @@ commands:
     usage: /permission [set] [Spieler] [Gruppe]
     permissions: epicraft.permission.use
 
+  disco:
+   description: Für den Discoboden
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft
