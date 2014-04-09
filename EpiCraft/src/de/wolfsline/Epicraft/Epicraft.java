@@ -176,6 +176,7 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("block").setExecutor(pb);
         this.getCommand("chest").setExecutor(new ChestAccess(this));
         this.getCommand("whois").setExecutor(new WhoIsCommand(this));
+        this.getCommand("permission").setExecutor(pManager);
         
 		PluginManager pm = this.getServer().getPluginManager();
 		

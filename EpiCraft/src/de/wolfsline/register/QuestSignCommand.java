@@ -12,6 +12,7 @@ public class QuestSignCommand implements CommandExecutor{
 	
 	private QuestSignListener qsl;
 	private Epicraft plugin;
+	
 	public QuestSignCommand(Epicraft plugin, QuestSignListener qsl) {
 		this.plugin = plugin;
 		this.qsl = qsl;
@@ -26,6 +27,7 @@ public class QuestSignCommand implements CommandExecutor{
 		Player p = (Player) cs;
 		if(!p.isOp()){
 			p.sendMessage(plugin.error);
+			plugin.api.sendLog("[Epicraft - Fragebogen] " + p.getName() + " wollte auf den Befehl zugreifen!");
 			return true;
 		}
 		if(args.length == 2){
