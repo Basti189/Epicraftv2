@@ -33,7 +33,7 @@ public class VoteListener implements CommandExecutor, Listener{
 		this.econ = plugin.economy;
 		
 		MySQL sql = this.plugin.getMySQL();
-		sql.queryUpdate("CREATE TABLE IF NOT EXISTS `ep-Vote` (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(16), amount INT)");
+		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Votes (Benutzername VARCHAR(16), Anzahl INT)");
 	}
 	
 	@Override
@@ -47,32 +47,38 @@ public class VoteListener implements CommandExecutor, Listener{
 	public void onVotifierEvent(VotifierEvent event){
 		Vote vote = event.getVote();
 		Player p = Bukkit.getServer().getPlayer(vote.getUsername());
-		EpicraftPlayer player = plugin.pManager.getEpicraftPlayer(vote.getUsername());
-		if(p != null){
+		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(vote.getUsername());
+		this.plugin.api.sendLog("[Epicraft - Vote] " + vote.getUsername() + " hat einen Vote für den Server abgegeben");
+		if(p != null){ // Spieler online
 			p.sendMessage(plugin.namespace + ChatColor.WHITE + "Vielen Dank für deinen Vote!");
-			if(player == null){
+			if(epiPlayer == null){
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dir wurden 100 Coins gutgeschrieben!");
+				this.plugin.api.sendLog("[Epicraft - Vote] " + vote.getUsername() + " wurden 100 Coins gutgeschrieben");
 				econ.depositPlayer(p.getName(), 100.0D);
 			}
 			else{
-				if(player.moneyForVote){
+				if(epiPlayer.moneyForVote){
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dir wurden 100 Coins gutgeschrieben!");
+					this.plugin.api.sendLog("[Epicraft - Vote] " + vote.getUsername() + " wurden 100 Coins gutgeschrieben");
 					econ.depositPlayer(p.getName(), 100.0D);
 				}
 			}
 		}
-		else{
-			if(econ.hasAccount(vote.getUsername())){
-				if(player != null){
-					if(player.moneyForVote)
+		else{ // Spieler offline
+			if(econ.hasAccount(vote.getUsername())){ //Bankaccoutn vorhanden?
+				EpicraftPlayer offlineEpiPlayer = plugin.pManager.getEpicraftPlayerFromOfflinePlayer(vote.getUsername());
+				if(offlineEpiPlayer != null){
+					if(offlineEpiPlayer.moneyForVote){
+						this.plugin.api.sendLog("[Epicraft - Vote] " + vote.getUsername() + " wurden 100 Coins gutgeschrieben");
 						econ.depositPlayer(vote.getUsername(), 100.0D);
+					}	
 				}
-				else
-					econ.depositPlayer(vote.getUsername(), 100.0D);
+			}
+			else{
+				//Nichts machen, da Spieler kein Bankaccount besitzt
 			}
 				
 		}
-		this.plugin.api.sendLog("[Epicraft - Vote] " + vote.getUsername() + " hat einen Vote für den Server abgegeben");
 		updateDatabase(vote.getUsername());
 		//Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + vote.getUsername() + " hat für unseren Server einen Vote abgegeben!");
 	}
@@ -83,18 +89,18 @@ public class VoteListener implements CommandExecutor, Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT amount FROM `ep-Vote` WHERE username='" + username + "'");
+			st = conn.prepareStatement("SELECT Anzahl FROM Votes WHERE Benutzername='" + username + "'");
 			rs = st.executeQuery();
 			if(rs.next()){//eintrag vorhanden?
 				int amountInDatabase = rs.getInt(1);
 				sql.closeRessources(rs, st);
 				amountInDatabase++;
-				String update = "UPDATE `ep-Vote` SET amount='" + String.valueOf(amountInDatabase) + "' WHERE username='" + username + "'";
+				String update = "UPDATE Votes SET Anzahl='" + String.valueOf(amountInDatabase) + "' WHERE Benutzername='" + username + "'";
                 sql.queryUpdate(update);
 			}
 			else{
 				sql.closeRessources(rs, st);
-				String update = "INSERT INTO `ep-Vote` (username, amount) VALUES ('" + username + "', '1')";
+				String update = "INSERT INTO Votes (Benutzername, Anzahl) VALUES ('" + username + "', '1')";
 				sql.queryUpdate(update);
 			}
 		}
