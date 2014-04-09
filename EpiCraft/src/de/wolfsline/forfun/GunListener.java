@@ -71,7 +71,7 @@ public class GunListener implements Listener, CommandExecutor{
 					loc.setX(x+3);
 					Bukkit.getWorld(WORLD).createExplosion(loc, 0.0f, false);
 					loc.setX(x+23);
-					Bukkit.getWorld(WORLD).createExplosion(loc, 0.0f, false);			
+					Bukkit.getWorld(WORLD).createExplosion(loc, 0.0f, false);		
 					return;
 				}
 				b = Bukkit.getServer().getWorld(WORLD).getBlockAt(x-1, y, z);
