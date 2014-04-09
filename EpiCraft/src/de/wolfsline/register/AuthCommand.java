@@ -32,8 +32,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 		this.plugin = plugin;
 		map = new HashMap<String, Boolean>();
 		MySQL sql = this.plugin.getMySQL();
-		sql.queryUpdate("CREATE TABLE IF NOT EXISTS auth (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(16), password VARCHAR(255), ip4 VARCHAR(40), lastlogin VARCHAR(15), email VARCHAR(255) )");
-
+		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Auth (Benutzername VARCHAR(16), Passwort VARCHAR(255), IP4 VARCHAR(40), `letzter Login` VARCHAR(15), `E-Mail` VARCHAR(255) )");
 	}
 
 	@Override
@@ -66,7 +65,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 				}
 			}
 			else{
-				p.sendMessage(plugin.namespace + ChatColor.RED + "/login <passwort>");
+				p.sendMessage(plugin.namespace + ChatColor.RED + "/login <Passwort>");
 				return true;
 			}
 		}
@@ -150,13 +149,11 @@ public class AuthCommand implements CommandExecutor, Listener{
 	        MessageDigest digest = MessageDigest.getInstance("SHA-256");
 	        byte[] hash = digest.digest(password.getBytes("UTF-8"));
 	        StringBuffer hexString = new StringBuffer();
-
 	        for (int i = 0; i < hash.length; i++) {
 	            String hex = Integer.toHexString(0xff & hash[i]);
 	            if(hex.length() == 1) hexString.append('0');
 	            hexString.append(hex);
 	        }
-
 	        return hexString.toString();
 	    } 
 		catch(Exception ex){
@@ -173,7 +170,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM auth WHERE username='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT * FROM Auth WHERE Benutzername='" + p.getName() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				sql.closeRessources(rs, st);
@@ -185,7 +182,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 			e.printStackTrace();
 			return false;
 		}
-		String update = "INSERT INTO auth (username, password, ip4, lastlogin, email) VALUES ('" + p.getName() + "', '" + convertedPassword + "', '" + Adress + "', '" + date + "', 'your@email.com')";
+		String update = "INSERT INTO Auth (Benutzername, Passwort, IP4, `letzter Login`, `E-Mail`) VALUES ('" + p.getName() + "', '" + convertedPassword + "', '" + Adress + "', '" + date + "', 'your@email.com')";
 		sql.queryUpdate(update);
 		return true;
 	}
@@ -200,14 +197,14 @@ public class AuthCommand implements CommandExecutor, Listener{
 		PreparedStatement st = null;
 		boolean login = false;
 		try {
-			st = conn.prepareStatement("SELECT password FROM auth WHERE username='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT Passwort FROM Auth WHERE Benutzername='" + p.getName() + "'");
 			rs = st.executeQuery();
 			rs.next();
 			if(rs.getString(1).equals(convertedPassword))
 				login = true;
 			sql.closeRessources(rs, st);
 			if(login){
-				String update = "UPDATE auth SET lastlogin='" + date + "', ip4='" + Adress + "' WHERE username='" + p.getName() + "'";
+				String update = "UPDATE Auth SET `letzter Login`='" + date + "', IP4='" + Adress + "' WHERE Benutzername='" + p.getName() + "'";
 				sql.queryUpdate(update);
 			}
 			return login;
@@ -225,7 +222,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT ip4 FROM auth WHERE username='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT IP4 FROM Auth WHERE Benutzername='" + p.getName() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				if(rs.getString(1).equalsIgnoreCase(Adress)){
@@ -248,7 +245,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT email FROM auth WHERE username='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT `E-Mail` FROM Auth WHERE Benutzername='" + p.getName() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				if(!rs.getString(1).equalsIgnoreCase("your@email.com")){
@@ -263,7 +260,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 			return false;
 		}
 		sql = this.plugin.getMySQL();
-		String update = "UPDATE auth SET email='" + email + "' WHERE username='" + p.getName() + "'";
+		String update = "UPDATE Auth SET `E-Mail`='" + email + "' WHERE Benutzername='" + p.getName() + "'";
 		sql.queryUpdate(update);
 		return true;
 	}
