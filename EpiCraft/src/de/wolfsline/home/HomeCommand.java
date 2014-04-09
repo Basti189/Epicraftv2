@@ -36,7 +36,7 @@ public class HomeCommand implements CommandExecutor{
 		}
 		Player p = (Player) cs;
 		if(!p.hasPermission("epicraft.home.one")){
-			p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
+			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Home] " + p.getName() + " versucht auf den Home-Befehl zuzugreifen");
 			return true;
 		}
