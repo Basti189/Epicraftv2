@@ -38,7 +38,7 @@ public class JoinQuitListener implements Listener {
 	public void onPlayerLoginEvent(PlayerLoginEvent event){
 		Player p = event.getPlayer();
 		if(p.isBanned()){
-			String banReason = "$4Du wurdest gebannt!\n\n$fInformationen findest du bei uns im Forum unter\nhttp://forum.Epicraft.de";
+			String banReason = "$4Du wurdest gebannt!\n\n$fInformationen findest du bei uns im Forum unter\nhttp://forum.epicraft.de";
 			event.setResult(Result.KICK_BANNED);
 			event.setKickMessage(ChatColor.translateAlternateColorCodes('$', banReason));
 		}
