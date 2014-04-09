@@ -160,10 +160,10 @@ commands:
     permissions:
      - epicraft.fly.use
 
-  ts:
-    description: Info TS
-    aliases: [ts3, teamspeak]
-    usage: /ts
+  info:
+    description: Informationen zum Server
+    aliases: [ts3, teamspeak, ts]
+    usage: /info
 
   debug:
     description: ServiceModus

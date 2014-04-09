@@ -48,7 +48,7 @@ import de.wolfsline.gs.GSCommand;
 import de.wolfsline.gs.SignName;
 import de.wolfsline.home.HomeCommand;
 import de.wolfsline.info.TimeCommand;
-import de.wolfsline.info.infoCommand;
+import de.wolfsline.info.InfoCommand;
 import de.wolfsline.message.ChatListener;
 import de.wolfsline.message.WhisperExecuter;
 import de.wolfsline.modify.BedListener;
@@ -162,7 +162,7 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("onlinetime").setExecutor(timeplayer);
         this.getCommand("pvp").setExecutor(pvp);
         this.getCommand("fly").setExecutor(new FlyCommand(this));
-        this.getCommand("ts").setExecutor(new infoCommand(this));
+        this.getCommand("ts").setExecutor(new InfoCommand(this));
         this.getCommand("debug").setExecutor(debugCommand);
         this.getCommand("me").setExecutor(new MECommand());
         this.getCommand("tp").setExecutor(new TeleportCommand(this));
