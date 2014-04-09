@@ -1,6 +1,5 @@
 package de.wolfsline.teleport;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,7 +26,7 @@ public class SignLift implements Listener{
 	@EventHandler
 	public void onSignChangeEvent(SignChangeEvent event){
 		if(event.getLine(0).equalsIgnoreCase("[Lift]")){
-			if(!event.getPlayer().isOp()){
+			if(!(event.getPlayer().isOp() || event.getPlayer().hasPermission("epicraft.permission.admin"))){
 				if(event.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase("plots")){
 					return;
 				}
@@ -66,7 +65,7 @@ public class SignLift implements Listener{
 							}
 						}
 					}
-					p.sendMessage(plugin.namespace + ChatColor.RED + "Sie sind bereits in der obersten Etage");
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Du bist bereits in der obersten Etage");
 				}
 				else if(line3.equalsIgnoreCase("runter")){
 					Location loc = event.getClickedBlock().getLocation();
@@ -86,7 +85,7 @@ public class SignLift implements Listener{
 							}
 						}
 					}
-					p.sendMessage(plugin.namespace + ChatColor.RED + "Sie sind bereits in der untersten Etage");
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Du bist bereits in der untersten Etage");
 				}
 			}
 		}
@@ -96,19 +95,23 @@ public class SignLift implements Listener{
 		String direction = ((Directional)block.getType().getNewData(block.getData())).getFacing().toString();
 		Location loc = new Location(block.getWorld(), block.getX(), block.getY() - 1, block.getZ());
 		if(direction.equalsIgnoreCase("north")){
-			loc.setZ(loc.getZ() - 1.5);
+			loc.setZ(loc.getZ() - 1.0); //-1.5
+			loc.setX(loc.getX() + 0.5);
 			loc.setYaw(0);
 		}
 		else if(direction.equalsIgnoreCase("east")){
-			loc.setX(loc.getX() + 1.5);
+			loc.setX(loc.getX() + 2.0); //+.1.5
+			loc.setZ(loc.getZ() + 0.5);
 			loc.setYaw(90);
 		}
 		else if(direction.equalsIgnoreCase("south")){
-			loc.setZ(loc.getZ() + 1.5);
+			loc.setZ(loc.getZ() + 2.0); // +1.5
+			loc.setX(loc.getX() + 0.5);
 			loc.setYaw(180);
 		}
 		else if(direction.equalsIgnoreCase("west")){
-			loc.setX(loc.getX() - 1.5);
+			loc.setX(loc.getX() - 1.0); // -1.5
+			loc.setZ(loc.getZ() + 0.5);
 			loc.setYaw(-90);
 		}
 		return loc;
