@@ -75,7 +75,7 @@ import de.wolfsline.worldgenerator.CleanRoomChunkGenerator;
 public class Epicraft extends JavaPlugin{
 	private int messageTask;
 	private int restartTask;
-	public static Economy economy = null;
+	public Economy economy = null;
 	public final String namespace = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] ";
 	public final String error = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] " + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!";
 	public final String namespaceBeta = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster - Beta" + ChatColor.GOLD + "] ";
