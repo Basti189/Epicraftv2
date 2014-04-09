@@ -59,7 +59,6 @@ import de.wolfsline.permission.PermissionManager;
 import de.wolfsline.register.AuthCommand;
 import de.wolfsline.register.QuestSignCommand;
 import de.wolfsline.register.QuestSignListener;
-import de.wolfsline.restriction.AutoKickListener;
 import de.wolfsline.restriction.RestrictionCommand;
 import de.wolfsline.reward.VoteListener;
 import de.wolfsline.security.ChestPassword;
@@ -201,7 +200,6 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(myJail, this);
 		pm.registerEvents(new DeathListener(), this);
 		pm.registerEvents(debugCommand, this);
-		pm.registerEvents(new AutoKickListener(this), this);
 		pm.registerEvents(chestPasswort, this);
 		pm.registerEvents(new MapSizeControll(this), this);
 		pm.registerEvents(new IronGolemDropControll(), this);
