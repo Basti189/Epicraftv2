@@ -7,11 +7,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import de.wolfsline.Epicraft.Epicraft;
-import de.wolfsline.register.AuthCommand;
 
 public class CommandListener implements Listener{
 	
 	private Epicraft plugin;
+	
 	public CommandListener(Epicraft plugin) {
 		this.plugin = plugin;
 	}
