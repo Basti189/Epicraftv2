@@ -1,20 +1,9 @@
 package de.wolfsline.restriction;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Properties;
 
-/*
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMessage.RecipientType;
-*/
+import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -22,14 +11,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Criterias;
 
 import de.wolfsline.Epicraft.Epicraft;
-import de.wolfsline.data.MySQL;
 
 public class BanCommand implements CommandExecutor{
 	
 	private Epicraft plugin;
+	private BanList banList = Bukkit.getServer().getBanList(BanList.Type.NAME);
+	
 	public BanCommand(Epicraft plugin) {
 		this.plugin = plugin;
 	}
@@ -37,32 +26,23 @@ public class BanCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
 		String reason = "";
-		if(!(cs.hasPermission("epicraft.restriction.team.ban") || cs.isOp())){
-			cs.sendMessage(ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl");
-			plugin.api.sendLog("[Epicraft - Ban] " + cs.getName() + " hat versucht auf den Ban-Befehl zuzugreifen");
+		if(!(cs.hasPermission("epicraft.permission.moderator") || cs.hasPermission("epicraft.permission.admin") || cs.isOp())){
+			cs.sendMessage(plugin.error);
+			plugin.api.sendLog("[Epicraft - Ban] " + cs.getName() + " hat versucht auf den Befehl zuzugreifen");
 			return true;
 		}
 		if(args.length > 1){
 			for(int i = 1 ; i < args.length ; i++){
 				reason += args[i] + " ";
 			}
-			Player p = Bukkit.getPlayer(args[0]);
 			cs.sendMessage(plugin.namespace + ChatColor.WHITE + "Suche nach Spieler: " + args[0]);
-			if(p != null){
-				if(cs instanceof Player){
-					Player team = (Player) cs;
-					if(!team.isOp()){
-						if(p.hasPermission("epicraft.restriction.team") || p.hasPermission("epicraft.restriction.team.ban") ){
-							team.kickPlayer(plugin.namespace + ChatColor.RED + "Hör auf dich selbst zu kicken ;)");
-							return true;
-						}
-					}
-				}
+			Player targetPlayer = Bukkit.getPlayer(args[0]);
+			if(targetPlayer != null){
 				cs.sendMessage(plugin.namespace + ChatColor.WHITE + args[0] + " ist online");
-				p.kickPlayer(reason);
-				p.setBanned(true);
-				writeToDatabase(cs, p.getName(), reason);
-				plugin.api.sendLog("[Epicraft - Ban] " + cs.getName() + " hat den Spieler(online)" + p.getName() + " vom Server gebannt");
+				targetPlayer.kickPlayer(reason);
+				banList.addBan(targetPlayer.getName(), reason, null, null);
+				writeToDatabase(cs, targetPlayer.getName(), reason);
+				plugin.api.sendLog("[Epicraft - Ban] " + cs.getName() + " hat den Spieler(online)" + targetPlayer.getName() + " vom Server gebannt");
 				plugin.api.sendLog("[Epicraft - Ban] Grund: " + reason);
 				return true;
 			}
@@ -75,7 +55,7 @@ public class BanCommand implements CommandExecutor{
 						cs.sendMessage(plugin.namespace + ChatColor.WHITE + offlinePlayer.getName() + " ist bereits gebannt!");
 						return true;
 					}
-					offlinePlayer.setBanned(true);
+					banList.addBan(offlinePlayer.getName(), reason, null, null);
 					writeToDatabase(cs, offlinePlayer.getName(), reason);
 					plugin.api.sendLog("[Epicraft - Ban] " + cs.getName() + " hat den Spieler(Offline)" + offlinePlayer.getName() + " vom Server gebannt");
 					return true;
@@ -86,49 +66,14 @@ public class BanCommand implements CommandExecutor{
 				}
 			}
 		}
-		else
-			cs.sendMessage(plugin.namespace + ChatColor.RED + "Zu wenig Argumente!");
-		return false;
+		cs.sendMessage(plugin.namespace + ChatColor.RED + "/ban <Spieler> <Grund>");
+		return true;
 	}
 	
 	private void writeToDatabase(CommandSender cs, String name, String reason){
-		MySQL sql = this.plugin.getMySQL();
 		String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 		String date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
-		String update = "INSERT INTO warning (username, typ, reason, time, date, teamuser) VALUES ('" + name + "', 'ban', '" + reason + "', '" + time + "', '" + date + "', '" + cs.getName() + "')";
-		sql.queryUpdate(update);
-	}
-	
-	private String showDetails(String name){
-		MySQL sql = this.plugin.getMySQL();
-		Connection conn = sql.getConnection();
-		ResultSet rs = null;
-		PreparedStatement st = null;
-		String text = "";
-		try {
-			st = conn.prepareStatement("SELECT * FROM warning WHERE username='" + name + "'");
-			rs = st.executeQuery();
-			while(rs.next()){
-				String typ = rs.getString(3);
-				if(typ.equalsIgnoreCase("warn")){
-					text += "Verwarnung:\n";
-				}
-				else if(typ.equalsIgnoreCase("kick")){
-					text += "Kick:\n";
-				}
-				else if(typ.equalsIgnoreCase("ban")){
-					text += "Ban:\n";
-				}
-				text += "- Grund: " + rs.getString(4) + "\n";
-				text += "- Datum: " + rs.getString(5) + " Uhr am " + rs.getString(6) + "\n\n";
-			}
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally{
-			sql.closeRessources(rs, st);
-		}
-		return text;
+		String update = "INSERT INTO Verwarnung (Name, Typ, Grund, Zeit, Datum, Team) VALUES ('" + name + "', 'ban', '" + reason + "', '" + time + "', '" + date + "', '" + cs.getName() + "')";
+		plugin.getMySQL().queryUpdate(update);
 	}
 }

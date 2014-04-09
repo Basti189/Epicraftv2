@@ -9,17 +9,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
-
-/*
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMessage.RecipientType;
-*/
-
-
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -40,7 +29,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import de.wolfsline.Epicraft.Epicraft;
 import de.wolfsline.data.MySQL;
-import de.wolfsline.helpClasses.myLocation;
 
 public class RestrictionCommand implements CommandExecutor, Listener{
     
@@ -50,7 +38,7 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 	public RestrictionCommand(Epicraft plugin) {
 		this.plugin = plugin;
 		MySQL sql = this.plugin.getMySQL();
-		sql.queryUpdate("CREATE TABLE IF NOT EXISTS warning (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(16), typ VARCHAR(5) , reason VARCHAR(70), time VARCHAR(10), date VARCHAR(10), teamuser VARCHAR(16))");
+		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Verwarnung (Benutzername VARCHAR(16), Typ VARCHAR(5) , Grund VARCHAR(70), Zeit VARCHAR(10), Datum VARCHAR(10), Team VARCHAR(16))");
 	}
 
 	@Override
@@ -64,9 +52,9 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 			openInv(p);
 			return true;
 		}
-		if(!(p.hasPermission("epicraft.restriction.use") || p.isOp())){
-			p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
-			plugin.api.sendLog("[Epicraft - Verwarnung] " + p.getName() + " hat versucht den Verwarn-Befehl zu benutzen");
+		if(!(p.hasPermission("epicraft.permission.guard") || p.hasPermission("epicraft.permission.moderator") || p.hasPermission("epicraft.permission.admin") || p.isOp())){
+			p.sendMessage(plugin.error);
+			plugin.api.sendLog("[Epicraft - Verwarnung] " + p.getName() + " hat versucht den Befehl zu benutzen!");
 			return true;
 		}
 		if(args.length >= 3){
@@ -114,13 +102,11 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT username FROM warning WHERE username='" + name + "'");
+			st = conn.prepareStatement("SELECT Benutzername FROM Verwarnung WHERE Benutzername='" + name + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
-				if(rs.getString(1).equalsIgnoreCase(name)){
-					sql.closeRessources(rs, st);
-					return true;
-				}
+				sql.closeRessources(rs, st);
+				return true;
 			}
 		} 
 		catch (SQLException e) {
@@ -137,7 +123,7 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 		MySQL sql = this.plugin.getMySQL();
 		String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 		String date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
-		String update = "INSERT INTO warning (username, typ, reason, time, date, teamuser) VALUES ('" + name + "', 'warn', '" + reason + "', '" + time + "', '" + date + "', '" + p.getName() + "')";
+		String update = "INSERT INTO Verwarnung (Benutzername, Typ, Grund, Zeit, Datum, Team) VALUES ('" + name + "', 'warn', '" + reason + "', '" + time + "', '" + date + "', '" + p.getName() + "')";
 		sql.queryUpdate(update);
 		return true;
 	}
@@ -149,15 +135,13 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM warning WHERE username='" + name + "'");
+			st = conn.prepareStatement("SELECT * FROM Verwarnung WHERE Benutzername='" + name + "'");
 			rs = st.executeQuery();
-			p.sendMessage(ChatColor.GOLD + "---------------[Benutzerverwaltung]---------------");
-			p.sendMessage(ChatColor.GOLD + "Benutzer: " + name);
 			int kick = 0;
 			int ban = 0;
 			int warn = 0;
 			while(rs.next()){
-				String typ = rs.getString(3);
+				String typ = rs.getString(2);
 				if(typ.equalsIgnoreCase("warn"))
 					warn++;
 				else if(typ.equalsIgnoreCase("kick"))
@@ -165,6 +149,8 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 				else if(typ.equalsIgnoreCase("ban"))
 					ban++;
 			}
+			p.sendMessage(ChatColor.GOLD + "---------------[Benutzerverwaltung]---------------");
+			p.sendMessage(ChatColor.GOLD + "Benutzer: " + name);
 			p.sendMessage(ChatColor.GOLD + "Anzahl Verwarnungen: " + String.valueOf(warn));
 			p.sendMessage(ChatColor.GOLD + "Anzahl Kicks: " + String.valueOf(kick));
 			p.sendMessage(ChatColor.GOLD + "Anzahl Bans: " + String.valueOf(ban));
@@ -184,27 +170,26 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM warning WHERE username='" + name + "'");
+			st = conn.prepareStatement("SELECT * FROM Verwarnung WHERE Benutzername='" + name + "'");
 			rs = st.executeQuery();
 			p.sendMessage(ChatColor.GOLD + "---------------[Benutzerverwaltung]---------------");
 			p.sendMessage(ChatColor.GOLD + "Benutzer: " + name);
-			int i = 0;
 			while(rs.next()){
-				String typ = rs.getString(3);
+				String typ = rs.getString(2);
 				if(typ.equalsIgnoreCase("warn")){
 					p.sendMessage(ChatColor.GOLD + "Verwarnung: ");
-					p.sendMessage(ChatColor.GOLD + "- Grund: " + rs.getString(4));
-					p.sendMessage(ChatColor.GOLD + "- Datum: " + rs.getString(5) + " Uhr am " + rs.getString(6) + " von " + rs.getString(7));
+					p.sendMessage(ChatColor.GOLD + "- Grund: " + rs.getString(3));
+					p.sendMessage(ChatColor.GOLD + "- Datum: " + rs.getString(4) + " Uhr am " + rs.getString(5) + " von " + rs.getString(6));
 				}
 				else if(typ.equalsIgnoreCase("kick")){
 					p.sendMessage(ChatColor.GOLD + "Gekickt: ");
-					p.sendMessage(ChatColor.GOLD + "- Grund: " + rs.getString(4));
-					p.sendMessage(ChatColor.GOLD + "- Datum: " + rs.getString(5) + " Uhr am " + rs.getString(6) + " von " + rs.getString(7));
+					p.sendMessage(ChatColor.GOLD + "- Grund: " + rs.getString(3));
+					p.sendMessage(ChatColor.GOLD + "- Datum: " + rs.getString(4) + " Uhr am " + rs.getString(5) + " von " + rs.getString(6));
 				}
 				else if(typ.equalsIgnoreCase("ban")){
 					p.sendMessage(ChatColor.GOLD + "Gebannt: ");
-					p.sendMessage(ChatColor.GOLD + "- Grund: " + rs.getString(4));
-					p.sendMessage(ChatColor.GOLD + "- Datum: " + rs.getString(5) + " Uhr am " + rs.getString(6) + " von " + rs.getString(7));
+					p.sendMessage(ChatColor.GOLD + "- Grund: " + rs.getString(3));
+					p.sendMessage(ChatColor.GOLD + "- Datum: " + rs.getString(4) + " Uhr am " + rs.getString(5) + " von " + rs.getString(6));
 				}
 				p.sendMessage("");
 			};
@@ -268,10 +253,10 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 		PreparedStatement st = null;
 		List<String> myWarn = new ArrayList<String>();
 		try {
-			st = conn.prepareStatement("SELECT * FROM warning WHERE username='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT * FROM Verwarnung WHERE Benutzername='" + p.getName() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
-				String typ = rs.getString(3);
+				String typ = rs.getString(2);
 				if(typ.equalsIgnoreCase("warn"))
 					myWarn.add("Verwarnung");
 				
@@ -280,8 +265,8 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 				
 				else if(typ.equalsIgnoreCase("ban"))
 					myWarn.add("Gebannt");
-				myWarn.add("Grund: " + rs.getString(4));
-				myWarn.add("Datum: " + rs.getString(5) + " Uhr am " + rs.getString(6));
+				myWarn.add("Grund: " + rs.getString(3));
+				myWarn.add("Datum: " + rs.getString(4) + " Uhr am " + rs.getString(5));
 			}
 		} 
 		catch (SQLException e) {

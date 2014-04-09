@@ -23,47 +23,33 @@ public class KickCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
 		String reason = "";
-		if(!(cs.hasPermission("epicraft.restriction.team") || cs.isOp())){
-			cs.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl");
-			plugin.api.sendLog("[Epicraft - Kick] " + cs.getName() + " hat versucht auf den Kick-Befehl zuzugreifen");
+		if(!(cs.hasPermission("epicraft.permission.guard") || cs.hasPermission("epicraft.permission.moderator") || cs.hasPermission("epicraft.permission.admin")|| cs.isOp())){
+			cs.sendMessage(plugin.error);
+			plugin.api.sendLog("[Epicraft - Kick] " + cs.getName() + " hat versucht auf den Befehl zuzugreifen");
 			return true;
 		}
 		if(args.length > 1){
 			for(int i = 1 ; i < args.length ; i++){
 				reason += args[i] + " ";
 			}
-			Player p = Bukkit.getPlayer(args[0]);
-			if(p != null){
-				if(cs instanceof Player){
-					Player team = (Player) cs;
-					if(!team.isOp()){
-						if(team.hasPermission("epicraft.restriction.guard") && (p.hasPermission("epicraft.restriction.mod") || p.hasPermission("epicraft.guard"))){
-							team.kickPlayer(ChatColor.RED + "Hör auf dich selbst zu kicken ;)");
-							return true;
-						}
-						else if(p.hasPermission("epicraft.restriction.mod") && team.hasPermission("epicraft.restriction.mod")){
-							team.kickPlayer(ChatColor.RED + "Hör auf dich selbst zu kicken ;)");
-							return true;
-						}
-					}
-				}
-				p.kickPlayer(reason);
-				plugin.api.sendLog("[Epicraft - Kick] " + cs.getName() + " hat den Spieler " + p.getName() + " vom Server gegicked");
+			Player targetPlayer = Bukkit.getPlayer(args[0]);
+			if(targetPlayer != null){
+				targetPlayer.kickPlayer(reason);
+				plugin.api.sendLog("[Epicraft - Kick] " + cs.getName() + " hat den Spieler " + targetPlayer.getName() + " vom Server gegicked");
 				plugin.api.sendLog("[Epicraft - Kick] Grund: " + reason);
-				writeToDatabase(cs, p, reason);
+				writeToDatabase(cs, targetPlayer, reason);
 				return true;
 			}
 		}
-		else
-			cs.sendMessage(ChatColor.RED + "Zu wenig Argumente!");
-		return false;
+		cs.sendMessage(ChatColor.RED + "/kick <Spieler> <Grund>");
+		return true;
 	}
 	
 	private void writeToDatabase(CommandSender cs, Player p, String reason){
 		MySQL sql = this.plugin.getMySQL();
 		String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 		String date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
-		String update = "INSERT INTO warning (username, typ, reason, time, date, teamuser) VALUES ('" + p.getName() + "', 'kick', '" + reason + "', '" + time + "', '" + date + "', '" + cs.getName() + "')";
+		String update = "INSERT INTO Verwarnung (Benutzername, Typ, Grund, Zeit, Datum, Team) VALUES ('" + p.getName() + "', 'kick', '" + reason + "', '" + time + "', '" + date + "', '" + cs.getName() + "')";
 		sql.queryUpdate(update);
 	}
 
