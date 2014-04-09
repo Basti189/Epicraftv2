@@ -7,12 +7,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,9 +20,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import de.wolfsline.Epicraft.Epicraft;
 import de.wolfsline.data.MySQL;
@@ -48,8 +42,8 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(args.length == 0){
-			openInv(p);
+		if(args.length == 0){//Zeige dem Spieler seine Verwarnungen
+			showInfo(p.getName(), p);
 			return true;
 		}
 		if(!(p.hasPermission("epicraft.permission.guard") || p.hasPermission("epicraft.permission.moderator") || p.hasPermission("epicraft.permission.admin") || p.isOp())){
@@ -88,12 +82,16 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 					showInfo(name, p);
 					return true;
 				}
+				else{
+					p.sendMessage(plugin.namespace + ChatColor.RED + "/warn zeige <Spieler> <details> oder <info>");
+				}
 			}
 			else{
 				p.sendMessage(plugin.namespace + ChatColor.RED + "Unbekannter Befehl");
 			}
 		}
-		return false;
+		p.sendMessage(plugin.namespace + ChatColor.RED + "/warn <zeige> oder <neu>");
+		return true;
 	}
 	
 	public boolean isPlayerinDatabase(String name){
@@ -150,7 +148,8 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 					ban++;
 			}
 			p.sendMessage(ChatColor.GOLD + "---------------[Benutzerverwaltung]---------------");
-			p.sendMessage(ChatColor.GOLD + "Benutzer: " + name);
+			if(!p.getName().equals(name))
+				p.sendMessage(ChatColor.GOLD + "Benutzer: " + name);
 			p.sendMessage(ChatColor.GOLD + "Anzahl Verwarnungen: " + String.valueOf(warn));
 			p.sendMessage(ChatColor.GOLD + "Anzahl Kicks: " + String.valueOf(kick));
 			p.sendMessage(ChatColor.GOLD + "Anzahl Bans: " + String.valueOf(ban));
@@ -205,78 +204,6 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 	
 	
 	//----------------------------------------------------------------------------------------------------------//
-	
-	public void openInv(Player p){
-		List<String> myWarn = getWarn(p);
-		Iterator<String> it = myWarn.iterator();
-		int lines = (myWarn.size()/3);
-		if(lines == 0){
-			p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du hast keine Einträge!");
-			return;
-		}
-		Inventory inv = Bukkit.createInventory(null, lines*9, "Deine Einträge");
-		if(inv == null){
-			p.sendMessage(plugin.namespace + ChatColor.RED + "Es ist ein interner Fehler aufgetreten!");
-			return;
-		}
-		while(it.hasNext()){
-			String what = it.next();
-			String reason = it.next();
-			String timestamp = it.next();
-			ItemStack stack = null;
-			ItemMeta meta = null;
-			if(what.equals("gekicked"))
-				stack = new ItemStack(Material.WOOL, 1, (short) 4);
-			else if(what.equalsIgnoreCase("verwarnung"))
-				stack = new ItemStack(Material.WOOL, 1, (short) 1);
-			else if(what.equalsIgnoreCase("gebannt"))
-				stack = new ItemStack(Material.WOOL, 1, (short) 14);
-			meta = stack.getItemMeta();
-			
-			meta.setDisplayName(what);
-			List<String> tmp = new ArrayList<String>();
-			tmp.add(reason);
-			tmp.add(timestamp);
-			meta.setLore(tmp);
-			stack.setItemMeta(meta);
-			inv.addItem(stack);
-		}
-		p.sendMessage(plugin.namespace + ChatColor.WHITE + "Benutzerverwaltung wird geöffnet");
-		inInventory.add(p.getName());
-		p.openInventory(inv);
-	}
-	
-	private List<String> getWarn(Player p){
-		MySQL sql = this.plugin.getMySQL();
-		Connection conn = sql.getConnection();
-		ResultSet rs = null;
-		PreparedStatement st = null;
-		List<String> myWarn = new ArrayList<String>();
-		try {
-			st = conn.prepareStatement("SELECT * FROM Verwarnung WHERE Benutzername='" + p.getName() + "'");
-			rs = st.executeQuery();
-			while(rs.next()){
-				String typ = rs.getString(2);
-				if(typ.equalsIgnoreCase("warn"))
-					myWarn.add("Verwarnung");
-				
-				else if(typ.equalsIgnoreCase("kick"))
-					myWarn.add("Gekicked");
-				
-				else if(typ.equalsIgnoreCase("ban"))
-					myWarn.add("Gebannt");
-				myWarn.add("Grund: " + rs.getString(3));
-				myWarn.add("Datum: " + rs.getString(4) + " Uhr am " + rs.getString(5));
-			}
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally{
-			sql.closeRessources(rs, st);
-		}
-		return myWarn;
-	}
 	
 	@EventHandler
 	public void onInventoryClickEvent(InventoryClickEvent event){

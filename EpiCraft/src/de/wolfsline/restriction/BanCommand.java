@@ -73,7 +73,7 @@ public class BanCommand implements CommandExecutor{
 	private void writeToDatabase(CommandSender cs, String name, String reason){
 		String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 		String date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
-		String update = "INSERT INTO Verwarnung (Name, Typ, Grund, Zeit, Datum, Team) VALUES ('" + name + "', 'ban', '" + reason + "', '" + time + "', '" + date + "', '" + cs.getName() + "')";
+		String update = "INSERT INTO Verwarnung (Benutzername, Typ, Grund, Zeit, Datum, Team) VALUES ('" + name + "', 'ban', '" + reason + "', '" + time + "', '" + date + "', '" + cs.getName() + "')";
 		plugin.getMySQL().queryUpdate(update);
 	}
 }

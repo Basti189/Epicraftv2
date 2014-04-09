@@ -35,7 +35,7 @@ public class KickCommand implements CommandExecutor{
 			Player targetPlayer = Bukkit.getPlayer(args[0]);
 			if(targetPlayer != null){
 				targetPlayer.kickPlayer(reason);
-				plugin.api.sendLog("[Epicraft - Kick] " + cs.getName() + " hat den Spieler " + targetPlayer.getName() + " vom Server gegicked");
+				plugin.api.sendLog("[Epicraft - Kick] " + cs.getName() + " hat den Spieler " + targetPlayer.getName() + " vom Server gekicked");
 				plugin.api.sendLog("[Epicraft - Kick] Grund: " + reason);
 				writeToDatabase(cs, targetPlayer, reason);
 				return true;
