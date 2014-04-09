@@ -9,18 +9,24 @@ import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.wolfsline.Epicraft.Epicraft;
@@ -33,6 +39,8 @@ public class GSCommand implements CommandExecutor, Listener{
 	private Data data;
 	private HashMap<String, String> map = new HashMap<String, String>();
 	
+	private final String WORLD = "world"; //Legt die Welt der Grundstücke fest
+	
 	public GSCommand(Epicraft plugin){
 		this.plugin = plugin;
 		this.data = new Data(plugin);
@@ -43,18 +51,18 @@ public class GSCommand implements CommandExecutor, Listener{
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
 		//Prüfe ob es ein Spieler ist
 		if(!(cs instanceof Player)){
-			cs.sendMessage(plugin.namespace + ChatColor.RED + "Der Befehl steht nur Spielern zur Verfügung!");
+			cs.sendMessage(plugin.namespace + ChatColor.RED + "Du bist kein Spieler!");
 			return true;
 		}
 		Player p = (Player) cs;
 		//Prüfe ob er die Permission hat
 		if(!p.hasPermission("epicraft.gs.use")){
-			p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
+			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " versucht auf den Grundstücks-Befehl zuzugreifen");
 			return true;
 		}
 		//Prüfe ob der Spieler in der richtigen Welt ist
-		if(!(p.getLocation().getWorld() == Bukkit.getServer().getWorld("Survival"))){
+		if(!(p.getLocation().getWorld() == Bukkit.getServer().getWorld(WORLD))){
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst dir auf dieser Welt kein Grundstück anlegen!");
 			plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " versucht auf der Welt " + p.getLocation().getWorld().getName() + " ein Grundstück anzulegen");
 			return true;
@@ -173,7 +181,7 @@ public class GSCommand implements CommandExecutor, Listener{
 		//Admiistration
 		if(args.length == 2){
 			if(!(p.hasPermission("epicraft.gs.remove") || p.isOp())){
-				p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
+				p.sendMessage(plugin.error);
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("show") || args[0].equalsIgnoreCase("zeige")){
@@ -246,10 +254,12 @@ public class GSCommand implements CommandExecutor, Listener{
 		ecke(x1, y1, z1, Material.WOOD);
 		ecke(x1, y1, z1+1, Material.WOOD);
 		ecke(x1, y1, z1+2, Material.TORCH);
-		Bukkit.getServer().getWorld("Survival").getBlockAt(x1-1, z1+1, y1).setTypeIdAndData(68,o , false);
-		setSign(p, (Sign)Bukkit.getServer().getWorld("Survival").getBlockAt(x1-1, z1+1, y1).getState());
-		Bukkit.getServer().getWorld("Survival").getBlockAt(x1, z1+1, y1+1).setTypeIdAndData(68, n , false);
-		setSign(p, (Sign)Bukkit.getServer().getWorld("Survival").getBlockAt(x1, z1+1, y1+1).getState());
+		Bukkit.getServer().getWorld(WORLD).getBlockAt(x1-1, z1+1, y1).setTypeIdAndData(68,o , false);
+		setSign(p, (Sign)Bukkit.getServer().getWorld(WORLD).getBlockAt(x1-1, z1+1, y1).getState());
+		Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1+1, y1+1).setTypeIdAndData(68, n , false);
+		setSign(p, (Sign)Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1+1, y1+1).getState());
+		createFirework(x1, y1, z1+2);
+		createFirework(x1, y1, z1+2);
 		
 		x1 = x+(groeße_x / 2);
 		y1 = y + (groeße_y / 2)-1;
@@ -257,10 +267,12 @@ public class GSCommand implements CommandExecutor, Listener{
 		ecke(x1, y1, z1, Material.WOOD);
 		ecke(x1, y1, z1+1, Material.WOOD);
 		ecke(x1, y1, z1+2, Material.TORCH);
-		Bukkit.getServer().getWorld("Survival").getBlockAt(x1+1, z1+1, y1).setTypeIdAndData(68,w , false);
-		setSign(p, (Sign)Bukkit.getServer().getWorld("Survival").getBlockAt(x1+1, z1+1, y1).getState());
-		Bukkit.getServer().getWorld("Survival").getBlockAt(x1, z1+1, y1+1).setTypeIdAndData(68,n , false);
-		setSign(p, (Sign)Bukkit.getServer().getWorld("Survival").getBlockAt(x1, z1+1, y1+1).getState());
+		Bukkit.getServer().getWorld(WORLD).getBlockAt(x1+1, z1+1, y1).setTypeIdAndData(68,w , false);
+		setSign(p, (Sign)Bukkit.getServer().getWorld(WORLD).getBlockAt(x1+1, z1+1, y1).getState());
+		Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1+1, y1+1).setTypeIdAndData(68,n , false);
+		setSign(p, (Sign)Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1+1, y1+1).getState());
+		createFirework(x1, y1, z1+2);
+		createFirework(x1, y1, z1+2);
 		
 		x1 = x-(groeße_x / 2)+1;
 		y1 = y - (groeße_y / 2);
@@ -268,10 +280,12 @@ public class GSCommand implements CommandExecutor, Listener{
 		ecke(x1, y1, z1, Material.WOOD);
 		ecke(x1, y1, z1+1, Material.WOOD);
 		ecke(x1, y1, z1+2, Material.TORCH);
-		Bukkit.getServer().getWorld("Survival").getBlockAt(x1-1, z1+1, y1).setTypeIdAndData(68,o , false);
-		setSign(p, (Sign)Bukkit.getServer().getWorld("Survival").getBlockAt(x1-1, z1+1, y1).getState());
-		Bukkit.getServer().getWorld("Survival").getBlockAt(x1, z1+1, y1-1).setTypeIdAndData(68,s , false);
-		setSign(p, (Sign)Bukkit.getServer().getWorld("Survival").getBlockAt(x1, z1+1, y1-1).getState());
+		Bukkit.getServer().getWorld(WORLD).getBlockAt(x1-1, z1+1, y1).setTypeIdAndData(68,o , false);
+		setSign(p, (Sign)Bukkit.getServer().getWorld(WORLD).getBlockAt(x1-1, z1+1, y1).getState());
+		Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1+1, y1-1).setTypeIdAndData(68,s , false);
+		setSign(p, (Sign)Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1+1, y1-1).getState());
+		createFirework(x1, y1, z1+2);
+		createFirework(x1, y1, z1+2);
 		
 		x1 = x+(groeße_x / 2);
 		y1 = y - (groeße_y / 2);
@@ -279,10 +293,12 @@ public class GSCommand implements CommandExecutor, Listener{
 		ecke(x1, y1, z1, Material.WOOD);
 		ecke(x1, y1, z1+1, Material.WOOD);
 		ecke(x1, y1, z1+2, Material.TORCH);
-		Bukkit.getServer().getWorld("Survival").getBlockAt(x1+1, z1+1, y1).setTypeIdAndData(68,w , false);
-		setSign(p, (Sign)Bukkit.getServer().getWorld("Survival").getBlockAt(x1+1, z1+1, y1).getState());
-		Bukkit.getServer().getWorld("Survival").getBlockAt(x1, z1+1, y1-1).setTypeIdAndData(68,s , false);
-		setSign(p, (Sign)Bukkit.getServer().getWorld("Survival").getBlockAt(x1, z1+1, y1-1).getState());
+		Bukkit.getServer().getWorld(WORLD).getBlockAt(x1+1, z1+1, y1).setTypeIdAndData(68,w , false);
+		setSign(p, (Sign)Bukkit.getServer().getWorld(WORLD).getBlockAt(x1+1, z1+1, y1).getState());
+		Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1+1, y1-1).setTypeIdAndData(68,s , false);
+		setSign(p, (Sign)Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1+1, y1-1).getState());
+		createFirework(x1, y1, z1+2);
+		createFirework(x1, y1, z1+2);
 	}
 	
 	private void starterKit(Player p){
@@ -305,14 +321,20 @@ public class GSCommand implements CommandExecutor, Listener{
 	}
 	
 	private void ecke(int x1, int y1, int z1, Material mat){
-		Bukkit.getServer().getWorld("Survival").getBlockAt(x1, z1, y1).setType(mat);
+		Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1, y1).setType(mat);
 	}
 	
 	private int getZonGround(int x, int y, int z){
 		int tmpZ = z+100;
 		for( ; tmpZ >= 0 ; tmpZ--){
-			Block block = Bukkit.getServer().getWorld("Survival").getBlockAt(x, tmpZ, y);
-			if(block.getType() != Material.AIR && block.getType() != Material.RED_ROSE && block.getType() != Material.YELLOW_FLOWER && block.getType() != Material.LONG_GRASS){
+			Block block = Bukkit.getServer().getWorld(WORLD).getBlockAt(x, tmpZ, y);
+			if(block.getType() != Material.AIR 
+					&& block.getType() != Material.RED_ROSE 
+					&& block.getType() != Material.YELLOW_FLOWER 
+					&& block.getType() != Material.LONG_GRASS
+					&& block.getType() != Material.CACTUS
+					&& block.getType() != Material.LEAVES
+					&& block.getType() != Material.LEAVES_2){
 				return tmpZ+1;
 			}
 		}
@@ -325,6 +347,18 @@ public class GSCommand implements CommandExecutor, Listener{
 		sign.setLine(2, p.getName());
 		sign.setLine(3, "---------------");
 		sign.update();
+	}
+	
+	private synchronized void createFirework(int x, int y, int z){
+		Location loc = new Location(Bukkit.getServer().getWorld(WORLD), x, z, y);
+		for(int i = 0 ; i < 2 ; i++){
+			Firework fw = loc.getWorld().spawn(loc, Firework.class);
+			FireworkMeta data = fw.getFireworkMeta();
+		    data.addEffects(FireworkEffect.builder().withColor(Color.RED).with(Type.BALL_LARGE).build());
+		    data.setPower(3);
+		    fw.setFireworkMeta(data);
+		}
+
 	}
 
 	@EventHandler

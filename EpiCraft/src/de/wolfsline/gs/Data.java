@@ -21,7 +21,10 @@ import de.wolfsline.Epicraft.Epicraft;
 import de.wolfsline.data.MySQL;
 
 public class Data {	
+	
 	private Epicraft plugin;
+	
+	private final String WORLD = "world"; //Legt die Welt der Grundstücke fest
 	
 	public Data(Epicraft plugin) {
 		this.plugin = plugin;
@@ -143,7 +146,7 @@ public class Data {
 			int gsY = rs.getInt(5);
 			int gsZ = rs.getInt(6);
 			sql.closeRessources(rs, st);
-			Location loc = new Location(Bukkit.getWorld("Survival"), gsX, gsY+25, gsZ);
+			Location loc = new Location(Bukkit.getWorld(WORLD), gsX, gsY+25, gsZ);
 			p.teleport(loc);
 			p.setAllowFlight(true);
 			p.setFlying(true);
