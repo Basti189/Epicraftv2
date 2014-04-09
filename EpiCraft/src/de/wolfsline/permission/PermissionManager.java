@@ -201,64 +201,90 @@ public class PermissionManager implements CommandExecutor{
 	}
 	
 	//Rückgabe EpicraftPlayer -> Einstellungen des Spielers
-		public EpicraftPlayer getEpicraftPlayer(String name){
-			for(EpicraftPlayer tmpEpiPlayer : listEpicraftPlayer){
-				if(tmpEpiPlayer.username.equals(name))
-					return tmpEpiPlayer;
-			}
-			return null;
+	public EpicraftPlayer getEpicraftPlayer(String name){
+		for(EpicraftPlayer tmpEpiPlayer : listEpicraftPlayer){
+			if(tmpEpiPlayer.username.equals(name))
+				return tmpEpiPlayer;
 		}
-		
-		//EpicraftSpieler hinzufügen, wenn nicht vorhanden
-		public void triggerEpicraftPlayerList(Player p, boolean isOnline){
-			if(isOnline){ //Spieler ist online gekommen
-				Connection conn = plugin.getMySQL().getConnection();
-				ResultSet rs = null;
-				PreparedStatement st = null;
-				EpicraftPlayer epiPlayer = null;
-				try{
-					st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE Name='" + p.getName() + "'");
-					rs = st.executeQuery();
-					rs.next();
-					boolean eventMessages = rs.getBoolean(2);
-					boolean chatMessages = rs.getBoolean(3);
-					boolean chatTime = rs.getBoolean(4);
-					boolean chatWorld = rs.getBoolean(5);
-					boolean systemMessages = rs.getBoolean(6);
-					boolean moneyForVote = rs.getBoolean(7);
-					String permission = rs.getString(8);
-					epiPlayer = new EpicraftPlayer(plugin, p.getName(), permission, eventMessages, chatMessages, systemMessages, chatTime, moneyForVote, chatWorld, false);
-					plugin.getMySQL().closeRessources(rs, st);
-				} catch (SQLException e){
-					//e.printStackTrace();
-					plugin.api.sendLog("[Epicraft - Login] Neuer Datenbankeintrag für " + p.getName());
-				}
-				if(epiPlayer == null)
-					epiPlayer = new EpicraftPlayer(plugin, p.getName(), "epicraft.permission.gast", true, true, true, false, true, false, true);
-				listEpicraftPlayer.add(epiPlayer);
-				plugin.pManager.setPermissionToPlayer(p);
-				plugin.pManager.substringNameAndColor(p);
-				// *** TEST *** //
-				if(p.hasPermission("epicraft.permission.gast"))
-					Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Gast");
-				if(p.hasPermission("epicraft.permission.spieler"))
-					Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Spieler");
-				if(p.hasPermission("epicraft.permission.guard"))
-					Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Guard");
-				if(p.hasPermission("epicraft.permission.moderator"))
-					Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Moderator");
-				if(p.hasPermission("epicraft.permission.admin"))
-					Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Admin");
-				// *** TEST *** //
-			}
-			else{
-				//Player aus der Liste entfernen
-				for(Iterator<EpicraftPlayer> it = listEpicraftPlayer.iterator() ; it.hasNext();){
-					if(it.next().username.equals(p.getName())){
-						it.remove();
-					}
-				}
-			}
-		}
+		return null;
+	}
 	
+	//EpicraftSpieler hinzufügen, wenn nicht vorhanden
+	public void triggerEpicraftPlayerList(Player p, boolean isOnline){
+		if(isOnline){ //Spieler ist online gekommen
+			Connection conn = plugin.getMySQL().getConnection();
+			ResultSet rs = null;
+			PreparedStatement st = null;
+			EpicraftPlayer epiPlayer = null;
+			try{
+				st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE Name='" + p.getName() + "'");
+				rs = st.executeQuery();
+				rs.next();
+				boolean eventMessages = rs.getBoolean(2);
+				boolean chatMessages = rs.getBoolean(3);
+				boolean chatTime = rs.getBoolean(4);
+				boolean chatWorld = rs.getBoolean(5);
+				boolean systemMessages = rs.getBoolean(6);
+				boolean moneyForVote = rs.getBoolean(7);
+				String permission = rs.getString(8);
+				epiPlayer = new EpicraftPlayer(plugin, p.getName(), permission, eventMessages, chatMessages, systemMessages, chatTime, moneyForVote, chatWorld, false);
+				plugin.getMySQL().closeRessources(rs, st);
+			} catch (SQLException e){
+				//e.printStackTrace();
+				plugin.api.sendLog("[Epicraft - Login] Neuer Datenbankeintrag für " + p.getName());
+			}
+			if(epiPlayer == null)
+				epiPlayer = new EpicraftPlayer(plugin, p.getName(), "epicraft.permission.gast", true, true, true, false, true, false, true);
+			listEpicraftPlayer.add(epiPlayer);
+			plugin.pManager.setPermissionToPlayer(p);
+			plugin.pManager.substringNameAndColor(p);
+			// *** TEST *** //
+			if(p.hasPermission("epicraft.permission.gast"))
+				Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Gast");
+			if(p.hasPermission("epicraft.permission.spieler"))
+				Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Spieler");
+			if(p.hasPermission("epicraft.permission.guard"))
+				Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Guard");
+			if(p.hasPermission("epicraft.permission.moderator"))
+				Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Moderator");
+			if(p.hasPermission("epicraft.permission.admin"))
+				Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Admin");
+			// *** TEST *** //
+		}
+		else{
+			//Player aus der Liste entfernen
+			for(Iterator<EpicraftPlayer> it = listEpicraftPlayer.iterator() ; it.hasNext();){
+				if(it.next().username.equals(p.getName())){
+					it.remove();
+				}
+			}
+		}
+	}
+	
+	public EpicraftPlayer getEpicraftPlayerFromOfflinePlayer(String name){
+		Connection conn = plugin.getMySQL().getConnection();
+		ResultSet rs = null;
+		PreparedStatement st = null;
+		try{
+			st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE Name='" + name + "'");
+			rs = st.executeQuery();
+			if(rs.next()){
+				plugin.getMySQL().closeRessources(rs, st);
+				return null;
+			}
+			boolean eventMessages = rs.getBoolean(2);
+			boolean chatMessages = rs.getBoolean(3);
+			boolean chatTime = rs.getBoolean(4);
+			boolean chatWorld = rs.getBoolean(5);
+			boolean systemMessages = rs.getBoolean(6);
+			boolean moneyForVote = rs.getBoolean(7);
+			String permission = rs.getString(8);
+			plugin.getMySQL().closeRessources(rs, st);
+			return new EpicraftPlayer(plugin, name, permission, eventMessages, chatMessages, systemMessages, chatTime, moneyForVote, chatWorld, false);
+			
+		} catch (SQLException e){
+			//e.printStackTrace();
+		}
+		return null;
+	}
 }
