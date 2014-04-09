@@ -44,9 +44,9 @@ public class SignLift implements Listener{
 			return;
 		if (event.getClickedBlock().getType() == Material.WALL_SIGN && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Sign sign = (Sign) event.getClickedBlock().getState();
-			String line1 = sign.getLine(0);
+			String line1 = ChatColor.stripColor(sign.getLine(0));
 			if(line1.equalsIgnoreCase("[Lift]")){
-				String line3 = sign.getLine(2);
+				String line3 = ChatColor.stripColor(sign.getLine(2));
 				if(line3.equalsIgnoreCase("hoch")){
 					Location loc = event.getClickedBlock().getLocation();
 					int x = loc.getBlockX();
@@ -56,9 +56,9 @@ public class SignLift implements Listener{
 						Block block = new Location(loc.getWorld(), x, i, z).getBlock();
 						if(block.getType() == Material.WALL_SIGN){
 							Sign mySign = (Sign) block.getState();
-							if(mySign.getLine(0).equalsIgnoreCase("[Lift]")){
+							if(ChatColor.stripColor(mySign.getLine(0)).equalsIgnoreCase("[Lift]")){
 								p.teleport(getLocationInFrontSign(block));
-								String floor = mySign.getLine(1);
+								String floor = ChatColor.stripColor(mySign.getLine(1));
 								if(!floor.equalsIgnoreCase(""))
 									p.sendMessage(plugin.namespace + ChatColor.WHITE + "Willkommen im " + floor);
 								return;
@@ -76,9 +76,9 @@ public class SignLift implements Listener{
 						Block block = new Location(loc.getWorld(), x, i, z).getBlock();
 						if(block.getType() == Material.WALL_SIGN){
 							Sign mySign = (Sign) block.getState();
-							if(mySign.getLine(0).equalsIgnoreCase("[Lift]")){
+							if(ChatColor.stripColor(mySign.getLine(0)).equalsIgnoreCase("[Lift]")){
 								p.teleport(getLocationInFrontSign(block));
-								String floor = mySign.getLine(1);
+								String floor = ChatColor.stripColor(mySign.getLine(1));
 								if(!floor.equalsIgnoreCase(""))
 									p.sendMessage(plugin.namespace + ChatColor.WHITE + "Willkommen im " + floor);
 								return;
