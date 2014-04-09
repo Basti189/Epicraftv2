@@ -31,6 +31,8 @@ public class GunListener implements Listener, CommandExecutor{
 	File file = new File("plugins/EpiCraft/tntButtons.yml");
 	FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 	
+	private final String WORLD = "world";
+	
 	public GunListener(Epicraft plugin) {
 		this.plugin = plugin;
 		map = new ArrayList<Location>();
@@ -64,36 +66,36 @@ public class GunListener implements Listener, CommandExecutor{
 				int y = (int) loc.getY();
 				int z = (int) loc.getZ();
 				ItemStack woolB = new ItemStack(Material.WOOL, 1, (short)15);
-				Block b = Bukkit.getServer().getWorld("Survival").getBlockAt(x+1, y, z);
+				Block b = Bukkit.getServer().getWorld(WORLD).getBlockAt(x+1, y, z);
 				if(b.getType().equals(woolB.getType())){
 					loc.setX(x+3);
-					Bukkit.getWorld("Survival").createExplosion(loc, 0.0f, false);
+					Bukkit.getWorld(WORLD).createExplosion(loc, 0.0f, false);
 					loc.setX(x+23);
-					Bukkit.getWorld("Survival").createExplosion(loc, 0.0f, false);			
+					Bukkit.getWorld(WORLD).createExplosion(loc, 0.0f, false);			
 					return;
 				}
-				b = Bukkit.getServer().getWorld("Survival").getBlockAt(x-1, y, z);
+				b = Bukkit.getServer().getWorld(WORLD).getBlockAt(x-1, y, z);
 				if(b.getType().equals(woolB.getType())){
 					loc.setX(x-3);
-					Bukkit.getWorld("Survival").createExplosion(loc, 0.0f, false);
+					Bukkit.getWorld(WORLD).createExplosion(loc, 0.0f, false);
 					loc.setX(x-23);
-					Bukkit.getWorld("Survival").createExplosion(loc, 0.0f, false);
+					Bukkit.getWorld(WORLD).createExplosion(loc, 0.0f, false);
 					return;
 				}
-				b = Bukkit.getServer().getWorld("Survival").getBlockAt(x, y, z+1);
+				b = Bukkit.getServer().getWorld(WORLD).getBlockAt(x, y, z+1);
 				if(b.getType().equals(woolB.getType())){;
 					loc.setZ(z+3);
-					Bukkit.getWorld("Survival").createExplosion(loc, 0.0f, false);
+					Bukkit.getWorld(WORLD).createExplosion(loc, 0.0f, false);
 					loc.setZ(z+23);
-					Bukkit.getWorld("Survival").createExplosion(loc, 0.0f, false);
+					Bukkit.getWorld(WORLD).createExplosion(loc, 0.0f, false);
 					return;
 				}
-				b = Bukkit.getServer().getWorld("Survival").getBlockAt(x, y, z-1);
+				b = Bukkit.getServer().getWorld(WORLD).getBlockAt(x, y, z-1);
 				if(b.getType().equals(woolB.getType())){
 					loc.setZ(z-3);
-					Bukkit.getWorld("Survival").createExplosion(loc, 0.0f, false);
+					Bukkit.getWorld(WORLD).createExplosion(loc, 0.0f, false);
 					loc.setZ(z-23);
-					Bukkit.getWorld("Survival").createExplosion(loc, 0.0f, false);
+					Bukkit.getWorld(WORLD).createExplosion(loc, 0.0f, false);
 					return;
 				}
 			}
@@ -139,7 +141,7 @@ public class GunListener implements Listener, CommandExecutor{
 	private void readList(){
 		for(String t : cfg.getKeys(false)){
 			String pos = t + ".";
-			Location loc = new Location(Bukkit.getWorld("Survival"), cfg.getInt(pos + "x"), cfg.getInt(pos + "y"), cfg.getInt(pos + "z"));
+			Location loc = new Location(Bukkit.getWorld(WORLD), cfg.getInt(pos + "x"), cfg.getInt(pos + "y"), cfg.getInt(pos + "z"));
 			map.add(loc);
 		}
 	}
