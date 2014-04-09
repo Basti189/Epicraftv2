@@ -12,7 +12,7 @@ import de.wolfsline.Epicraft.Epicraft;
 public class MapSizeControll implements Listener{
 	
 	private Epicraft plugin;
-	private double limit = 12000.0D;
+	private final double limit = 12000.0D;
 	
 	public MapSizeControll(Epicraft plugin){
 		this.plugin = plugin;

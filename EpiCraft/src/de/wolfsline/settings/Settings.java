@@ -39,7 +39,7 @@ public class Settings implements CommandExecutor, Listener{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(p.hasPermission("epicraft.chat.gast") && (!p.isOp())){
+		if(p.hasPermission("epicraft.permission.gast") && (!p.isOp())){
 			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " versucht auf die Einstellungen zuzugreifen");
 			return true;
