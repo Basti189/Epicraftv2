@@ -23,15 +23,14 @@ public class SignListener implements Listener{
 	public void onSignChange(SignChangeEvent event){
 		Player p = event.getPlayer();
 		if(event.getLine(0).equals("[Hexer]")){
-			if(p.hasPermission("epicraft.sign.mod") || p.isOp()){
+			if(p.hasPermission("epicraft.permission.admin") || p.isOp()){
 				String money = event.getLine(2);
 				money = money.replaceAll(" ", "");
 				money = money.replaceAll("Coins", "");
 				money = money.replaceAll("Coin", "");
 				money = money.replaceAll("C", "");
-				double coins = 0.0D;
 				try{
-					coins = Double.valueOf(money);
+					Double.valueOf(money);
 				}
 				catch(NumberFormatException nfe){
 					event.setLine(2, ChatColor.DARK_RED + "Keine Zahl");
@@ -40,7 +39,7 @@ public class SignListener implements Listener{
 				}
 				return;
 			}
-			if(!p.hasPermission("epicraft.sign.guard")){
+			if(!(p.hasPermission("epicraft.permission.moderator") || p.hasPermission("epicraft.permission.admin") || p.isOp())){
 				p.kickPlayer(ChatColor.RED + "Das wäre wohl zu einfach...");
 			}
 			event.getBlock().breakNaturally();
@@ -96,7 +95,6 @@ public class SignListener implements Listener{
 						Bukkit.getServer().getWorld("Survival").setStorm(true);
 					}
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dir wurden dafür " + money + " Coins berechnet.");
-					
 				}
 			}
 		}
