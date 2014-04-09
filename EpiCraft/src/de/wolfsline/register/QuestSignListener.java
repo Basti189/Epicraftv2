@@ -236,6 +236,7 @@ public class QuestSignListener implements Listener{
 		Player p = event.getPlayer();
 		if(!map.containsKey(p.getName()))
 			return;
+		map.remove(p.getName());
 		p.teleport(this.start);
 		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getName());
 		if(epiPlayer != null){
