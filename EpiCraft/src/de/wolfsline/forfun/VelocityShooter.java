@@ -21,7 +21,7 @@ public class VelocityShooter implements CommandExecutor{
 		Vector dir = p.getLocation().getDirection();
 		Vector vec = new Vector(dir.getX() * 25.8D, 10.0D, dir.getZ() * 1.2D);
         p.setVelocity(vec);
-        //p.setFallDistance(-100.0F);
+        p.setFallDistance(-100.0F);
 		return true;
 	}
 
