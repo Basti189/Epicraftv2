@@ -171,22 +171,26 @@ public class Settings implements CommandExecutor, Listener{
 						if(player.eventMessages){
 							tmpList.add("Status: Aus");
 							player.eventMessages = false;
+							player.update();
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " empfängt nun keine Eventnachrichten mehr");
 						}
 						else{
 							tmpList.add("Status: An");
 							player.eventMessages = true;
+							player.update();
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " empfängt nun wieder Eventnachrichten");
 						}
 					}
 					else if(slot == 1){ //Chatnachrichten
 						if(player.chatMessages){
 							player.chatMessages = false;
+							player.update();
 							tmpList.add("Status: Aus");
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " empfängt nun keine Chatnachrichten mehr");
 						}
 						else{
 							player.chatMessages = true;
+							player.update();
 							tmpList.add("Status: An");
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " empfängt nun wieder Chatnachrichten");
 						}
@@ -195,11 +199,13 @@ public class Settings implements CommandExecutor, Listener{
 						if(player.chatTime){
 							tmpList.add("Status: Aus");
 							player.chatTime = false;
+							player.update();
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " bekommt nun keine Zeit im Chat angezeigt");
 						}
 						else{
 							tmpList.add("Status: An");
 							player.chatTime = true;
+							player.update();
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " bekommt nun wieder die Zeit im Chat angezeigt");
 						}
 					}
@@ -207,11 +213,13 @@ public class Settings implements CommandExecutor, Listener{
 						if(player.chatWorld){
 							tmpList.add("Status: Aus");
 							player.chatWorld = false;
+							player.update();
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " bekommt nun keine Welt im Chat angezeigt");
 						}
 						else{
 							tmpList.add("Status: An");
 							player.chatWorld = true;
+							player.update();
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " bekommt nun wieder die Welt im Chat angezeigt");
 						}
 					}
@@ -219,11 +227,13 @@ public class Settings implements CommandExecutor, Listener{
 						if(player.moneyForVote){
 							tmpList.add("Status: Aus");
 							player.moneyForVote = false;
+							player.update();
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " bekommt nun keine Coins fürs Voten");
 						}
 						else{
 							tmpList.add("Status: An");
 							player.moneyForVote = true;
+							player.update();
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " bekommt nun wieder Coins fürs Voten");
 						}
 					}
