@@ -1,7 +1,5 @@
 package de.wolfsline.Epicraft;
 
-import java.util.HashMap;
-
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
@@ -163,7 +161,7 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("fly").setExecutor(new FlyCommand(this));
         this.getCommand("ts").setExecutor(new InfoCommand(this));
         this.getCommand("debug").setExecutor(debugCommand);
-        this.getCommand("me").setExecutor(new MECommand());
+        this.getCommand("me").setExecutor(new MECommand(this));
         this.getCommand("tp").setExecutor(new TeleportCommand(this));
         this.getCommand("settings").setExecutor(set);
         this.getCommand("secure").setExecutor(chestPasswort);

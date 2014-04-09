@@ -7,7 +7,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import de.wolfsline.Epicraft.Epicraft;
+
 public class MECommand implements CommandExecutor{
+	
+	private Epicraft plugin;
+	
+	public MECommand(Epicraft plugin){
+		this.plugin = plugin;
+	}
 
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
@@ -17,7 +25,7 @@ public class MECommand implements CommandExecutor{
 		}
 		Player p = (Player) cs;
 		if(!p.hasPermission("epicraft.important")){
-			
+			p.sendMessage(plugin.error);
 			return true;
 		}
 		if(args.length >= 1){
@@ -30,7 +38,8 @@ public class MECommand implements CommandExecutor{
 			}
 			return true;
 		}
-		return false;
+		p.sendMessage(plugin.namespace + ChatColor.RED + "/me <Nachricht>");
+		return true;
 	}
 
 }
