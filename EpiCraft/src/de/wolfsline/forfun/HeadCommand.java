@@ -31,6 +31,7 @@ public class HeadCommand implements CommandExecutor{
 			p.sendMessage(plugin.error);
 			return true;
 		}
+		
 		if(args.length == 0){
 			p.getInventory().setHelmet(p.getItemInHand());
 			p.sendMessage(plugin.namespace + "Du hast nun einen neuen Kopfschmuck");
@@ -38,7 +39,15 @@ public class HeadCommand implements CommandExecutor{
 		}
 		else if(args.length == 1){
 			String name = args[0];
-			ItemStack stackSkull = new ItemStack(Material.SKULL_ITEM);
+			if(name.length() < 2){
+				p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte gib mind. 3 Zeichen ein");
+				return true;
+			}
+			else if(name.length() > 16){
+				p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte gib max. 16 Zeichen ein");
+				return true;
+			}
+			ItemStack stackSkull = new ItemStack(Material.SKULL_ITEM, 1,(byte) 3);
             SkullMeta metaSkull = (SkullMeta) stackSkull.getItemMeta();
             metaSkull.setOwner(name);
             stackSkull.setItemMeta(metaSkull);
