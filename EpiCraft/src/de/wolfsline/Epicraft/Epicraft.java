@@ -51,7 +51,6 @@ import de.wolfsline.info.TimeCommand;
 import de.wolfsline.info.InfoCommand;
 import de.wolfsline.message.ChatListener;
 import de.wolfsline.message.WhisperExecuter;
-import de.wolfsline.modify.BedListener;
 import de.wolfsline.modify.ColorSignListener;
 import de.wolfsline.modify.CommandListener;
 import de.wolfsline.modify.DeathListener;
@@ -184,7 +183,6 @@ public class Epicraft extends JavaPlugin{
 		
 		pm.registerEvents(jqlistener, this);
 		pm.registerEvents(new ArenaSignListener(), this);
-		pm.registerEvents(new BedListener(this), this);
 		pm.registerEvents(new GameSignListener(this), this);
 		pm.registerEvents(sign, this);
 		pm.registerEvents(new de.wolfsline.Time.SignListener(this), this);
