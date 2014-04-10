@@ -42,7 +42,7 @@ import de.wolfsline.forfun.TntCommand;
 import de.wolfsline.forfun.VelocityShooter;
 import de.wolfsline.game.ArenaSignListener;
 import de.wolfsline.game.GameSignListener;
-import de.wolfsline.gs.GSCommand;
+import de.wolfsline.gs.Grundstück;
 import de.wolfsline.gs.SignName;
 import de.wolfsline.home.HomeCommand;
 import de.wolfsline.info.TimeCommand;
@@ -107,7 +107,8 @@ public class Epicraft extends JavaPlugin{
 		GunListener gun = new GunListener(this);
 		AuthCommand auth = new AuthCommand(this);
 		UnHideCommand unhide = new UnHideCommand(this);
-		GSCommand gs = new GSCommand(this);
+		//GSCommand gs = new GSCommand(this);
+		Grundstück gs = new Grundstück(this);
 		TimePlayer timeplayer = new TimePlayer(this);
 		PVP pvp = new PVP(this);
 		DebugCommand debugCommand = new DebugCommand(this);
