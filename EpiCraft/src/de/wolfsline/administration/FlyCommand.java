@@ -21,7 +21,7 @@ public class FlyCommand implements CommandExecutor{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!p.hasPermission("epicraft.fly.use")){
+		if(!p.hasPermission("epicraft.fly")){
 			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Flugmodus] " + p.getName() + " versuchte den Flugmodus zu benutzen");
 			return true;

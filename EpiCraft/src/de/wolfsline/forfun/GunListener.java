@@ -46,7 +46,7 @@ public class GunListener implements Listener, CommandExecutor{
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
 			if(e.getClickedBlock().getType().equals(Material.STONE_BUTTON)){
 				Location loc = e.getClickedBlock().getLocation();
-				if((p.hasPermission("epicraft.gun.create") || p.isOp())){
+				if((p.hasPermission("epicraft.gun") || p.isOp())){
 					if(createNewGun){
 						if(map.contains(loc)){
 							map.remove(loc);
@@ -109,7 +109,7 @@ public class GunListener implements Listener, CommandExecutor{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!(p.hasPermission("epicraft.gun.create") || p.isOp())){
+		if(!(p.hasPermission("epicraft.gun") || p.isOp())){
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
 			return true;
 		}

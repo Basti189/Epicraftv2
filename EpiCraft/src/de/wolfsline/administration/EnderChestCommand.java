@@ -24,7 +24,7 @@ public class EnderChestCommand implements CommandExecutor {
             return true;
         }
         Player p = (Player) cs;
-        if(!p.hasPermission("epicraft.enderchest.use")){
+        if(!p.hasPermission("epicraft.enderchest")){
             p.sendMessage(plugin.error);
             plugin.api.sendLog("[Epicraft - Enderchest] " + p.getName() + " versuchte auf die Enderchest von " + args[0] + " zuzugreifen");
             return true;

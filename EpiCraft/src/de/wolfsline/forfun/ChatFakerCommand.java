@@ -23,7 +23,7 @@ public class ChatFakerCommand implements CommandExecutor{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!p.isOp())
+		if(!p.hasPermission("epicraft.chat.fake"))
 			return true;
 		if(args.length >= 2){
 			Player pu = Bukkit.getPlayer(args[0]);

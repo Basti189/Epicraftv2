@@ -95,13 +95,13 @@ public class QuestSignListener implements Listener{
 		String line = event.getLine(1);
 		line = ChatColor.stripColor(line);
 		if(line.equals("[Start]") || line.equalsIgnoreCase("a")|| line.equalsIgnoreCase("b")|| line.equalsIgnoreCase("c")|| line.equalsIgnoreCase("d")){
-			if(!p.hasPermission("epicraft.sign.guard")){
+			if(!p.hasPermission("epicraft.permission.guard")){
 				event.getBlock().breakNaturally();
 				p.kickPlayer(ChatColor.RED + "Nein...");
 				plugin.api.sendLog("[Epicraft - Fragebogen] " + p.getName() + " hat versucht ein Fragebogenschild aufzustellen");
 				return;
 			}
-			else if(!(p.hasPermission("epicraft.sign.mod") || p.isOp())){
+			else if(!(p.hasPermission("epicraft.permission.moderator") || p.isOp())){
 				event.getBlock().breakNaturally(); //<-- Exception! Warum ?
 				return;
 			}

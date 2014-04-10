@@ -6,7 +6,6 @@ import org.bukkit.block.Chest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import de.wolfsline.Epicraft.Epicraft;
@@ -26,7 +25,7 @@ public class ChestAccess implements CommandExecutor{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!(p.hasPermission("epicraft.chest.access") || p.isOp())){
+		if(!p.hasPermission("epicraft.chest")){
 			p.sendMessage(plugin.error);
 			this.plugin.api.sendLog("[Epicraft - Kistenzugiff] " + p.getName() + " versuchte den Befehl zu benutzen");
 			return true;

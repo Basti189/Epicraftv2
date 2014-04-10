@@ -2,8 +2,6 @@ package de.wolfsline.forfun;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.SkullType;
-import org.bukkit.block.Skull;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,7 +26,7 @@ public class HeadCommand implements CommandExecutor{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!p.isOp()){
+		if(!p.hasPermission("epicraft.head")){
 			p.sendMessage(plugin.error);
 			return true;
 		}

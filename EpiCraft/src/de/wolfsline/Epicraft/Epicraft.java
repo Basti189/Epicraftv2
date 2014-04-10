@@ -41,9 +41,6 @@ import de.wolfsline.forfun.HeadCommand;
 import de.wolfsline.forfun.LightningCommand;
 import de.wolfsline.forfun.PVP;
 import de.wolfsline.forfun.TntCommand;
-import de.wolfsline.forfun.VelocityShooter;
-import de.wolfsline.game.ArenaSignListener;
-import de.wolfsline.game.GameSignListener;
 import de.wolfsline.gs.Grundstück;
 import de.wolfsline.gs.SignName;
 import de.wolfsline.home.HomeCommand;
@@ -54,7 +51,6 @@ import de.wolfsline.message.WhisperExecuter;
 import de.wolfsline.modify.ColorSignListener;
 import de.wolfsline.modify.CommandListener;
 import de.wolfsline.modify.DeathListener;
-import de.wolfsline.modify.GamemodeListener;
 import de.wolfsline.modify.JoinQuitListener;
 import de.wolfsline.modify.MECommand;
 import de.wolfsline.permission.PermissionManager;
@@ -168,7 +164,6 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("horse").setExecutor(horse);
         this.getCommand("api").setExecutor(api);
         this.getCommand("epicraft").setExecutor(new DEBUGCLASS(this));
-        this.getCommand("jump").setExecutor(new VelocityShooter());
         this.getCommand("uhr").setExecutor(new TimeCommand(this));
         this.getCommand("skull").setExecutor(skp);
         this.getCommand("vote").setExecutor(voteListener);
@@ -181,8 +176,6 @@ public class Epicraft extends JavaPlugin{
 		PluginManager pm = this.getServer().getPluginManager();
 		
 		pm.registerEvents(jqlistener, this);
-		pm.registerEvents(new ArenaSignListener(), this);
-		pm.registerEvents(new GameSignListener(this), this);
 		pm.registerEvents(sign, this);
 		pm.registerEvents(new de.wolfsline.Time.SignListener(this), this);
 		pm.registerEvents(qsl, this);
@@ -205,7 +198,6 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(new MapSizeControll(this), this);
 		pm.registerEvents(new IronGolemDropControll(), this);
 		pm.registerEvents(horse, this);
-		pm.registerEvents(new GamemodeListener(), this);
 		pm.registerEvents(set, this);
 		pm.registerEvents(restriction, this);
 		pm.registerEvents(api, this);

@@ -16,6 +16,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -42,6 +43,11 @@ public class AuthCommand implements CommandExecutor, Listener{
 			return true;
 		}
 		Player p = (Player) cs;
+		if(!p.hasPermission("epicraft.auth")){
+			p.sendMessage(plugin.error);
+			plugin.api.sendLog("[Epicraft - Passwort] " + p.getName() + " versucht auf den Befehl zuzugreifen!");
+			return true;
+		}
 		if((label.equalsIgnoreCase("l") || label.equalsIgnoreCase("login"))){
 			if(args.length == 1){
 				String password = args[0];
@@ -295,5 +301,12 @@ public class AuthCommand implements CommandExecutor, Listener{
 			}
 			
 		}	
+	}
+	
+	@EventHandler
+	public void PlayerBreakBlockEvent(BlockBreakEvent event){
+		if(map.containsKey(event.getPlayer().getName())){
+			event.setCancelled(true);
+		}
 	}
 }

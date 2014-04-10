@@ -30,7 +30,7 @@ public class UnHideCommand implements CommandExecutor, Listener{
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
 		if(!(cs instanceof Player))
 			return false;
-		if(!cs.hasPermission("epicraft.hide.use")){
+		if(!cs.hasPermission("epicraft.hide")){
 			cs.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Unsichtbar] " + cs.getName() + " hat versucht auf den Hide-Befehl zuzugreifen");
 			return true;

@@ -34,7 +34,7 @@ public class TimePlayer implements CommandExecutor, Listener{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!p.hasPermission("epicraft.time.look")){
+		if(!p.hasPermission("epicraft.time")){
 			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Onlinezeit] " + p.getName() + " hat versucht seine Onlinezeit anzeigen zu lassen");
 			return true;

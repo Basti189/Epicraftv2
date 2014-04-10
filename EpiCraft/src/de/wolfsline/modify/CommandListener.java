@@ -19,7 +19,7 @@ public class CommandListener implements Listener{
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void PlayerCommandListener(PlayerCommandPreprocessEvent e){
 		e.setMessage(ChatColor.stripColor(e.getMessage()));
-		if((!e.getPlayer().hasPermission("epicraft.command.allow"))){
+		if(!e.getPlayer().hasPermission("epicraft.command.allow")){
 			e.setCancelled(true);
 			e.getPlayer().sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
 		}	

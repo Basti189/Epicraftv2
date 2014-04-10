@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 
 import de.wolfsline.Epicraft.Epicraft;
@@ -26,7 +25,7 @@ public class RestartCommand implements CommandExecutor, Listener{
 
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
-		if(!(cs.hasPermission("epicraft.restart.use") || cs.isOp())){
+		if(!(cs.hasPermission("epicraft.restart") || cs.isOp())){
 			cs.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Neustart] " + cs.getName() + " versuchte den Server neuzustarten");
 			return true;

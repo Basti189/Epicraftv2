@@ -173,7 +173,7 @@ public class EventAPI extends Handler implements Listener, CommandExecutor{
 
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
-		if(!cs.hasPermission("epicraft.debug.console")){
+		if(!cs.hasPermission("epicraft.api")){
 			return true;
 		}
 		if(list.contains(cs.getName())){

@@ -24,7 +24,7 @@ public class TntCommand implements CommandExecutor{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!(p.hasPermission("epicraft.grenade.use") || p.isOp())){
+		if(!p.hasPermission("epicraft.grenade")){
 			p.sendMessage(plugin.error);
 			return true;
 		}

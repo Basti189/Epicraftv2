@@ -68,7 +68,7 @@ public class JailCommand implements CommandExecutor, Listener{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!(p.hasPermission("epicraft.jail.use"))){
+		if(!(p.hasPermission("epicraft.jail"))){
 			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Gefängnis] " + p.getName() + " versuchte den Befehl zu benutzen");
 			return true;

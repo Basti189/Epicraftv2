@@ -14,8 +14,10 @@ import de.wolfsline.Epicraft.Epicraft;
 public class WhisperExecuter implements CommandExecutor {
 
 	private Epicraft plugin;
+	
 	private HashMap<String,String> answer = new HashMap<String,String>();
 	private HashMap<String,String> repeat = new HashMap<String,String>();
+	
 	public WhisperExecuter(Epicraft plugin) {
 		this.plugin = plugin;
 	}
@@ -27,6 +29,11 @@ public class WhisperExecuter implements CommandExecutor {
 			return true;
 		}
 		Player p = (Player) cs;
+		if(p.hasPermission("epicraft.chat.whisper")){
+			p.sendMessage(plugin.error);
+			plugin.api.sendLog("[Epicraft - Flüstern] " + p.getName() + " versucht auf den Befehl zuzugreifen!");
+			return true;
+		}
 		if(label.equals("r")){
 			if(args.length == 0){
 				p.sendMessage(plugin.namespace + ChatColor.RED + "Nachricht und fehlt!");

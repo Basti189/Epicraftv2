@@ -33,7 +33,7 @@ public class SkullPlayer implements CommandExecutor, Listener{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!(p.isOp() || p.hasPermission("epicraft.permission.admin")))
+		if(!p.hasPermission("epicraft.skull"))
 			return true;
 		if(args.length == 1){
 			this.name = args[0];

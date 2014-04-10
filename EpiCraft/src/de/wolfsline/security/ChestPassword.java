@@ -58,8 +58,8 @@ public class ChestPassword implements CommandExecutor, Listener{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!p.hasPermission("epicraft.blocksecure.use")){
-			p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl");
+		if(!p.hasPermission("epicraft.blocksecure")){
+			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Secure] " + p.getName() + " hat versucht auf den Secure-Befehl zuzugreifen");
 			return true;
 		}

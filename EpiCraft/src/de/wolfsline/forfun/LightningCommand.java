@@ -11,7 +11,7 @@ public class LightningCommand implements CommandExecutor{
 
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
-		if(!cs.isOp())
+		if(!cs.hasPermission("epicraft.lightning"))
 			return true;
 		if(args.length == 1){
 			Player p = Bukkit.getPlayer(args[0]);

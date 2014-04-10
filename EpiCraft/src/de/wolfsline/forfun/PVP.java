@@ -39,7 +39,7 @@ public class PVP implements CommandExecutor, Listener {
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!p.hasPermission("epicraft.pvp.use")){
+		if(!p.hasPermission("epicraft.pvp")){
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
 			plugin.api.sendLog("[Epicraft - PVP] " + p.getName() + " hat versucht auf den PVP-Befehl zuzugreifen");
 			return true;

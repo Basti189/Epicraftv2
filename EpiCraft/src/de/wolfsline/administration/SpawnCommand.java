@@ -22,7 +22,7 @@ public class SpawnCommand implements CommandExecutor{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!p.hasPermission("epicraft.spawn.use")){
+		if(!p.hasPermission("epicraft.spawn")){
 			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Spawn] " + p.getName() + " hat versucht sich zum Spawn zu teleportieren");
 			return true;
@@ -39,7 +39,7 @@ public class SpawnCommand implements CommandExecutor{
 			return true;
 		}
 		if(args.length == 1){
-			if(!p.isOp()){
+			if(!p.hasPermission("epicraft.spawn.set")){
 				return false;
 			}
 			p.getWorld().setSpawnLocation((int)p.getLocation().getX(), (int)p.getLocation().getY(),(int)p.getLocation().getZ());

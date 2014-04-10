@@ -36,7 +36,7 @@ public class HorseListener implements CommandExecutor, Listener{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!p.hasPermission("epicraft.horse.setowner")){
+		if(!p.hasPermission("epicraft.horse")){
 			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Pferd] " + p.getName() + " hat versucht auf den Befehl zuzugreifen");
 			return true;
