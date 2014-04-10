@@ -58,6 +58,7 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.important", true);
 			p.addAttachment(plugin, "epicraft.horse", true);
 			p.addAttachment(plugin, "epicraft.blocksecure", true);
+			p.addAttachment(plugin, "epicraft.pvp", true);
 		}
 		else if(permission.equals("epicraft.permission.guard")){
 			//Epicraft
@@ -77,6 +78,7 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.sign.color", true);
 			p.addAttachment(plugin, "epicraft.kick", true);
 			p.addAttachment(plugin, "epicraft.warn", true);
+			p.addAttachment(plugin, "epicraft.pvp", true);
 		}
 		else if(permission.equals("epicraft.permission.moderator")){
 			//Epicraft
@@ -97,6 +99,7 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.kick", true);
 			p.addAttachment(plugin, "epicraft.warn", true);
 			p.addAttachment(plugin, "epicraft.ban", true);
+			p.addAttachment(plugin, "epicraft.pvp", true);
 			
 		}
 		else if(permission.equals("epicraft.permission.admin")){

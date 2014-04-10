@@ -26,7 +26,7 @@ public class ChatListener implements Listener, CommandExecutor{
 	private Epicraft plugin;
 	
 	//0 = Öffentlicher Channel //1 = Öffentlicher Channel //2 = Supportchannel1 //3 = Supportchannel2
-	private HashMap<String, Integer> mapChannel = new HashMap<String, Integer>();
+	public HashMap<String, Integer> mapChannel = new HashMap<String, Integer>();
 	
 	public ChatListener(Epicraft plugin) {
 		this.plugin = plugin;
@@ -123,9 +123,11 @@ public class ChatListener implements Listener, CommandExecutor{
 		e.setCancelled(true);
 		
 		EpicraftPlayer epiSender = plugin.pManager.getEpicraftPlayer(p.getName());
-		if(epiSender.chatMessages == false){
-			p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst zur Zeit keine Nachrichten senden!");
-			return;
+		if(epiSender != null){
+			if(epiSender.chatMessages == false){
+				p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst zur Zeit keine Nachrichten senden!");
+				return;
+			}
 		}
 		if(!p.hasPermission("epicraft.chat")){
 			p.sendMessage(plugin.error);

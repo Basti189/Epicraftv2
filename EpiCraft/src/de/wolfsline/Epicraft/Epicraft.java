@@ -213,6 +213,7 @@ public class Epicraft extends JavaPlugin{
 		
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
 			pManager.triggerEpicraftPlayerList(player, true);
+			myChat.mapChannel.put(player.getName(), 0);
 		}
 		
 		this.messageTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new TimeRunnable(), 0L, 2*20L);
