@@ -11,30 +11,24 @@ commands:
   spawn:
     description: Teleportiert dich zum Spawn
     usage: /spawn
-    permission: epicraft.spawn.use
+    permission: epicraft.spawn
     
   gs:
     description: Kaufe und Verwalte dein Grundstueck
     usage: /gs neu <Name>, + <x> <y>, help
     permissions: 
-     - epicraft.gs.use
-     - epicraft.gs.remove
-     - epicraft.gs.warp
-
+     - epicraft.gs
   restart:
     description: Startet den Server neu
     usage: /restart
     permissions: 
-     - epicraft.restart.use
+     - epicraft.restart
 
   sign:
     description: Ermöglicht dir das automatische Beschriften deiner Schilder an der Grundstücksgrenze
     usgage: /sign
     permissions:
      - epicraft.gs.sign
-     - epicraft.sign.mod
-     - epicraft.sign.guard
-     - epicraft.register.gast
 
   fragebogen:
     description: Fragebogeneinstellungen
@@ -43,18 +37,14 @@ commands:
   warn:
     description: Benutzerverwaltung
     usage: /warn
-    permissions:
-      - epicraft.restriction.use
+
   kick:
     description: Kickt einen Spieler vom Server
     usage: /kick <spieler> <Grund>
-    permissions:
-      - epictraft.restriction.team
+
   ban:
     description: Bannt einen Spieler vom Server
     usage: /ban <spieler> <Grund>
-    permissions:
-      - epicraft.restriction.team.ban
 
   home:
     description: Homepunktsystem
@@ -69,37 +59,37 @@ commands:
     aliases: [unhide]
     usage: /hide, unhide
     permissions:
-      - epicraft.hide.use
+      - epicraft.hide
       
   invsee:
     descripton: Zeigt den Inventarinhalt eines Spielers
     usage: /invsee <spieler>
     permissions:
-      - epicraft.inv.use
+      - epicraft.inv
 
   lightning:
     description: Blitzt einen Spieler
     usage: /lightning <spieler>
     permissions:
-      - epicraft.lightning.use
+      - epicraft.lightning
 
   gun:
     description: Neue Gun ja nein
     usage: /gun
     permissions:
-     - epicraft.gun.create
+     - epicraft.gun
 
   grenade:
     description: Platziert TNT
     usage: /grenade
     permissions:
-     - epicraft.greande.use
+     - epicraft.grenade
  
   ensee:
     descripton: Zeigt den Enderchestinhalt eines Spielers
     usage: /ensee <spieler>
     permissions:
-      - epicraft.enderchest.use
+      - epicraft.enderchest
 
   jail:
     description: Gefängnissystem
@@ -117,16 +107,19 @@ commands:
   head:
     descripton: Setze Helm
     usage: /head 
+    permissions: epicraft.head
 
   login:
     descripton: Registrieren und Einloggen
     usage: /login <passwort>, register <passwort> <passwort>
     aliases: [l, email, register, cp, changepw]
+    permissions: epicraft.auth
 
   w:
     description: Flüstert eine Nachricht
     aliases: [w,r,a, msg]
     usage: /w <Spieler> <Nachticht>
+    permissions: epicraft.chat.whisper
 
   support:
     description: Wechselt dein Inventar
@@ -140,23 +133,19 @@ commands:
     aliases: [ot]
     usage: /onlinetime
     permissions:
-     - epicraft.time.look
-
-#  map:
-#    description: Map
-#    usage: /map
+     - epicraft.time
 
   pvp:
     description: PVP aktivieren, deaktivieren
     usage: /pvp
     permissions:
-     - epicraft.pvp.use
+     - epicraft.pvp
 
   fly:
     description: Aktiviert fliegen
     usage: /fly [speed]
     permissions:
-     - epicraft.fly.use
+     - epicraft.fly
 
   info:
     description: Informationen zum Server
@@ -189,13 +178,13 @@ commands:
     description: Verschlüsselt Kisten und Oefen
     usage: /secure
     permissions:
-      - epicraft.blocksecure.use
+      - epicraft.blocksecure
 
   horse:
     description: Legt den Besitzer eines Maultieres fest
     usage: /horse <Spieler>
     permissions:
-      - epicraft.horse.setowner
+      - epicraft.horse
 
   api:
     description: Zugriff auf die EventAPI von Epicraft
@@ -205,16 +194,6 @@ commands:
     description: zu DEBUGzwecken
     usage: /epicraft
 
-#  sky:
-#    description: Aktiviert fliegen
-#    usage: /sky [speed]
-#    permissions:
-#     - epicraft.sky.create
-
-  jump:
-    description: Vectorspass
-    usage: /jump
-
   uhr:
     description: Die Zeit
     usage: /uhr
@@ -222,6 +201,7 @@ commands:
   skull:
     description: Head
     usage: /skull <name>
+    permission: epicraft.skull
 
   vote:
     description: Vote fuer Epicraft
@@ -234,10 +214,12 @@ commands:
   chest:
     description: Zugriff auf Kisten in der Ferne
     usage: /chest
+    permissions: epicraft.chest
 
   whois:
     description: Informationen ueber den Spieler
     usage: /whois
+    permissions: epicraft.whois
 
   channel:
     description: Channel im Chat wechseln
@@ -262,16 +244,38 @@ permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft
     children:
-      epicraft.einstellungen.admin: true
-      epicraft.whisper.use: true
-      epicraft.einstellungen.use: true
-      epicraft.me.use: true
-      epicraft.permission.use: true
-      epicraft.api.use: true
-      epicraft.chat.use: true
-      epicraft.info.wer: true
+      epicraft.chest: true
+      epicraft.enderchest: true
+      epicraft.fly: true
+      epicraft.inv: true
+      epicraft.jail: true
+      epicraft.restart: true
+      epicraft.spawn: true
+      epicraft.spawn.set: true
+      epicraft.teleport: true
+      epicraft.time: true
+      epicraft.hide: true
+      epicraft.whois: true
+      epicraft.api: true
+      epicraft.chat.fake: true
+      epicraft.gun: true
+      epicraft.head: true
+      epicraft.lightning: true
+      epicraft.pvp: true
+      epicraft.grenade: true
+      epicraft.gs: true
+      epicraft.gs.sign: true
+      epicraft.chat: true
       epicraft.chat.channel: true
-      epicraft.verwarnung.use: true
-      epicraft.verwarnung.team: true
-      epicraft.verwarnung.use.ban: true
-      epicraft.teleport.use: true
+      epicraft.chat.whisper: true
+      epicraft.chat.color: true
+      epicraft.sign.color: true
+      epicraft.command.allow: true
+      epicraft.important: true
+      epicraft.auth: true
+      epicraft.blocksecure: true
+      epicraft.horse: true
+      epicraft.ticket: true
+      epicraft.warn: true
+      epicraft.ban: true
+      epicraft.kick: true

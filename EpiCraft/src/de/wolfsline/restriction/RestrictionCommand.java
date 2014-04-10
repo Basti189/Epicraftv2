@@ -46,7 +46,7 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 			showInfo(p.getName(), p);
 			return true;
 		}
-		if(!(p.hasPermission("epicraft.permission.guard") || p.hasPermission("epicraft.permission.moderator") || p.hasPermission("epicraft.permission.admin") || p.isOp())){
+		if(!p.hasPermission("epicraft.warn")){
 			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Verwarnung] " + p.getName() + " hat versucht den Befehl zu benutzen!");
 			return true;

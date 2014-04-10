@@ -36,29 +36,67 @@ public class PermissionManager implements CommandExecutor{
 		if(permission.equals("epicraft.permission.gast")){
 			//Epicraft
 			p.addAttachment(plugin, "epicraft.permission.gast", true);
-			p.addAttachment(plugin, "epicraft.chat.use", true);
-			p.addAttachment(plugin, "epicraft.info.wer", true);
-			
+			p.addAttachment(plugin, "epicraft.chat", true);
+			p.addAttachment(plugin, "epicraft.chat.channel", true);;
+			p.addAttachment(plugin, "epicraft.spawn", true);
+			p.addAttachment(plugin, "epicraft.time", true);
+			p.addAttachment(plugin, "epicraft.command.allow", true);
+			p.addAttachment(plugin, "epicraft.auth", true);
+			p.addAttachment(plugin, "epicraft.ticket", true);
 		}
 		else if(permission.equals("epicraft.permission.spieler")){
 			//Epicraft
 			p.addAttachment(plugin, "epicraft.permission.spieler", true);
-			p.addAttachment(plugin, "epicraft.chat.use", true);
-			p.addAttachment(plugin, "epicraft.info.wer", true);
-			
+			p.addAttachment(plugin, "epicraft.chat", true);
+			p.addAttachment(plugin, "epicraft.chat.whisper", true);
+			p.addAttachment(plugin, "epicraft.chat.channel", true);
+			p.addAttachment(plugin, "epicraft.spawn", true);
+			p.addAttachment(plugin, "epicraft.time", true);
+			p.addAttachment(plugin, "epicraft.command.allow", true);
+			p.addAttachment(plugin, "epicraft.auth", true);
+			p.addAttachment(plugin, "epicraft.ticket", true);
+			p.addAttachment(plugin, "epicraft.important", true);
+			p.addAttachment(plugin, "epicraft.horse", true);
+			p.addAttachment(plugin, "epicraft.blocksecure", true);
 		}
 		else if(permission.equals("epicraft.permission.guard")){
 			//Epicraft
 			p.addAttachment(plugin, "epicraft.permission.guard", true);
-			p.addAttachment(plugin, "epicraft.chat.use", true);
-			p.addAttachment(plugin, "epicraft.info.wer", true);
+			p.addAttachment(plugin, "epicraft.chat", true);
+			p.addAttachment(plugin, "epicraft.chat.whisper", true);
+			p.addAttachment(plugin, "epicraft.chat.channel", true);
+			p.addAttachment(plugin, "epicraft.chat.color", true);
+			p.addAttachment(plugin, "epicraft.spawn", true);
+			p.addAttachment(plugin, "epicraft.time", true);
+			p.addAttachment(plugin, "epicraft.command.allow", true);
+			p.addAttachment(plugin, "epicraft.auth", true);
+			p.addAttachment(plugin, "epicraft.ticket", true);
+			p.addAttachment(plugin, "epicraft.important", true);
+			p.addAttachment(plugin, "epicraft.horse", true);
+			p.addAttachment(plugin, "epicraft.blocksecure", true);
+			p.addAttachment(plugin, "epicraft.sign.color", true);
+			p.addAttachment(plugin, "epicraft.kick", true);
+			p.addAttachment(plugin, "epicraft.warn", true);
 		}
 		else if(permission.equals("epicraft.permission.moderator")){
 			//Epicraft
 			p.addAttachment(plugin, "epicraft.permission.moderator", true);
-			p.addAttachment(plugin, "epicraft.chat.use", true);
-			p.addAttachment(plugin, "epicraft.info.wer", true);
-			p.addAttachment(plugin, "epicraft.teleport.use", true);
+			p.addAttachment(plugin, "epicraft.chat", true);
+			p.addAttachment(plugin, "epicraft.chat.whisper", true);
+			p.addAttachment(plugin, "epicraft.chat.channel", true);
+			p.addAttachment(plugin, "epicraft.chat.color", true);
+			p.addAttachment(plugin, "epicraft.spawn", true);
+			p.addAttachment(plugin, "epicraft.time", true);
+			p.addAttachment(plugin, "epicraft.command.allow", true);
+			p.addAttachment(plugin, "epicraft.auth", true);
+			p.addAttachment(plugin, "epicraft.ticket", true);
+			p.addAttachment(plugin, "epicraft.important", true);
+			p.addAttachment(plugin, "epicraft.horse", true);
+			p.addAttachment(plugin, "epicraft.blocksecure", true);
+			p.addAttachment(plugin, "epicraft.sign.color", true);
+			p.addAttachment(plugin, "epicraft.kick", true);
+			p.addAttachment(plugin, "epicraft.warn", true);
+			p.addAttachment(plugin, "epicraft.ban", true);
 			
 		}
 		else if(permission.equals("epicraft.permission.admin")){
@@ -83,6 +121,7 @@ public class PermissionManager implements CommandExecutor{
 		p.addAttachment(plugin, "epicraft.permission.guard", false);
 		p.addAttachment(plugin, "epicraft.permission.moderator", false);
 		p.addAttachment(plugin, "epicraft.permission.admin", false);
+		p.addAttachment(plugin, "epicraft.*", false);
 		//WorldGuard
 		p.addAttachment(plugin, "worldguard.*", false);
 		//WorldEdit

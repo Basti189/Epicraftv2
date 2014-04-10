@@ -23,7 +23,7 @@ public class KickCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
 		String reason = "";
-		if(!(cs.hasPermission("epicraft.permission.guard") || cs.hasPermission("epicraft.permission.moderator") || cs.hasPermission("epicraft.permission.admin")|| cs.isOp())){
+		if(!cs.hasPermission("epicraft.ban")){
 			cs.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Kick] " + cs.getName() + " hat versucht auf den Befehl zuzugreifen");
 			return true;

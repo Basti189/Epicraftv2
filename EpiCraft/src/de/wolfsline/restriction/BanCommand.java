@@ -26,7 +26,7 @@ public class BanCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
 		String reason = "";
-		if(!(cs.hasPermission("epicraft.permission.moderator") || cs.hasPermission("epicraft.permission.admin") || cs.isOp())){
+		if(!cs.hasPermission("epicraft.kick")){
 			cs.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Ban] " + cs.getName() + " hat versucht auf den Befehl zuzugreifen");
 			return true;

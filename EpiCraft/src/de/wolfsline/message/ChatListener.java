@@ -127,7 +127,7 @@ public class ChatListener implements Listener, CommandExecutor{
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst zur Zeit keine Nachrichten senden!");
 			return;
 		}
-		if(!p.hasPermission("epicraft.chat.use")){
+		if(!p.hasPermission("epicraft.chat")){
 			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Chat] " + p.getName() + " versucht auf den Chat zuzugreifen");
 			return;
