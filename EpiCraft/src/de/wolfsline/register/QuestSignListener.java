@@ -170,7 +170,8 @@ public class QuestSignListener implements Listener{
 			if(qn.questionAllRight(p)){
 				map.remove(p.getName());
 				p.teleport(this.start);
-				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Glückwunsch! Du hast alle Fragen richtig beantwortet\nDu gehörst nun zu den Spielern");
+				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Glückwunsch! Du hast alle Fragen richtig beantwortet");
+				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du gehörst nun zu den Spielern");
 				for(Player player : Bukkit.getServer().getOnlinePlayers()){
 					if(player.getName().equals(p.getName()))
 						continue;
