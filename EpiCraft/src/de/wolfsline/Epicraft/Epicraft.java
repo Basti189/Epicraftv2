@@ -16,6 +16,8 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.wolfsline.API.EventAPI;
 import de.wolfsline.DEBUG.DEBUGCLASS;
 import de.wolfsline.DEBUG.PlayerBLock;
+import de.wolfsline.Ticketsystem.Ticketsystem;
+import de.wolfsline.Ticketsystem.Ticketsystem_Daten;
 import de.wolfsline.Time.TimeRunnable;
 import de.wolfsline.administration.ChestAccess;
 import de.wolfsline.administration.DebugCommand;
@@ -107,7 +109,6 @@ public class Epicraft extends JavaPlugin{
 		GunListener gun = new GunListener(this);
 		AuthCommand auth = new AuthCommand(this);
 		UnHideCommand unhide = new UnHideCommand(this);
-		//GSCommand gs = new GSCommand(this);
 		Grundstück gs = new Grundstück(this);
 		TimePlayer timeplayer = new TimePlayer(this);
 		PVP pvp = new PVP(this);
@@ -124,6 +125,7 @@ public class Epicraft extends JavaPlugin{
 		RestartCommand restart = new RestartCommand(this);
 		SignName sign = new SignName(this);
 		ChatListener myChat = new ChatListener(this);
+		Ticketsystem ticket = new Ticketsystem(this);
 		
 		//TEST
 		Disco disco = new Disco(this);
@@ -174,6 +176,7 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("chest").setExecutor(new ChestAccess(this));
         this.getCommand("whois").setExecutor(new WhoIsCommand(this));
         this.getCommand("permission").setExecutor(pManager);
+        this.getCommand("ticket").setExecutor(ticket);
         
 		PluginManager pm = this.getServer().getPluginManager();
 		

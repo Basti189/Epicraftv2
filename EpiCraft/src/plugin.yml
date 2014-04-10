@@ -253,6 +253,11 @@ commands:
   disco:
    description: Für den Discoboden
 
+  ticket:
+    description: Hier kannst du Probleme an das Team melden
+    usage: /ticket <Nachricht>
+    permissions: epicraft.ticket
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft
