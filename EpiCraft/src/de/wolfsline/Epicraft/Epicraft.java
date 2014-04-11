@@ -17,7 +17,6 @@ import de.wolfsline.API.EventAPI;
 import de.wolfsline.DEBUG.DEBUGCLASS;
 import de.wolfsline.DEBUG.PlayerBLock;
 import de.wolfsline.Ticketsystem.Ticketsystem;
-import de.wolfsline.Ticketsystem.Ticketsystem_Daten;
 import de.wolfsline.Time.TimeRunnable;
 import de.wolfsline.administration.ChestAccess;
 import de.wolfsline.administration.DebugCommand;
@@ -67,6 +66,7 @@ import de.wolfsline.security.MapSizeControll;
 import de.wolfsline.settings.Settings;
 import de.wolfsline.statistics.KillCounter;
 import de.wolfsline.teleport.SignLift;
+import de.wolfsline.teleport.World;
 import de.wolfsline.worldgenerator.CleanRoomChunkGenerator;
 
 public class Epicraft extends JavaPlugin{
@@ -122,6 +122,7 @@ public class Epicraft extends JavaPlugin{
 		SignName sign = new SignName(this);
 		ChatListener myChat = new ChatListener(this);
 		Ticketsystem ticket = new Ticketsystem(this);
+		World world = new World(this);
 		
 		//TEST
 		Disco disco = new Disco(this);
@@ -172,6 +173,7 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("whois").setExecutor(new WhoIsCommand(this));
         this.getCommand("permission").setExecutor(pManager);
         this.getCommand("ticket").setExecutor(ticket);
+        this.getCommand("welt").setExecutor(world);
         
 		PluginManager pm = this.getServer().getPluginManager();
 		
@@ -208,6 +210,7 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(pb, this);
 		pm.registerEvents(new EpiMaster(this), this);
 		pm.registerEvents(restart, this);
+		pm.registerEvents(world, this);
 		
 		pm.registerEvents(disco, this);
 		
@@ -221,7 +224,8 @@ public class Epicraft extends JavaPlugin{
 	}
 	
 	public MySQL getMySQL(){
-		this.sql.getConnection();
+		this.sql.closeConnection();
+		this.sql = new MySQL();
 		return this.sql;
 	}
 	

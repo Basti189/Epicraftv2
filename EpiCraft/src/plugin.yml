@@ -240,6 +240,15 @@ commands:
     usage: /ticket <Nachricht>
     permissions: epicraft.ticket
 
+  welt:
+    description: Welten wechseln
+    usage: /welt
+    permissions:
+      - epicraft.world.change
+      - epicraft.world.change.other
+      - epicraft.world.sign
+      - epicraft.world.sign.create
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft
@@ -257,7 +266,6 @@ permissions:
       epicraft.hide: true
       epicraft.whois: true
       epicraft.api: true
-      epicraft.chat.fake: true
       epicraft.gun: true
       epicraft.head: true
       epicraft.lightning: true
@@ -269,6 +277,7 @@ permissions:
       epicraft.chat.channel: true
       epicraft.chat.whisper: true
       epicraft.chat.color: true
+      epicraft.chat.fake: true
       epicraft.sign.color: true
       epicraft.command.allow: true
       epicraft.important: true
@@ -279,3 +288,7 @@ permissions:
       epicraft.warn: true
       epicraft.ban: true
       epicraft.kick: true
+      epicraft.world.change: true
+      epicraft.world.change.other: true
+      epicraft.world.sign: true
+      epicraft.world.sign.create: true
