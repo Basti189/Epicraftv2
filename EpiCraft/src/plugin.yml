@@ -292,3 +292,6 @@ permissions:
       epicraft.world.change.other: true
       epicraft.world.sign: true
       epicraft.world.sign.create: true
+      epicraft.world.load: true
+      epicraft.world.unload: true
+      epicraft.world.create: true

@@ -11,7 +11,6 @@ import de.wolfsline.Epicraft.Epicraft;
 public class CommandListener implements Listener{
 	
 	private Epicraft plugin;
-	
 	public CommandListener(Epicraft plugin) {
 		this.plugin = plugin;
 	}
@@ -22,6 +21,6 @@ public class CommandListener implements Listener{
 		if(!e.getPlayer().hasPermission("epicraft.command.allow")){
 			e.setCancelled(true);
 			e.getPlayer().sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
-		}	
+		}
 	}
 }

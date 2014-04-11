@@ -2,6 +2,7 @@ package de.wolfsline.teleport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.WorldCreator;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -55,6 +56,38 @@ public class World implements CommandExecutor, Listener{
 				p.teleport(world.getSpawnLocation());
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest auf die Welt \"" + targetWorld + "\" teleportiert!");
 				plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat sich auf die Welt " + targetWorld + " teleportiert");
+				return true;
+			}
+			else if(args[0].equalsIgnoreCase("load")){
+				if(!p.hasPermission("epicraft.world.load")){//Wenn permission nicht
+					p.sendMessage(plugin.error);
+					plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat versucht auf den Load-Befehl zuzugreifen!");
+					return true;
+				}
+				String targetWorld = args[1];
+				org.bukkit.World world = Bukkit.getServer().getWorld(targetWorld);
+				if(world != null){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Die Welt \"" + targetWorld + "\" ist bereits geladen!");
+					return true;
+				}
+				Bukkit.getServer().createWorld(new WorldCreator(targetWorld));
+				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Die Welt \"" + targetWorld + "\" wurde geladen/erstellt!");
+				return true;
+			}
+			else if(args[0].equalsIgnoreCase("unload")){
+				if(!p.hasPermission("epicraft.world.unload")){//Wenn permission nicht
+					p.sendMessage(plugin.error);
+					plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat versucht auf den Unload-Befehl zuzugreifen!");
+					return true;
+				}
+				String targetWorld = args[1];
+				org.bukkit.World world = Bukkit.getServer().getWorld(targetWorld);
+				if(world == null){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Die Welt \"" + targetWorld + "\" ist nicht geladen!");
+					return true;
+				}
+				Bukkit.getServer().unloadWorld(world, true);
+				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Die Welt \"" + targetWorld + "\" wurde entladen!");
 				return true;
 			}
 		}

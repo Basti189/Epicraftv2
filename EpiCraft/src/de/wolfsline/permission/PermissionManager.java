@@ -59,6 +59,9 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.horse", true);
 			p.addAttachment(plugin, "epicraft.blocksecure", true);
 			p.addAttachment(plugin, "epicraft.pvp", true);
+			p.addAttachment(plugin, "epicraft.gs", true);
+			p.addAttachment(plugin, "epicraft.gs.sign", true);
+			p.addAttachment(plugin, "epicraft.world.sign", true);
 		}
 		else if(permission.equals("epicraft.permission.stammi")){
 			//Epicraft
@@ -77,6 +80,10 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.blocksecure", true);
 			p.addAttachment(plugin, "epicraft.pvp", true);
 			p.addAttachment(plugin, "epicraft.sign.color", true);
+			p.addAttachment(plugin, "epicraft.gs", true);
+			p.addAttachment(plugin, "epicraft.gs.sign", true);
+			p.addAttachment(plugin, "epicraft.world.sign", true);
+			p.addAttachment(plugin, "epicraft.sign.color", true);
 		}
 		else if(permission.equals("epicraft.permission.guard")){
 			//Epicraft
@@ -94,9 +101,18 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.horse", true);
 			p.addAttachment(plugin, "epicraft.blocksecure", true);
 			p.addAttachment(plugin, "epicraft.sign.color", true);
+			p.addAttachment(plugin, "epicraft.gs.sign", true);
+			p.addAttachment(plugin, "epicraft.gs", true);
+			p.addAttachment(plugin, "epicraft.world.sign", true);
+			//Epicraft - Team
+			p.addAttachment(plugin, "epicraft.fly", true);
+			p.addAttachment(plugin, "epicraft.jail", true);
+			p.addAttachment(plugin, "epicraft.teleport", true);
+			p.addAttachment(plugin, "epicraft.hide", true);
 			p.addAttachment(plugin, "epicraft.kick", true);
 			p.addAttachment(plugin, "epicraft.warn", true);
 			p.addAttachment(plugin, "epicraft.pvp", true);
+			p.addAttachment(plugin, "epicraft.world.change", true);
 		}
 		else if(permission.equals("epicraft.permission.moderator")){
 			//Epicraft
@@ -114,10 +130,23 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.horse", true);
 			p.addAttachment(plugin, "epicraft.blocksecure", true);
 			p.addAttachment(plugin, "epicraft.sign.color", true);
+			p.addAttachment(plugin, "epicraft.world.sign", true);
+			//Epicraft - Team
+			p.addAttachment(plugin, "epicraft.chest", true);
+			p.addAttachment(plugin, "epicraft.enderchest", true);
+			p.addAttachment(plugin, "epicraft.fly", true);
+			p.addAttachment(plugin, "epicraft.jail", true);
+			p.addAttachment(plugin, "epicraft.restart", true);
+			p.addAttachment(plugin, "epicraft.teleport", true);
+			p.addAttachment(plugin, "epicraft.hide", true);
+			p.addAttachment(plugin, "epicraft.whois", true);
+			p.addAttachment(plugin, "epicraft.api", true);
 			p.addAttachment(plugin, "epicraft.kick", true);
 			p.addAttachment(plugin, "epicraft.warn", true);
 			p.addAttachment(plugin, "epicraft.ban", true);
 			p.addAttachment(plugin, "epicraft.pvp", true);
+			p.addAttachment(plugin, "epicraft.world.change", true);
+			p.addAttachment(plugin, "epicraft.world.change.other", true);
 			
 		}
 		else if(permission.equals("epicraft.permission.admin")){
