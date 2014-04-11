@@ -60,6 +60,24 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.blocksecure", true);
 			p.addAttachment(plugin, "epicraft.pvp", true);
 		}
+		else if(permission.equals("epicraft.permission.stammi")){
+			//Epicraft
+			p.addAttachment(plugin, "epicraft.permission.stammi", true);
+			p.addAttachment(plugin, "epicraft.chat", true);
+			p.addAttachment(plugin, "epicraft.chat.whisper", true);
+			p.addAttachment(plugin, "epicraft.chat.channel", true);
+			p.addAttachment(plugin, "epicraft.chat.color", true);
+			p.addAttachment(plugin, "epicraft.spawn", true);
+			p.addAttachment(plugin, "epicraft.time", true);
+			p.addAttachment(plugin, "epicraft.command.allow", true);
+			p.addAttachment(plugin, "epicraft.auth", true);
+			p.addAttachment(plugin, "epicraft.ticket", true);
+			p.addAttachment(plugin, "epicraft.important", true);
+			p.addAttachment(plugin, "epicraft.horse", true);
+			p.addAttachment(plugin, "epicraft.blocksecure", true);
+			p.addAttachment(plugin, "epicraft.pvp", true);
+			p.addAttachment(plugin, "epicraft.sign.color", true);
+		}
 		else if(permission.equals("epicraft.permission.guard")){
 			//Epicraft
 			p.addAttachment(plugin, "epicraft.permission.guard", true);
