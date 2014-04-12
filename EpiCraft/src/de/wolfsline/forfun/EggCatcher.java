@@ -3,6 +3,7 @@ package de.wolfsline.forfun;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Egg;
@@ -29,6 +30,9 @@ public class EggCatcher implements Listener{
 
 	@EventHandler
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
+		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Damager: " + event.getDamager().toString());
+		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Entity: " + event.getEntity().toString());
+		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "EntityTyp: " + event.getEntityType().toString());
 		if(event.getDamager() instanceof Egg){
 			Egg egg = (Egg) event.getDamager();
 			if(egg.getShooter() instanceof Player){
@@ -51,11 +55,15 @@ public class EggCatcher implements Listener{
 					}
 					else if(targetEntity instanceof Horse){//100
 						Horse horse = (Horse) targetEntity;
-						if(!horse.getOwner().getName().equals(p.getName())){
-							p.sendMessage(plugin.namespace + ChatColor.RED + "Zugriff auf das Maultier von " + horse.getOwner().getName() + " verweigert!");
-							plugin.api.sendLog("[Epicraft - EggCatcher] " + p.getName() + " versucht auf das Maultier von " + horse.getOwner().getName() + " zuzugreifen");
-							return;
+						AnimalTamer tamer = horse.getOwner();
+						if(tamer != null){
+							if(!horse.getOwner().getName().equals(p.getName())){
+								p.sendMessage(plugin.namespace + ChatColor.RED + "Zugriff auf das Maultier von " + horse.getOwner().getName() + " verweigert!");
+								plugin.api.sendLog("[Epicraft - EggCatcher] " + p.getName() + " versucht auf das Maultier von " + horse.getOwner().getName() + " zuzugreifen");
+								return;
+							}
 						}
+						
 						event.setCancelled(true);
 						targetEntity.remove();
 						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)100);
