@@ -1,5 +1,7 @@
 package de.wolfsline.teleport;
 
+import javax.swing.text.html.parser.Entity;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.WorldCreator;
@@ -12,7 +14,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.PortalCreateEvent;
 
 import de.wolfsline.Epicraft.Epicraft;
 
@@ -120,6 +124,32 @@ public class World implements CommandExecutor, Listener{
 				plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat den Spieler " + targetPlayer + " auf die Welt " + targetWorld + " teleportiert");
 				return true;
 			}
+			else if(args[0].equalsIgnoreCase("load")){
+				if(!p.hasPermission("epicraft.world.load")){//Wenn permission nicht
+					p.sendMessage(plugin.error);
+					plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat versucht auf den Load-Befehl zuzugreifen!");
+					return true;
+				}
+				String targetWorld = args[1];
+				String seed = args[2];
+				org.bukkit.World world = Bukkit.getServer().getWorld(targetWorld);
+				if(world != null){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Die Welt \"" + targetWorld + "\" ist bereits geladen!");
+					return true;
+				}
+				long seedNumber = 0L;
+				try{
+					seedNumber = Long.valueOf(seed);
+				} catch(NumberFormatException nfe){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte gib einen gültigen Seed ein [0-9]");
+					return true;
+				}
+				WorldCreator worldCreator = new WorldCreator(targetWorld);
+				worldCreator.seed(seedNumber);
+				Bukkit.getServer().createWorld(worldCreator);
+				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Die Welt \"" + targetWorld + "\" wurde erstellt mit dem Seed " + seed);
+				return true;
+			}
 		}
 		p.sendMessage(plugin.namespace + ChatColor.RED + "/welt");
 		return true;
@@ -172,6 +202,23 @@ public class World implements CommandExecutor, Listener{
 			plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat versucht ein Weltenschild zu erstellen");
 			event.getBlock().breakNaturally();
 		}
+	}
+	
+	@EventHandler
+	public void onEntityPortalEnterEvent(EntityPortalEnterEvent event){
+		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Entity: " + event.getEntity().toString());
+		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Eventname: " + event.getEventName());
+		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Welt: " + event.getLocation().getWorld().getName());
+		if(event.getEntity() instanceof Player){
+			
+		}
+	}
+	
+	@EventHandler
+	public void onPortalCreateEvent(PortalCreateEvent event){
+		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Welt: " + event.getWorld().getName());
+		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Eventname: " + event.getEventName());
+		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Reason: " + event.getReason().toString());
 	}
 	
 	//Eigene Methoden

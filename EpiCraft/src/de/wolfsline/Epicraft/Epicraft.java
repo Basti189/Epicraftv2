@@ -35,6 +35,7 @@ import de.wolfsline.data.MySQL;
 import de.wolfsline.disco.Disco;
 import de.wolfsline.epimaster.EpiMaster;
 import de.wolfsline.forfun.ChatFakerCommand;
+import de.wolfsline.forfun.EggCatcher;
 import de.wolfsline.forfun.GunListener;
 import de.wolfsline.forfun.HeadCommand;
 import de.wolfsline.forfun.LightningCommand;
@@ -123,6 +124,7 @@ public class Epicraft extends JavaPlugin{
 		ChatListener myChat = new ChatListener(this);
 		Ticketsystem ticket = new Ticketsystem(this);
 		World world = new World(this);
+		EggCatcher catcher = new EggCatcher(this);
 		
 		//TEST
 		Disco disco = new Disco(this);
@@ -211,6 +213,7 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(new EpiMaster(this), this);
 		pm.registerEvents(restart, this);
 		pm.registerEvents(world, this);
+		pm.registerEvents(catcher, this);
 		
 		pm.registerEvents(disco, this);
 		
