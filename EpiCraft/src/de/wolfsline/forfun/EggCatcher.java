@@ -1,7 +1,7 @@
 package de.wolfsline.forfun;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Chicken;
@@ -60,6 +60,8 @@ public class EggCatcher implements Listener{
 								return;
 							}
 						}
+						if(!canPlayerCatchEntity(p, targetEntity))
+							return;
 						event.setCancelled(true);
 						targetEntity.remove();
 						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)100);
@@ -84,6 +86,19 @@ public class EggCatcher implements Listener{
 					p.getInventory().addItem(stack);
 				}
 			}
+		}
+	}
+	
+	private boolean canPlayerCatchEntity(Player p, Entity entity){
+		Location loc = entity.getLocation();
+		boolean canCatch = plugin.getWorldGuard().canBuild(p, loc.getBlock());
+		if(canCatch){
+			p.sendMessage(plugin.namespaceBeta + ChatColor.WHITE + "Du kannst auf diesem Grundstück Tiere einfangen!");
+			return true;
+		}
+		else{
+			p.sendMessage(plugin.namespaceBeta + ChatColor.RED + "Du kannst auf diesem Grundstück keine Tiere einfangen!");
+			return false;
 		}
 	}
 }

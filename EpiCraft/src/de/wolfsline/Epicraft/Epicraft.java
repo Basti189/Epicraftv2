@@ -241,13 +241,12 @@ public class Epicraft extends JavaPlugin{
     }
 	
 	public WorldGuardPlugin getWorldGuard() {
-	    Plugin wg = getServer().getPluginManager().getPlugin("WorldGuard");
+	    Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
 	 
 	    // WorldGuard may not be loaded
 	    if (wg == null || !(wg instanceof WorldGuardPlugin)) {
 	        return null; // Maybe you want throw an exception instead
 	    }
-	 
 	    return (WorldGuardPlugin) wg;
 	}
 	
