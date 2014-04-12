@@ -43,11 +43,15 @@ public class EggCatcher implements Listener{
 						return;
 					}
 					else if(targetEntity instanceof Chicken){//93
+						if(!canPlayerCatchEntity(p, targetEntity))
+							return;
 						event.setCancelled(true);
 						targetEntity.remove();
 						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)93);
 					}
 					else if(targetEntity instanceof Cow){//92
+						if(!canPlayerCatchEntity(p, targetEntity))
+							return;
 						event.setCancelled(true);
 						targetEntity.remove();
 						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)92);
@@ -57,13 +61,17 @@ public class EggCatcher implements Listener{
 						AnimalTamer tamer = horse.getOwner();
 						if(tamer != null){
 							if(!horse.getOwner().getName().equals(p.getName())){
-								p.sendMessage(plugin.namespace + ChatColor.RED + "Zugriff auf das Maultier von " + horse.getOwner().getName() + " verweigert!");
+								p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst das Mautlier von " + horse.getOwner().getName() + " nicht einfangen!");
 								plugin.api.sendLog("[Epicraft - EggCatcher] " + p.getName() + " versucht das Maultier von " + horse.getOwner().getName() + " einzufangen");
 								return;
 							}
 						}
 						if(!canPlayerCatchEntity(p, targetEntity))
 							return;
+						if(horse.isLeashed()){
+							p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte binde das Maultier los, bevor du es einfängst!");
+							return;
+						}
 						for(ItemStack invStack : horse.getInventory()){
 							if(invStack == null)
 								continue;
@@ -74,16 +82,22 @@ public class EggCatcher implements Listener{
 						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)100);
 					}
 					else if(targetEntity instanceof Ocelot){//98
+						if(!canPlayerCatchEntity(p, targetEntity))
+							return;
 						event.setCancelled(true);
 						targetEntity.remove();
 						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)98);
 					}
 					else if(targetEntity instanceof Pig){//90
+						if(!canPlayerCatchEntity(p, targetEntity))
+							return;
 						event.setCancelled(true);
 						targetEntity.remove();
 						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)90);
 					}
 					else if(targetEntity instanceof Sheep){//91
+						if(!canPlayerCatchEntity(p, targetEntity))
+							return;
 						event.setCancelled(true);
 						targetEntity.remove();
 						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)91);
