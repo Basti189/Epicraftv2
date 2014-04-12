@@ -1,7 +1,5 @@
 package de.wolfsline.teleport;
 
-import javax.swing.text.html.parser.Entity;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.WorldCreator;
@@ -14,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 
@@ -204,21 +201,15 @@ public class World implements CommandExecutor, Listener{
 		}
 	}
 	
-	@EventHandler
+	/*@EventHandler Wird nicht verwendet, da die Portale deaktiviert sind
 	public void onEntityPortalEnterEvent(EntityPortalEnterEvent event){
-		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Entity: " + event.getEntity().toString());
-		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Eventname: " + event.getEventName());
-		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Welt: " + event.getLocation().getWorld().getName());
 		if(event.getEntity() instanceof Player){
-			
 		}
-	}
+	}*/
 	
 	@EventHandler
 	public void onPortalCreateEvent(PortalCreateEvent event){
-		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Welt: " + event.getWorld().getName());
-		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Eventname: " + event.getEventName());
-		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Reason: " + event.getReason().toString());
+		event.setCancelled(true);
 	}
 	
 	//Eigene Methoden
