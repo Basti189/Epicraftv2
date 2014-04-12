@@ -3,6 +3,7 @@ package de.wolfsline.forfun;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fish;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -68,8 +70,12 @@ public class PVP implements CommandExecutor, Listener {
 	public void onDamage(EntityDamageByEntityEvent event){
 		Entity e = event.getEntity();
 		Entity d = event.getDamager();
-		if(!(e instanceof Player && (d instanceof Player || d instanceof Arrow || d instanceof Fish) || d instanceof Egg || d instanceof Snowball))
+		if(!(e instanceof Player && (d instanceof Player || d instanceof Arrow || d instanceof Fish) || d instanceof Egg || d instanceof Snowball)){
 			return;
+		}
+		if(e instanceof Horse){
+			return;
+		}
 		
 		Player victim = (Player) e;
 		Player damager = null;
