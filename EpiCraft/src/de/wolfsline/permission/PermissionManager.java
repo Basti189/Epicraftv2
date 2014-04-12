@@ -84,6 +84,7 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.gs.sign", true);
 			p.addAttachment(plugin, "epicraft.world.sign", true);
 			p.addAttachment(plugin, "epicraft.sign.color", true);
+			p.addAttachment(plugin, "epicraft.egg.catch", true);
 		}
 		else if(permission.equals("epicraft.permission.guard")){
 			//Epicraft
@@ -104,6 +105,7 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.gs.sign", true);
 			p.addAttachment(plugin, "epicraft.gs", true);
 			p.addAttachment(plugin, "epicraft.world.sign", true);
+			p.addAttachment(plugin, "epicraft.egg.catch", true);
 			//Epicraft - Team
 			p.addAttachment(plugin, "epicraft.fly", true);
 			p.addAttachment(plugin, "epicraft.jail", true);
@@ -131,6 +133,7 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.blocksecure", true);
 			p.addAttachment(plugin, "epicraft.sign.color", true);
 			p.addAttachment(plugin, "epicraft.world.sign", true);
+			p.addAttachment(plugin, "epicraft.egg.catch", true);
 			//Epicraft - Team
 			p.addAttachment(plugin, "epicraft.chest", true);
 			p.addAttachment(plugin, "epicraft.enderchest", true);
@@ -152,6 +155,45 @@ public class PermissionManager implements CommandExecutor{
 		else if(permission.equals("epicraft.permission.admin")){
 			//Epicraft
 			p.addAttachment(plugin, "epicraft.permission.admin", true);
+			p.addAttachment(plugin, "epicraft.chat", true);
+			p.addAttachment(plugin, "epicraft.chat.whisper", true);
+			p.addAttachment(plugin, "epicraft.chat.channel", true);
+			p.addAttachment(plugin, "epicraft.chat.color", true);
+			p.addAttachment(plugin, "epicraft.spawn", true);
+			p.addAttachment(plugin, "epicraft.time", true);
+			p.addAttachment(plugin, "epicraft.command.allow", true);
+			p.addAttachment(plugin, "epicraft.auth", true);
+			p.addAttachment(plugin, "epicraft.ticket", true);
+			p.addAttachment(plugin, "epicraft.important", true);
+			p.addAttachment(plugin, "epicraft.horse", true);
+			p.addAttachment(plugin, "epicraft.blocksecure", true);
+			p.addAttachment(plugin, "epicraft.sign.color", true);
+			p.addAttachment(plugin, "epicraft.world.sign", true);
+			p.addAttachment(plugin, "epicraft.egg.catch", true);
+			//Epicraft - Team
+			p.addAttachment(plugin, "epicraft.chest", true);
+			p.addAttachment(plugin, "epicraft.enderchest", true);
+			p.addAttachment(plugin, "epicraft.fly", true);
+			p.addAttachment(plugin, "epicraft.jail", true);
+			p.addAttachment(plugin, "epicraft.restart", true);
+			p.addAttachment(plugin, "epicraft.teleport", true);
+			p.addAttachment(plugin, "epicraft.hide", true);
+			p.addAttachment(plugin, "epicraft.whois", true);
+			p.addAttachment(plugin, "epicraft.api", true);
+			p.addAttachment(plugin, "epicraft.kick", true);
+			p.addAttachment(plugin, "epicraft.warn", true);
+			p.addAttachment(plugin, "epicraft.ban", true);
+			p.addAttachment(plugin, "epicraft.pvp", true);
+			p.addAttachment(plugin, "epicraft.world.change", true);
+			p.addAttachment(plugin, "epicraft.world.change.other", true);
+			//WorldGuard
+			p.addAttachment(plugin, "worldguard.*", true);
+			//WorldEdit
+			p.addAttachment(plugin, "worldedit.*", true);
+		}
+		else if(permission.equalsIgnoreCase("epicraft.permission.owner")){
+			//Epicraft
+			p.addAttachment(plugin, "epicraft.permission.owner", true);
 			p.addAttachment(plugin, "epicraft.*", true);
 			//WorldGuard
 			p.addAttachment(plugin, "worldguard.*", true);
@@ -168,9 +210,11 @@ public class PermissionManager implements CommandExecutor{
 		//Epicraft
 		p.addAttachment(plugin, "epicraft.permission.gast", false);
 		p.addAttachment(plugin, "epicraft.permission.spieler", false);
+		p.addAttachment(plugin, "epicraft.permission.stammi", false);
 		p.addAttachment(plugin, "epicraft.permission.guard", false);
 		p.addAttachment(plugin, "epicraft.permission.moderator", false);
 		p.addAttachment(plugin, "epicraft.permission.admin", false);
+		p.addAttachment(plugin, "epicraft.permission.owner", false);
 		p.addAttachment(plugin, "epicraft.*", false);
 		//WorldGuard
 		p.addAttachment(plugin, "worldguard.*", false);
@@ -204,6 +248,9 @@ public class PermissionManager implements CommandExecutor{
 				else if(group.equals("Spieler")){
 					epicraftPlayer.permission = "epicraft.permission.spieler";
 				}
+				else if(group.equals("Stammi")){
+					epicraftPlayer.permission = "epicraft.permission.stammi";
+				}
 				else if(group.equals("Guard")){
 					epicraftPlayer.permission = "epicraft.permission.guard";
 				}
@@ -212,6 +259,9 @@ public class PermissionManager implements CommandExecutor{
 				}
 				else if(group.equals("Admin")){
 					epicraftPlayer.permission = "epicraft.permission.admin";
+				}
+				else if(group.equals("Owner")){
+					epicraftPlayer.permission = "epicraft.permission.owner";
 				}
 				else {
 					cs.sendMessage(plugin.namespace + ChatColor.RED + "Die Gruppe \"" + group + "\" gibt es nicht!");
