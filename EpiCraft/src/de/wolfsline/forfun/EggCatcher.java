@@ -30,9 +30,6 @@ public class EggCatcher implements Listener{
 
 	@EventHandler
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
-		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Damager: " + event.getDamager().toString());
-		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Entity: " + event.getEntity().toString());
-		Bukkit.getServer().broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "EntityTyp: " + event.getEntityType().toString());
 		if(event.getDamager() instanceof Egg){
 			Egg egg = (Egg) event.getDamager();
 			if(egg.getShooter() instanceof Player){
@@ -59,11 +56,10 @@ public class EggCatcher implements Listener{
 						if(tamer != null){
 							if(!horse.getOwner().getName().equals(p.getName())){
 								p.sendMessage(plugin.namespace + ChatColor.RED + "Zugriff auf das Maultier von " + horse.getOwner().getName() + " verweigert!");
-								plugin.api.sendLog("[Epicraft - EggCatcher] " + p.getName() + " versucht auf das Maultier von " + horse.getOwner().getName() + " zuzugreifen");
+								plugin.api.sendLog("[Epicraft - EggCatcher] " + p.getName() + " versucht das Maultier von " + horse.getOwner().getName() + " einzufangen");
 								return;
 							}
 						}
-						
 						event.setCancelled(true);
 						targetEntity.remove();
 						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)100);
