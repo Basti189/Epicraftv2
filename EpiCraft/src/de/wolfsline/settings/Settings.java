@@ -107,7 +107,7 @@ public class Settings implements CommandExecutor, Listener{
 		meta.setLore(tmpList);
 		chatWorld.setItemMeta(meta);
 		
-		ItemStack moneyForVote = new ItemStack(Material.WOOL, 1, (short) 5);
+		/*ItemStack moneyForVote = new ItemStack(Material.WOOL, 1, (short) 5);
     	meta = moneyForVote.getItemMeta();
 		meta.setDisplayName("Coins fürs Voten");
 		tmpList = new ArrayList<String>();
@@ -116,13 +116,13 @@ public class Settings implements CommandExecutor, Listener{
 		else
 			tmpList.add("Status: Aus");
 		meta.setLore(tmpList);
-		moneyForVote.setItemMeta(meta);
+		moneyForVote.setItemMeta(meta);*/
 		
 		inv.setItem(0, eventMessages);
 		inv.setItem(1, chatMessages);
 		inv.setItem(2, chatTime);
 		inv.setItem(3, chatWorld);
-		inv.setItem(4, moneyForVote);
+		//inv.setItem(4, moneyForVote);
 		/*for(int i = 5 ; i < 9 ; i++){
 			ItemStack tmpStack = new ItemStack(Material.WOOL, 1, (short) i);
 			ItemMeta tmpMeta = tmpStack.getItemMeta();
@@ -223,7 +223,7 @@ public class Settings implements CommandExecutor, Listener{
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " bekommt nun wieder die Welt im Chat angezeigt");
 						}
 					}
-					else if(slot == 4){//Geld fürs Voten
+					/*else if(slot == 4){//Geld fürs Voten
 						if(player.moneyForVote){
 							tmpList.add("Status: Aus");
 							player.moneyForVote = false;
@@ -236,7 +236,7 @@ public class Settings implements CommandExecutor, Listener{
 							player.update();
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " bekommt nun wieder Coins fürs Voten");
 						}
-					}
+					}*/
 					else{
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Keine weiteren Einstellungen vorhanden!");
 					}
