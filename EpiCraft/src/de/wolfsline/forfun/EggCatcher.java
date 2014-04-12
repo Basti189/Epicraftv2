@@ -62,6 +62,9 @@ public class EggCatcher implements Listener{
 						}
 						if(!canPlayerCatchEntity(p, targetEntity))
 							return;
+						for(ItemStack invStack : horse.getInventory()){
+							targetEntity.getLocation().getWorld().dropItemNaturally(targetEntity.getLocation(), invStack);
+						}
 						event.setCancelled(true);
 						targetEntity.remove();
 						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)100);
