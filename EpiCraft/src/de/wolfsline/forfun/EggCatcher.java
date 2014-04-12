@@ -18,6 +18,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+
 import de.wolfsline.Epicraft.Epicraft;
 
 public class EggCatcher implements Listener{
@@ -63,6 +65,8 @@ public class EggCatcher implements Listener{
 						if(!canPlayerCatchEntity(p, targetEntity))
 							return;
 						for(ItemStack invStack : horse.getInventory()){
+							if(invStack == null)
+								continue;
 							targetEntity.getLocation().getWorld().dropItemNaturally(targetEntity.getLocation(), invStack);
 						}
 						event.setCancelled(true);
@@ -94,13 +98,17 @@ public class EggCatcher implements Listener{
 	
 	private boolean canPlayerCatchEntity(Player p, Entity entity){
 		Location loc = entity.getLocation();
-		boolean canCatch = plugin.getWorldGuard().canBuild(p, loc.getBlock());
+		WorldGuardPlugin wgPlugin = plugin.getWorldGuard();
+		if(wgPlugin == null){
+			return true;
+		}
+		boolean canCatch = wgPlugin.canBuild(p, loc.getBlock());
 		if(canCatch){
-			p.sendMessage(plugin.namespaceBeta + ChatColor.WHITE + "Du kannst auf diesem Grundstück Tiere einfangen!");
 			return true;
 		}
 		else{
 			p.sendMessage(plugin.namespaceBeta + ChatColor.RED + "Du kannst auf diesem Grundstück keine Tiere einfangen!");
+			plugin.api.sendLog("[Epicraft - EggCatcher] " + p.getName() + " versucht ein Tier auf einem anderen Grundstück einzufangen");
 			return false;
 		}
 	}

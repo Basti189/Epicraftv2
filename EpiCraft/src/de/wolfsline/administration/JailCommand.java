@@ -80,7 +80,7 @@ public class JailCommand implements CommandExecutor, Listener{
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Spieler ist nicht online!");
 					return true;
 				}
-				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + jailPlayer.getName() + " group set Inhaftierter");
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "p set " + jailPlayer.getName() + " Inhaftierter");
 				jailPlayer.teleport(jailLoc);
 				jailPlayer.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest in das Gefängnis gesperrt!");
 				for(Player team : Bukkit.getServer().getOnlinePlayers()){
@@ -107,7 +107,7 @@ public class JailCommand implements CommandExecutor, Listener{
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Vorgang abgebrochen...");
 					return true;
 				}
-				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + jailPlayer.getName() + " group set Inhaftierter");
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "p set " + jailPlayer.getName() + " Inhaftierter");
 				jailPlayer.teleport(jailLoc);
 				jailPlayer.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest in das Gefängnis gesperrt!");
 				jailPlayer.sendMessage(plugin.namespace + ChatColor.WHITE + "Du musst " + obsidianAmount + " Obsidianblöcke mit der Hand abbauen!");
@@ -130,7 +130,7 @@ public class JailCommand implements CommandExecutor, Listener{
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Spieler ist nicht online!");
 					return true;
 				}
-				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + jailPlayer.getName() + " group set Spieler");
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "p set " + jailPlayer.getName() + " Spieler");
 				jailPlayer.teleport(Bukkit.getServer().getWorld("Survival").getSpawnLocation());
 				jailPlayer.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest entlassen!");
 				for(Player team : Bukkit.getServer().getOnlinePlayers()){
