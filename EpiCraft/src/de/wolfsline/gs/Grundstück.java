@@ -27,6 +27,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+
 import de.wolfsline.Epicraft.Epicraft;
 
 public class Grundstück implements CommandExecutor, Listener{
@@ -78,8 +83,12 @@ public class Grundstück implements CommandExecutor, Listener{
 				if(anzahlGS == 0){ //<-- Spieler hat noch kein Grundstück
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dies ist dein 1. Grundstück.");
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Erstelle Grundstück: " + gsname + " mit den Maßen: 50*50.");
+					if(!markGS(p, 50, 50)){
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Dein Grundstück schneidet ein anderes Grundsrtück!");
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Vorgang abgebrochen");
+						return true;
+					}
 					data.newGS((int)p.getLocation().getX(), (int)p.getLocation().getY(), (int)p.getLocation().getZ(), gsname, p.getName(), 50, 50);
-					markGS(p, 50, 50);
 					starterKit(p);
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Grundstück wurde erstellt.");
 					plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " hat sein 1. Grundstück erstellt");
@@ -96,13 +105,18 @@ public class Grundstück implements CommandExecutor, Listener{
 							return true;
 						}
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dies ist dein " + String.valueOf(anzahlGS+1) + ". Grundstück.");
-						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Für dieses Grundstück werden dir 5000 Coins berechnet.");
+						//p.sendMessage(plugin.namespace + ChatColor.WHITE + "Für dieses Grundstück werden dir 5000 Coins berechnet.");
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Erstelle Grundstück: " + gsname + " mit den Maßen: 25*25.");
+						if(!markGS(p, 25, 25)){
+							p.sendMessage(plugin.namespace + ChatColor.RED + "Dein Grundstück schneidet ein anderes Grundsrtück!");
+							p.sendMessage(plugin.namespace + ChatColor.RED + "Vorgang abgebrochen");
+							return true;
+						}
 						data.newGS((int)p.getLocation().getX(), (int)p.getLocation().getY(), (int)p.getLocation().getZ(), gsname, p.getName(), 25, 25);
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Grundstück wurde erstellt.");
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Wir wünschen dir weiterhin viel Spaß...");
 						//econ.withdrawPlayer(p.getName(), 5000.0D);
-						markGS(p, 25, 25);
+						
 						plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " hat sein " + String.valueOf(anzahlGS+1) + ". Grundstück erstellt");
 						return true;
 					}
@@ -214,7 +228,7 @@ public class Grundstück implements CommandExecutor, Listener{
 		p.sendMessage(plugin.namespace + ChatColor.WHITE + "Wir wünschen dir viel Spaß...");
 	}
 	
-	private void markGS(Player p, int groeße_x, int groeße_y){
+	private boolean markGS(Player p, int groeße_x, int groeße_y){
 		byte n = 0x3; // Norden
 		byte s = 0x2; // Süden
 		byte w = 0x5; // Westen
@@ -222,6 +236,39 @@ public class Grundstück implements CommandExecutor, Listener{
 		int x = (int)p.getLocation().getX();
 		int y = (int)p.getLocation().getZ();
 		int z = (int)p.getLocation().getY();
+		
+		//Prüfe jede Ecke des Grundstückes
+		int myX = x - (groeße_x / 2)+1;
+		int myY = y + (groeße_y / 2)-1;
+		int myZ = getZonGround(myX, myY, z);
+		if(isRegionOnLocation(myX, myZ, myY)){
+			return false;
+		}
+		
+		myX = x+(groeße_x / 2);
+		myY = y + (groeße_y / 2)-1;
+		myZ = getZonGround(myX, myY, z);
+		if(isRegionOnLocation(myX, myZ, myY)){
+			return false;
+		}
+		
+		myX = x-(groeße_x / 2)+1;
+		myY = y - (groeße_y / 2);
+		myZ = getZonGround(myX, myY, z);
+		if(isRegionOnLocation(myX, myZ, myY)){
+			return false;
+		}
+		
+		myX = x+(groeße_x / 2);
+		myY = y - (groeße_y / 2);
+		myZ = getZonGround(myX, myY, z);
+		if(isRegionOnLocation(myX, myZ, myY)){
+			return false;
+		}
+		
+		x = (int)p.getLocation().getX();
+		y = (int)p.getLocation().getZ();
+		z = (int)p.getLocation().getY();
 		
 		int x1 = x - (groeße_x / 2)+1;
 		int y1 = y + (groeße_y / 2)-1;
@@ -274,6 +321,8 @@ public class Grundstück implements CommandExecutor, Listener{
 		setSign(p, (Sign)Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1+1, y1-1).getState());
 		createFirework(x1, y1, z1+2);
 		createFirework(x1, y1, z1+2);
+		
+		return true;
 	}
 	
 	private void ecke(int x1, int y1, int z1, Material mat){
@@ -345,5 +394,28 @@ public class Grundstück implements CommandExecutor, Listener{
 			}
 		}
 	}
-
+	
+	private boolean isRegionOnLocation(int x, int y, int z){
+		Location loc = new Location(Bukkit.getServer().getWorld(WORLD), x, y, z);
+		ApplicableRegionSet set = getWGSet(loc);
+		if(set == null){
+			return true;
+		}
+		for(ProtectedRegion rg : set){
+			return true;
+		}
+		return false;
+	}
+	
+	private ApplicableRegionSet getWGSet(Location loc) {
+		WorldGuardPlugin wg = plugin.getWorldGuard();
+		if (wg == null) {
+			return null;
+		}
+		RegionManager rm = wg.getRegionManager(loc.getWorld());
+		if (rm == null) {
+			return null;
+		}
+		return rm.getApplicableRegions(loc);
+	}
 }
