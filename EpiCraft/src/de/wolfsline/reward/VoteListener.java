@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -26,11 +24,11 @@ import de.wolfsline.helpClasses.EpicraftPlayer;
 public class VoteListener implements CommandExecutor, Listener{
 	
 	Epicraft plugin;
-	Economy econ;
+	//Economy econ;
 	
 	public VoteListener(Epicraft plugin){
 		this.plugin = plugin;
-		this.econ = plugin.economy;
+		//this.econ = plugin.economy;
 		
 		MySQL sql = this.plugin.getMySQL();
 		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Votes (Benutzername VARCHAR(16), Anzahl INT)");
@@ -54,31 +52,31 @@ public class VoteListener implements CommandExecutor, Listener{
 			if(epiPlayer == null){
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dir wurden 100 Coins gutgeschrieben!");
 				this.plugin.api.sendLog("[Epicraft - Vote] " + vote.getUsername() + " wurden 100 Coins gutgeschrieben");
-				econ.depositPlayer(p.getName(), 100.0D);
+				//econ.depositPlayer(p.getName(), 100.0D);
 			}
 			else{
 				if(epiPlayer.moneyForVote){
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dir wurden 100 Coins gutgeschrieben!");
 					this.plugin.api.sendLog("[Epicraft - Vote] " + vote.getUsername() + " wurden 100 Coins gutgeschrieben");
-					econ.depositPlayer(p.getName(), 100.0D);
+					//econ.depositPlayer(p.getName(), 100.0D);
 				}
 			}
 		}
 		else{ // Spieler offline
-			if(econ.hasAccount(vote.getUsername())){ //Bankaccoutn vorhanden?
+			/*if(econ.hasAccount(vote.getUsername())){ //Bankaccoutn vorhanden?
 				EpicraftPlayer offlineEpiPlayer = plugin.pManager.getEpicraftPlayerFromOfflinePlayer(vote.getUsername());
 				if(offlineEpiPlayer != null){
 					if(offlineEpiPlayer.moneyForVote){
 						this.plugin.api.sendLog("[Epicraft - Vote] " + vote.getUsername() + " wurden 100 Coins gutgeschrieben");
 						econ.depositPlayer(vote.getUsername(), 100.0D);
 					}	
-				}
+				}*/
 			}
-			else{
+			//else{
 				//Nichts machen, da Spieler kein Bankaccount besitzt
-			}
+			//}
 				
-		}
+		//}
 		updateDatabase(vote.getUsername());
 		//Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + vote.getUsername() + " hat für unseren Server einen Vote abgegeben!");
 	}
