@@ -62,6 +62,7 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.gs", true);
 			p.addAttachment(plugin, "epicraft.gs.sign", true);
 			p.addAttachment(plugin, "epicraft.world.sign", true);
+			p.addAttachment(plugin, "epicraft.home.one", true);
 		}
 		else if(permission.equals("epicraft.permission.stammi")){
 			//Epicraft
@@ -85,6 +86,8 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.world.sign", true);
 			p.addAttachment(plugin, "epicraft.sign.color", true);
 			p.addAttachment(plugin, "epicraft.egg.catch", true);
+			p.addAttachment(plugin, "epicraft.home.one", true);
+			p.addAttachment(plugin, "epicraft.home.multiple", true);
 		}
 		else if(permission.equals("epicraft.permission.guard")){
 			//Epicraft
@@ -106,6 +109,8 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.gs", true);
 			p.addAttachment(plugin, "epicraft.world.sign", true);
 			p.addAttachment(plugin, "epicraft.egg.catch", true);
+			p.addAttachment(plugin, "epicraft.home.one", true);
+			p.addAttachment(plugin, "epicraft.home.multiple", true);
 			//Epicraft - Team
 			p.addAttachment(plugin, "epicraft.fly", true);
 			p.addAttachment(plugin, "epicraft.jail", true);
@@ -134,6 +139,8 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.sign.color", true);
 			p.addAttachment(plugin, "epicraft.world.sign", true);
 			p.addAttachment(plugin, "epicraft.egg.catch", true);
+			p.addAttachment(plugin, "epicraft.home.one", true);
+			p.addAttachment(plugin, "epicraft.home.multiple", true);
 			//Epicraft - Team
 			p.addAttachment(plugin, "epicraft.chest", true);
 			p.addAttachment(plugin, "epicraft.enderchest", true);
@@ -150,7 +157,6 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.pvp", true);
 			p.addAttachment(plugin, "epicraft.world.change", true);
 			p.addAttachment(plugin, "epicraft.world.change.other", true);
-			
 		}
 		else if(permission.equals("epicraft.permission.admin")){
 			//Epicraft
@@ -170,6 +176,8 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.sign.color", true);
 			p.addAttachment(plugin, "epicraft.world.sign", true);
 			p.addAttachment(plugin, "epicraft.egg.catch", true);
+			p.addAttachment(plugin, "epicraft.home.one", true);
+			p.addAttachment(plugin, "epicraft.home.multiple", true);
 			//Epicraft - Team
 			p.addAttachment(plugin, "epicraft.chest", true);
 			p.addAttachment(plugin, "epicraft.enderchest", true);
