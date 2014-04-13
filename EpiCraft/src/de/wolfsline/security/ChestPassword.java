@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,13 +33,13 @@ import de.wolfsline.helpClasses.userBlockLocation;
 public class ChestPassword implements CommandExecutor, Listener{
 
 	private Epicraft plugin;
-	private Economy econ;
+	//private Economy econ;
 	private List<userBlockLocation> myChest = new ArrayList<userBlockLocation>();
 	private List<String> list = new ArrayList<String>();
 	
-	public ChestPassword(Epicraft plugin, Economy economy){
+	public ChestPassword(Epicraft plugin){//, Economy economy){
 		this.plugin = plugin;
-		this.econ = economy;
+		//this.econ = economy;
 		try {
 			readData();
 		} catch (ClassNotFoundException e) {
@@ -106,24 +104,24 @@ public class ChestPassword implements CommandExecutor, Listener{
 					}
 				}
 				if(p.hasPermission("epicraft.blocksecure.team")){
-					if(!econ.has(p.getName(), 10.0D)){
+					/*if(!econ.has(p.getName(), 10.0D)){
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast nicht genug Geld!");
 						return;
-					}
+					}*/
 				}
-				else if(!econ.has(p.getName(), 25.0D)){
+				/*else if(!econ.has(p.getName(), 25.0D)){
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast nicht genug Geld!");
 					return;
-				}
+				}*/
 				myChest.add(new userBlockLocation(loc, p.getName()));
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Schutz hinzugefügt.");
 				if(p.hasPermission("epicraft.blocksecure.team")){
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dir wurden dafür 10 Coins berechnet - Teamprozente.");
-					econ.withdrawPlayer(p.getName(), 10.0D);
+					//econ.withdrawPlayer(p.getName(), 10.0D);
 				}
 				else{
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dir wurden dafür 25 Coins berechnet.");
-					econ.withdrawPlayer(p.getName(), 25.0D);
+					//econ.withdrawPlayer(p.getName(), 25.0D);
 				}
 				saveData();
 				event.setCancelled(true);
