@@ -91,6 +91,49 @@ public class SignLift implements Listener{
 				}
 			}
 		}
+		if (event.getClickedBlock().getType() == Material.WALL_SIGN && event.getAction() == Action.LEFT_CLICK_BLOCK) {
+			Sign sign = (Sign) event.getClickedBlock().getState();
+			String lineLift = ChatColor.stripColor(sign.getLine(0));
+			if(lineLift.equalsIgnoreCase("[Lift]")){
+				String lineDir = ChatColor.stripColor(sign.getLine(2));
+				if(lineDir.equalsIgnoreCase("hoch")){
+					Location loc = event.getClickedBlock().getLocation();
+					int x = loc.getBlockX();
+					int y = loc.getBlockY();
+					int z = loc.getBlockZ();
+					for(int i = y - 1 ; i > 10 ; i--){
+						Block block = new Location(loc.getWorld(), x, i, z).getBlock();
+						if(block.getType() == Material.WALL_SIGN){
+							Sign mySign = (Sign) block.getState();
+							if(ChatColor.stripColor(mySign.getLine(0)).equalsIgnoreCase("[Lift]")){//Lift runter gefunden
+								sign.setLine(2, lineDir.replace("hoch", "runter"));
+								sign.update();
+								return;
+							}
+						}
+					}
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Dies ist die unterste Etage!");
+				}
+				else if(lineDir.equalsIgnoreCase("runter")){
+					Location loc = event.getClickedBlock().getLocation();
+					int x = loc.getBlockX();
+					int y = loc.getBlockY();
+					int z = loc.getBlockZ();
+					for(int i = y + 1 ; i < 250 ; i++){
+						Block block = new Location(loc.getWorld(), x, i, z).getBlock();
+						if(block.getType() == Material.WALL_SIGN){
+							Sign mySign = (Sign) block.getState();
+							if(ChatColor.stripColor(mySign.getLine(0)).equalsIgnoreCase("[Lift]")){
+								sign.setLine(2, lineDir.replace("runter", "hoch"));
+								sign.update();
+								return;
+							}
+						}
+					}
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Dies ist die oberste Etage!");
+				}
+			}
+		}
 	}
 	
 	private Location getLocationInFrontSign(Block block){
