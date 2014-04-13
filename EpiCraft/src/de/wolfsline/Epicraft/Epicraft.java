@@ -1,7 +1,5 @@
 package de.wolfsline.Epicraft;
 
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -75,7 +73,7 @@ import de.wolfsline.worldgenerator.CleanRoomChunkGenerator;
 
 public class Epicraft extends JavaPlugin{
 	private int restartTask;
-	public Economy economy = null;
+	//public Economy economy = null;
 	public final String namespace = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] ";
 	public final String error = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] " + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!";
 	public final String namespaceBeta = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster - Beta" + ChatColor.GOLD + "] ";
@@ -101,7 +99,7 @@ public class Epicraft extends JavaPlugin{
 		api = new EventAPI();
 		pManager = new PermissionManager(this);
 		this.sql = new MySQL();
-		this.setupEconomy();
+		//this.setupEconomy();
 		
 		QuestSignListener qsl = new QuestSignListener(this);
 		GunListener gun = new GunListener(this);
@@ -113,7 +111,7 @@ public class Epicraft extends JavaPlugin{
 		DebugCommand debugCommand = new DebugCommand(this);
 		JailCommand myJail = new JailCommand(this);
 		JoinQuitListener jqlistener = new JoinQuitListener(this);
-		ChestPassword chestPasswort = new ChestPassword(this, economy);
+		ChestPassword chestPasswort = new ChestPassword(this);
 		invswitch = new InvSwitcherCommand(this);
 		HorseListener horse = new HorseListener(this);
 		Settings set = new Settings(this);
@@ -240,13 +238,13 @@ public class Epicraft extends JavaPlugin{
 		return this.sql;
 	}
 	
-	private boolean setupEconomy(){
+	/*private boolean setupEconomy(){
         RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (economyProvider != null) {
             economy = economyProvider.getProvider();
         }
         return (economy != null);
-    }
+    }*/
 	
 	public WorldGuardPlugin getWorldGuard() {
 	    Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
