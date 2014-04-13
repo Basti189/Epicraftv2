@@ -22,22 +22,26 @@ public class DoorAccess implements Listener{
 	
 	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEvent event){
-		if (event.getClickedBlock().getType() == Material.IRON_DOOR_BLOCK && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			Block block = event.getClickedBlock();
+		if(event.getAction() != Action.RIGHT_CLICK_BLOCK){
+			return;
+		}
+		if(!event.getPlayer().hasPermission("epicraft.door.access")){
+			return;
+		}
+		Block block = event.getClickedBlock();
+		if (block.getType() == Material.IRON_DOOR_BLOCK) {
+			if (block.getData() >= 8) {
+				block = block.getRelative(BlockFace.DOWN);
+			}
 			if (block.getType() == Material.IRON_DOOR_BLOCK) {
-				if (block.getData() >= 8) {
-					block = block.getRelative(BlockFace.DOWN);
+				if (block.getData() < 4) {
+					block.setData((byte) (block.getData() + 4));
+					block.getWorld().playEffect(block.getLocation(), Effect.DOOR_TOGGLE, 0);
+				} else {
+					block.setData((byte) (block.getData() - 4));
+					block.getWorld().playEffect(block.getLocation(), Effect.DOOR_TOGGLE, 0);
 				}
-				if (block.getType() == Material.IRON_DOOR_BLOCK) {
-					if (block.getData() < 4) {
-						block.setData((byte) (block.getData() + 4));
-						block.getWorld().playEffect(block.getLocation(), Effect.DOOR_TOGGLE, 0);
-					} else {
-						block.setData((byte) (block.getData() - 4));
-						block.getWorld().playEffect(block.getLocation(), Effect.DOOR_TOGGLE, 0);
-					}
-					event.setUseItemInHand(Result.DENY);
-				}
+				event.setUseItemInHand(Result.DENY);
 			}
 		}
 	}
