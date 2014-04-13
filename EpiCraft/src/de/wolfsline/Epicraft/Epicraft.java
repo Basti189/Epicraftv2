@@ -213,6 +213,7 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(restart, this);
 		pm.registerEvents(world, this);
 		pm.registerEvents(catcher, this);
+		pm.registerEvents(afk, this);
 		
 		pm.registerEvents(disco, this);
 		

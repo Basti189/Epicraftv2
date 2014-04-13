@@ -329,7 +329,7 @@ public class PermissionManager implements CommandExecutor{
 			p.setPlayerListName(colorName(p) + name);
 		}
 	}
-	private ChatColor colorName(Player p){
+	public ChatColor colorName(Player p){
 		if(p.hasPermission("epicraft.permission.gast")){
 			return ChatColor.AQUA;
 		}
