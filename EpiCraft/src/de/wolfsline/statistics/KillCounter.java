@@ -48,8 +48,8 @@ public class KillCounter implements Listener{
 			st = conn.prepareStatement("SELECT * FROM Statistik WHERE Benutzername='" + p.getName() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
-				if(rs.getString(3).equalsIgnoreCase(mob)){
-					int count = rs.getInt(4);
+				if(rs.getString(2).equalsIgnoreCase(mob)){
+					int count = rs.getInt(3);
 					sql.closeRessources(rs, st);
 					String update = "UPDATE Statistik SET Anzahl='" + String.valueOf(count+1) + "' WHERE Benutzername='" + p.getName() + "' and Mob='" + mob + "'";
 					sql.queryUpdate(update);
