@@ -169,7 +169,6 @@ commands:
 
   tp:
     description: Teleport
-    aliases: [back]
     usage: /tp
     permissions:
       - epicraft.teleport
@@ -253,6 +252,11 @@ commands:
     description: AFK Befehl
     usage: /afk
     permissions: epicraft.afk
+
+  back:
+    description: Teleportiert dich zu deinem Todespunkt zurück
+    usage: /back
+    permission: epicraft.tp.back
 
 permissions:
   epicraft.*:

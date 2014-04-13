@@ -77,7 +77,16 @@ public class Grundstück implements CommandExecutor, Listener{
 			return true;
 		}
 		else if(args.length == 1){
-			
+			if(args[0].equalsIgnoreCase("test")){
+				Location loc = p.getTargetBlock(null, 200).getLocation();
+				int x = (int) loc.getX();
+				int y = (int) loc.getZ();
+				int z = getZonGround(x, y, (int)loc.getY());
+				ecke(x, y, z, Material.WOOD);
+				ecke(x, y, z+1, Material.WOOD);
+				ecke(x, y, z+2, Material.TORCH);
+				return true;
+			}
 		}
 		else if(args.length == 2){
 			if(args[0].equalsIgnoreCase("neu") || args[0].equalsIgnoreCase("new")){//Neues Grundstück anlegen //gs neu GSNAME
@@ -358,13 +367,18 @@ public class Grundstück implements CommandExecutor, Listener{
 		int tmpZ = z+100;
 		for( ; tmpZ >= 0 ; tmpZ--){
 			Block block = Bukkit.getServer().getWorld(WORLD).getBlockAt(x, tmpZ, y);
+			if(block.getType() != Material.AIR){
+				Bukkit.broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Type: " + block.getType().toString());
+			}
 			if(block.getType() != Material.AIR 
 					&& block.getType() != Material.RED_ROSE 
 					&& block.getType() != Material.YELLOW_FLOWER 
 					&& block.getType() != Material.LONG_GRASS
 					&& block.getType() != Material.CACTUS
 					&& block.getType() != Material.LEAVES
-					&& block.getType() != Material.LEAVES_2){
+					&& block.getType() != Material.LEAVES_2
+					&& block.getType() != Material.DOUBLE_PLANT
+					&& block.getType() != Material.SUGAR_CANE_BLOCK){
 				return tmpZ+1;
 			}
 		}

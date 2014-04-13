@@ -19,6 +19,7 @@ import de.wolfsline.DEBUG.PlayerBLock;
 import de.wolfsline.Ticketsystem.Ticketsystem;
 import de.wolfsline.administration.ChestAccess;
 import de.wolfsline.administration.DebugCommand;
+import de.wolfsline.administration.DoorAccess;
 import de.wolfsline.administration.EnderChestCommand;
 import de.wolfsline.administration.FlyCommand;
 import de.wolfsline.administration.InvSwitcherCommand;
@@ -64,9 +65,11 @@ import de.wolfsline.security.CreatureSpawnListener;
 import de.wolfsline.security.HorseListener;
 import de.wolfsline.security.IronGolemDropControll;
 import de.wolfsline.security.MapSizeControll;
+import de.wolfsline.security.Region;
 import de.wolfsline.settings.Settings;
 import de.wolfsline.statistics.KillCounter;
 import de.wolfsline.teleport.SignLift;
+import de.wolfsline.teleport.TeleportBack;
 import de.wolfsline.teleport.World;
 import de.wolfsline.worldgenerator.CleanRoomChunkGenerator;
 
@@ -124,6 +127,9 @@ public class Epicraft extends JavaPlugin{
 		World world = new World(this);
 		EggCatcher catcher = new EggCatcher(this);
 		AFK afk = new AFK(this);
+		TeleportBack back = new TeleportBack(this);
+		Region region = new Region(this);
+		DoorAccess doorAccess = new DoorAccess(this);
 		
 		//TEST
 		Disco disco = new Disco(this);
@@ -176,6 +182,7 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("ticket").setExecutor(ticket);
         this.getCommand("welt").setExecutor(world);
         this.getCommand("afk").setExecutor(afk);
+        this.getCommand("back").setExecutor(back);
         
 		PluginManager pm = this.getServer().getPluginManager();
 		
@@ -214,6 +221,9 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(world, this);
 		pm.registerEvents(catcher, this);
 		pm.registerEvents(afk, this);
+		pm.registerEvents(back, this);
+		pm.registerEvents(region, this);
+		pm.registerEvents(doorAccess, this);
 		
 		pm.registerEvents(disco, this);
 		

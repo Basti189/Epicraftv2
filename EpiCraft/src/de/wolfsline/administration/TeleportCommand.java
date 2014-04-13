@@ -35,6 +35,15 @@ public class TeleportCommand implements CommandExecutor{
 		}
 		if(label.equalsIgnoreCase("tp")){
 			if(args.length == 1){
+				if(args[0].equalsIgnoreCase("back")){
+					if(!map.containsKey(p.getName())){
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Keine gespeicherte Location gefunden!");
+						return true;
+					}
+					p.teleport(map.get(p.getName()));
+					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest zurück teleportiert");
+					return true;
+				}
 				Player destinationPlayer = Bukkit.getServer().getPlayer(args[0]);
 				if(destinationPlayer == null){
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Der Spieler ist nicht online!");
@@ -75,18 +84,9 @@ public class TeleportCommand implements CommandExecutor{
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte gebe gültige Zahlen an!");
 				}
 				return true;
-			}
+			}	
 		}
-		else if(label.equalsIgnoreCase("back")){
-			if(!map.containsKey(p.getName())){
-				p.sendMessage(plugin.namespace + ChatColor.RED + "Keine gespeicherte Location gefunden!");
-				return true;
-			}
-			p.teleport(map.get(p.getName()));
-			p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest zurück teleportiert");
-			return true;
-		}
-		return false;
+		return true;
 	}
 	
 }

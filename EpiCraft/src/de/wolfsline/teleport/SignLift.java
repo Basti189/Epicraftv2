@@ -8,6 +8,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -48,6 +49,7 @@ public class SignLift implements Listener{
 			Sign sign = (Sign) event.getClickedBlock().getState();
 			String line1 = ChatColor.stripColor(sign.getLine(0));
 			if(line1.equalsIgnoreCase("[Lift]")){
+				event.setUseItemInHand(Result.DENY);
 				String line3 = ChatColor.stripColor(sign.getLine(2));
 				if(line3.equalsIgnoreCase("hoch")){
 					Location loc = event.getClickedBlock().getLocation();

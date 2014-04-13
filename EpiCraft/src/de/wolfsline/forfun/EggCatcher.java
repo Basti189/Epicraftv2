@@ -61,6 +61,7 @@ public class EggCatcher implements Listener{
 						AnimalTamer tamer = horse.getOwner();
 						if(tamer != null){
 							if(!horse.getOwner().getName().equals(p.getName())){
+								event.setCancelled(true);
 								p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst das Mautlier von " + horse.getOwner().getName() + " nicht einfangen!");
 								plugin.api.sendLog("[Epicraft - EggCatcher] " + p.getName() + " versucht das Maultier von " + horse.getOwner().getName() + " einzufangen");
 								return;
