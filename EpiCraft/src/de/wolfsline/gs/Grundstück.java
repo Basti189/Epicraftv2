@@ -181,6 +181,16 @@ public class Grundstück implements CommandExecutor, Listener{
 				//Prüfe ob Grundstück existiert
 				if(data.hasPlayerGSwithName(name, gsname)){
 					data.delGS(name, gsname);
+					WorldGuardPlugin wgp = plugin.getWorldGuard();
+					if(wgp != null){
+						RegionManager rm = wgp.getRegionManager(Bukkit.getServer().getWorld(WORLD));
+						rm.removeRegion(name + "_" + gsname);
+						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Protection wurde entfernt");
+					}
+					else{
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Protection konnte nicht entfernt werden!");
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte Region \"" + name + "_" + gsname + "\" manuell entfernen");
+					}
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Grundstück von " + name + " wurde gelöscht.");
 					plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " löscht von " + name + " das Grundstück: " + gsname);
 					return true;
