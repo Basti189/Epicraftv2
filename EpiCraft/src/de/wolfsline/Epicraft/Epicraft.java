@@ -17,7 +17,6 @@ import de.wolfsline.API.EventAPI;
 import de.wolfsline.DEBUG.DEBUGCLASS;
 import de.wolfsline.DEBUG.PlayerBLock;
 import de.wolfsline.Ticketsystem.Ticketsystem;
-import de.wolfsline.Time.TimeRunnable;
 import de.wolfsline.administration.ChestAccess;
 import de.wolfsline.administration.DebugCommand;
 import de.wolfsline.administration.EnderChestCommand;
@@ -71,7 +70,6 @@ import de.wolfsline.teleport.World;
 import de.wolfsline.worldgenerator.CleanRoomChunkGenerator;
 
 public class Epicraft extends JavaPlugin{
-	private int messageTask;
 	private int restartTask;
 	public Economy economy = null;
 	public final String namespace = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] ";
@@ -87,7 +85,6 @@ public class Epicraft extends JavaPlugin{
 	@Override
 	public void onDisable(){
 		Bukkit.getScheduler().cancelTask(restartTask);
-		Bukkit.getScheduler().cancelTask(messageTask);
 		invswitch.onServerShutdown();
 		sql.closeConnection();
 		System.out.println("[Epicraft] Epicraft wurde beendet");
@@ -181,7 +178,6 @@ public class Epicraft extends JavaPlugin{
 		
 		pm.registerEvents(jqlistener, this);
 		pm.registerEvents(sign, this);
-		pm.registerEvents(new de.wolfsline.Time.SignListener(this), this);
 		pm.registerEvents(qsl, this);
 		pm.registerEvents(myChat, this);
 		pm.registerEvents(new ColorSignListener(), this);
@@ -221,8 +217,6 @@ public class Epicraft extends JavaPlugin{
 			pManager.triggerEpicraftPlayerList(player, true);
 			myChat.mapChannel.put(player.getName(), 0);
 		}
-		
-		this.messageTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new TimeRunnable(), 0L, 2*20L);
 		System.out.println("[Epicraft] Epicraft wurde gestartet");
 	}
 	
