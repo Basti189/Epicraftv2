@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,11 +19,12 @@ import de.wolfsline.data.MySQL;
 public class HomeCommand implements CommandExecutor{
 	
 	private Epicraft plugin;
+	private final String WORLD = "world";
 	public HomeCommand(Epicraft plugin) {
 		this.plugin = plugin;
 		
 		MySQL sql = this.plugin.getMySQL();
-		sql.queryUpdate("CREATE TABLE IF NOT EXISTS home (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(16), title VARCHAR(50), x INT, y INT, z INT)");
+		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Home (Benutzername VARCHAR(16), Title VARCHAR(50), X INT, Y INT, Z INT)");
 	}
 
 	@Override
@@ -37,11 +36,11 @@ public class HomeCommand implements CommandExecutor{
 		Player p = (Player) cs;
 		if(!p.hasPermission("epicraft.home.one")){
 			p.sendMessage(plugin.error);
-			plugin.api.sendLog("[Epicraft - Home] " + p.getName() + " versucht auf den Home-Befehl zuzugreifen");
+			plugin.api.sendLog("[Epicraft - Home] " + p.getName() + " versucht auf den Befehl zuzugreifen");
 			return true;
 		}
 		if(label.equalsIgnoreCase("sethome")){
-			if(!p.getLocation().getWorld().equals(Bukkit.getServer().getWorld("Survival"))){
+			if(!p.getLocation().getWorld().equals(Bukkit.getServer().getWorld(WORLD))){
 				p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst in dieser Welt keine Homepunkte setzen");
 				plugin.api.sendLog("[Epicraft - Home] " + p.getName() + " versucht auf der Welt " + p.getLocation().getWorld().getName() + " einen Homepunkt zu setzen");
 				return true;
@@ -123,12 +122,10 @@ public class HomeCommand implements CommandExecutor{
 		PreparedStatement st = null;
 		int i = 0;
 		try {
-			st = conn.prepareStatement("SELECT username FROM plots WHERE username='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT Benutzername FROM Grundstuecke WHERE Benutzername='" + p.getName() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
-				if(rs.getString(1).equalsIgnoreCase(p.getName())){
-					i++;
-				}
+				i++;
 			}
 		} 
 		catch (SQLException e) {
@@ -147,12 +144,10 @@ public class HomeCommand implements CommandExecutor{
 		PreparedStatement st = null;
 		int i = 0;
 		try {
-			st = conn.prepareStatement("SELECT username FROM home WHERE username='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT Benutzername FROM Home WHERE Benutzername='" + p.getName() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
-				if(rs.getString(1).equalsIgnoreCase(p.getName())){
-					i++;
-				}
+				i++;
 			}
 		} 
 		catch (SQLException e) {
@@ -166,7 +161,7 @@ public class HomeCommand implements CommandExecutor{
 	
 	private void newHome(Player p, String title){
 		MySQL sql = this.plugin.getMySQL();
-		String update = "INSERT INTO home (username, title, x, y, z) VALUES ('" + p.getName() + "', '" + p.getName() + "_" + title + "', '" + p.getLocation().getX() + "', '" + p.getLocation().getY() + "', '" + p.getLocation().getZ() + "')";
+		String update = "INSERT INTO Home (Benutzername, Title, X, Y, Z) VALUES ('" + p.getName() + "', '" + title + "', '" + p.getLocation().getX() + "', '" + p.getLocation().getY() + "', '" + p.getLocation().getZ() + "')";
 		sql.queryUpdate(update);
 	}
 
@@ -176,10 +171,10 @@ public class HomeCommand implements CommandExecutor{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT title FROM home WHERE username='" + name + "'");
+			st = conn.prepareStatement("SELECT Title FROM Home WHERE Benutzername='" + name + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
-				if(rs.getString(1).equalsIgnoreCase(name + "_" + title)){
+				if(rs.getString(1).equalsIgnoreCase(title)){
 					sql.closeRessources(rs, st);
 					return true;
 				}
@@ -200,12 +195,12 @@ public class HomeCommand implements CommandExecutor{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT title FROM home WHERE username='" + name + "'");
+			st = conn.prepareStatement("SELECT Title FROM Home WHERE Benutzername='" + name + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
-				if(rs.getString(1).equalsIgnoreCase(name + "_" + title)){
+				if(rs.getString(1).equalsIgnoreCase(title)){
 					sql.closeRessources(rs, st);
-					sql.queryUpdate("UPDATE home SET title='" + name + "_" + newTitle + "' WHERE title='" + name + "_" + title + "'");
+					sql.queryUpdate("UPDATE Home SET Title='" + newTitle + "' WHERE Title='" + title + "'");
 					return true;
 				}
 			}
@@ -221,7 +216,7 @@ public class HomeCommand implements CommandExecutor{
 	
 	private void updateHome(Player p, String title){
 		MySQL sql = this.plugin.getMySQL();
-		String update = "UPDATE home SET x='" + p.getLocation().getX() + "', y='" + p.getLocation().getY() + "', z='" + p.getLocation().getZ() + "' WHERE title='" + p.getName() + "_" + title + "'";
+		String update = "UPDATE Home SET X='" + p.getLocation().getX() + "', Y='" + p.getLocation().getY() + "', Z='" + p.getLocation().getZ() + "' WHERE Title='" + title + "'";
 		sql.queryUpdate(update);
 	}
 
@@ -231,17 +226,20 @@ public class HomeCommand implements CommandExecutor{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM home WHERE title='" + p.getName() + "_" + title + "'");
+			st = conn.prepareStatement("SELECT * FROM Home WHERE Title='" + title + "' AND Benutzername='" + p.getName() + "'");
 			rs = st.executeQuery();
-			while(rs.next()){
-				if(rs.getString(3).equalsIgnoreCase(p.getName() + "_" + title)){
-					Location loc = new Location(Bukkit.getServer().getWorld("Survival"), rs.getInt(4), rs.getInt(5), rs.getInt(6));
+			if(rs.next()){
+				Location loc = new Location(Bukkit.getServer().getWorld(WORLD), rs.getInt(3), rs.getInt(4), rs.getInt(5));
+				if(p.isInsideVehicle()){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst teleportiert werden!");
+				}
+				else{
 					p.teleport(loc);
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Willkommen zu Hause");
 					plugin.api.sendLog("[Epicraft - Home] " + p.getName() + " hat sich zum Homepunkt " + title + " teleportiert");
-					sql.closeRessources(rs, st);
-					return;
 				}
+				sql.closeRessources(rs, st);
+				return;
 			}
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Kein Homepunkt names " + title + " gefunden!");
 		} 
@@ -260,13 +258,10 @@ public class HomeCommand implements CommandExecutor{
 		PreparedStatement st = null;
 		String home = plugin.namespace + ChatColor.WHITE + " ";
 		try {
-			st = conn.prepareStatement("SELECT title FROM home WHERE username='" + name + "'");
+			st = conn.prepareStatement("SELECT Title FROM Home WHERE Benutzername='" + name + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
-				String tmp = rs.getString(1);
-				tmp = tmp.replaceAll(p.getName(), "");
-				tmp = tmp.replaceFirst("_", "");
-				home += tmp + ", ";
+				home += rs.getString(1);
 			}
 		}
 		catch (SQLException e) {

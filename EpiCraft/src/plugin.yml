@@ -296,3 +296,5 @@ permissions:
       epicraft.world.unload: true
       epicraft.world.create: true
       epicraft.egg.catch: true
+      epicraft.home.one: true
+      epicraft.home.multiple: true
