@@ -4,13 +4,20 @@ import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Spider;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.wolfsline.Epicraft.Epicraft;
 
@@ -44,4 +51,54 @@ public class Region implements Listener{
 			}
 		}
     }
+	
+	@EventHandler
+	public void soilChangePlayer(PlayerInteractEvent event) {
+		if ((event.getAction() == Action.PHYSICAL) && (event.getClickedBlock().getType() == Material.SOIL)){
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void soilChangeEntity(EntityInteractEvent event)	{
+		if ((event.getEntityType() != EntityType.PLAYER) && (event.getBlock().getType() == Material.SOIL)){
+			event.setCancelled(true);
+		}
+	}
+	
+	/*@EventHandler
+	public void onTrampleEvent(PlayerInteractEvent event){
+		if (event.isCancelled()){
+			return;
+		}
+		if (event.getAction() == Action.PHYSICAL){
+			Block block = event.getClickedBlock();
+			if(block == null)
+        		return;
+			int blockType = block.getTypeId();
+			if(blockType == Material.getMaterial(59).getId()){
+				event.setUseInteractedBlock(Result.DENY);
+            	event.setCancelled(true);
+            	
+        		block.setTypeId(blockType);
+        		block.setData(block.getData());
+			}
+		}
+		if(event.getAction() == Action.PHYSICAL)
+        {
+        	Block block = event.getClickedBlock();
+        	if(block == null)
+        		return;
+
+        	int blockType = block.getTypeId();
+        	if(blockType == Material.getMaterial(60).getId())
+        	{
+            	event.setUseInteractedBlock(Result.DENY);
+            	event.setCancelled(true);
+            	
+        		block.setType(Material.getMaterial(60));
+        		block.setData(block.getData());
+        	}
+		}
+	}*/
 }
