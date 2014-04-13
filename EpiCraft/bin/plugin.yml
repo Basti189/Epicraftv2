@@ -304,3 +304,11 @@ permissions:
       epicraft.home.one: true
       epicraft.home.multiple: true
       epicraft.afk: true
+      epicraft.ticket.team: true
+      epicraft.sign.lift.create: true
+      epicraft.sign.lift: true
+      epicraft.blocksecure.team: true
+      epicraft.horse.team: true
+      epicraft.fragebogen: true
+      epicraft.gs.team: true
+      epicraft.wartung: true
