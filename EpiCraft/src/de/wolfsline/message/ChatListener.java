@@ -186,6 +186,9 @@ public class ChatListener implements Listener, CommandExecutor{
 			return ChatColor.AQUA + p.getName();
 		}
 		else if(p.hasPermission("epicraft.permission.spieler")){
+			return ChatColor.BLUE + p.getName();
+		}
+		else if(p.hasPermission("epicraft.permission.stammi")){
 			return ChatColor.DARK_BLUE + p.getName();
 		}
 		else if(p.hasPermission("epicraft.permission.guard")){
@@ -193,6 +196,9 @@ public class ChatListener implements Listener, CommandExecutor{
 		}
 		else if(p.hasPermission("epicraft.permission.moderator")){
 			return ChatColor.DARK_GREEN + p.getName();
+		}
+		else if(p.hasPermission("epicraft.permission.owner")){
+			return ChatColor.DARK_GRAY + p.getName();
 		}
 		else if(p.hasPermission("epicraft.permission.admin")){
 			return ChatColor.DARK_RED + p.getName();

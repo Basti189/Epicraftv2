@@ -193,6 +193,7 @@ public class PermissionManager implements CommandExecutor{
 		}
 		else if(permission.equalsIgnoreCase("epicraft.permission.owner")){
 			//Epicraft
+			p.addAttachment(plugin, "epicraft.permission.admin", true);
 			p.addAttachment(plugin, "epicraft.permission.owner", true);
 			p.addAttachment(plugin, "epicraft.*", true);
 			//WorldGuard
@@ -274,7 +275,8 @@ public class PermissionManager implements CommandExecutor{
 				for(Player tmpPlayer : Bukkit.getServer().getOnlinePlayers()){
 					if(tmpPlayer.hasPermission("epicraft.permission.guard") || 
 					   tmpPlayer.hasPermission("epicraft.permission.moderator") || 
-					   tmpPlayer.hasPermission("epicraft.permission.admin")){
+					   tmpPlayer.hasPermission("epicraft.permission.admin") ||
+					   tmpPlayer.hasPermission("epicraft.permission.owner")){
 						tmpPlayer.sendMessage(plugin.namespace + ChatColor.WHITE + player.getName() + " ist nun " + group);
 					}
 				}
@@ -324,6 +326,9 @@ public class PermissionManager implements CommandExecutor{
 			return ChatColor.AQUA;
 		}
 		else if(p.hasPermission("epicraft.permission.spieler")){
+			return ChatColor.BLUE;
+		}
+		else if(p.hasPermission("epicraft.permission.spieler")){
 			return ChatColor.DARK_BLUE;
 		}
 		else if(p.hasPermission("epicraft.permission.guard")){
@@ -331,6 +336,9 @@ public class PermissionManager implements CommandExecutor{
 		}
 		else if(p.hasPermission("epicraft.permission.moderator")){
 			return ChatColor.DARK_GREEN;
+		}
+		else if(p.hasPermission("epicraft.permission.owner")){
+			return ChatColor.DARK_GRAY;
 		}
 		else if(p.hasPermission("epicraft.permission.admin")){
 			return ChatColor.DARK_RED;
