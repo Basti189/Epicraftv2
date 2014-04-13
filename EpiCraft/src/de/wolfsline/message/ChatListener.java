@@ -122,6 +122,10 @@ public class ChatListener implements Listener, CommandExecutor{
 		//Event abbrechen
 		e.setCancelled(true);
 		
+		if(p.hasPermission("epicraft.chat.color")){
+			msg = ChatColor.translateAlternateColorCodes('$', msg);
+		}
+		
 		EpicraftPlayer epiSender = plugin.pManager.getEpicraftPlayer(p.getName());
 		if(epiSender != null){
 			if(epiSender.chatMessages == false){
