@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
 
@@ -24,7 +23,7 @@ public class DebugCommand implements CommandExecutor, Listener{
 
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
-		if(!(cs.isOp() || cs.hasPermission("epicraft.permission.admin")))
+		if(!(cs.isOp() || cs.hasPermission("epicraft.wartung")))
 			return true;
 		if(args.length == 1){
 			String state = args[0].toLowerCase();

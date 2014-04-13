@@ -31,7 +31,7 @@ public class Ticketsystem implements CommandExecutor{
 			return true;
 		}
 		if(args.length == 0){//Zeige Tickets an, welche noch offen sind
-			if(p.hasPermission("epicraft.permission.guard") || p.hasPermission("epicraft.permission.moderator") || p.hasPermission("epicraft.permission.admin")){
+			if(p.hasPermission("epicraft.ticket.team")){
 				int ID = data.isTeamOnTicket(p);
 				if(ID > 0){
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Du bearbeitest gerade das Ticket[" + ID + "]!");
@@ -46,7 +46,7 @@ public class Ticketsystem implements CommandExecutor{
 			return true;
 		}
 		else if(args.length >= 1){
-			if(p.hasPermission("epicraft.permission.guard") || p.hasPermission("epicraft.permission.moderator") || p.hasPermission("epicraft.permission.admin")){
+			if(p.hasPermission("epicraft.ticket.team")){
 				if(args[0].equalsIgnoreCase("release")){
 					if(data.setTicketState(p, args[0])){
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Das Ticket wurde als \"offen\" markiert");

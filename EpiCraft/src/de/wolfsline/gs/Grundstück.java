@@ -58,7 +58,7 @@ public class Grundstück implements CommandExecutor, Listener{
 		}
 		Player p = (Player) cs;
 		//Prüfe Berechtigung
-		if(!(p.hasPermission("epicraft.gs") || p.hasPermission("epicraft.permission.admin") || p.isOp())){
+		if(!(p.hasPermission("epicraft.gs") || p.isOp())){
 			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " hat versucht auf den Befehl zuzugreifen!");
 			return true;
@@ -130,10 +130,7 @@ public class Grundstück implements CommandExecutor, Listener{
 				}
 			}
 			else if(args[0].equalsIgnoreCase("warp")){ //gs warp SPIELERNAME
-				if(!(p.hasPermission("epicraft.permission.guard") || 
-						p.hasPermission("epicraft.permission.moderator") || 
-						p.hasPermission("epicraft.permission.admin") || 
-						p.isOp())){
+				if(!(p.hasPermission("epicraft.gs.team"))){
 					p.sendMessage(plugin.error);
 					plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " wollte auf den Warp-Befehl zugreifen!");
 					return true;
@@ -163,10 +160,7 @@ public class Grundstück implements CommandExecutor, Listener{
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("show") || args[0].equalsIgnoreCase("zeige")){ //gs show SPIELERNAME
-				if(!(p.hasPermission("epicraft.permission.guard") || 
-						p.hasPermission("epicraft.permission.moderator") || 
-						p.hasPermission("epicraft.permission.admin") || 
-						p.isOp())){
+				if(!(p.hasPermission("epicraft.gs.team"))){
 					p.sendMessage(plugin.error);
 					plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " wollte auf den Show-Befehl zugreifen!");
 					return true;
@@ -177,9 +171,7 @@ public class Grundstück implements CommandExecutor, Listener{
 		}
 		else if(args.length == 3){
 			if(args[0].equalsIgnoreCase("del") || args[0].equalsIgnoreCase("delete")){ //gs del SPIELERNAME GSNAME
-				if(!(p.hasPermission("epicraft.permission.moderator") ||
-						p.hasPermission("epicraft.permission.admin") ||
-						p.isOp())){
+				if(!(p.hasPermission("epicraft.gs.team"))){
 					p.sendMessage(plugin.error);
 					plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " wollte auf den Löschen-Befehl zugreifen!");
 					return true;
@@ -210,7 +202,7 @@ public class Grundstück implements CommandExecutor, Listener{
 	//----------------------------------------------------------------------------------------------------------------------//
 	
 	private void starterKit(Player p){
-		p.sendMessage(this.plugin.namespace + ChatColor.WHITE + "Zahle Starterpack aus...");
+		//p.sendMessage(this.plugin.namespace + ChatColor.WHITE + "Zahle Starterpack aus...");
 		Location loc = p.getLocation();
 		loc.getWorld().getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()).setType(Material.CHEST);
 		p.teleport(new Location(loc.getWorld(), loc.getX(), loc.getY() + 1, loc.getZ()));

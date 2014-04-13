@@ -33,6 +33,8 @@ import de.wolfsline.helpClasses.myLocation;
 public class JailCommand implements CommandExecutor, Listener{
 
 	private Epicraft plugin;
+	private final String WORLD = "Survival";
+	
 	private Location jailLoc;
 	private boolean newObsidian = false;
 	
@@ -50,7 +52,7 @@ public class JailCommand implements CommandExecutor, Listener{
 		cfg.addDefault(pos + "yaw", 0);
 		cfg.addDefault(pos + "pitch", 0);
 		
-		jailLoc = new Location(Bukkit.getWorld("Survival"), cfg.getDouble(pos + "x"), cfg.getDouble(pos + "y"), cfg.getDouble(pos + "z"));
+		jailLoc = new Location(Bukkit.getWorld(WORLD), cfg.getDouble(pos + "x"), cfg.getDouble(pos + "y"), cfg.getDouble(pos + "z"));
 		jailLoc.setPitch((float) cfg.getDouble(pos + "pitch"));
 		jailLoc.setYaw((float) cfg.getDouble(pos + "yaw"));
 		try {
@@ -131,7 +133,7 @@ public class JailCommand implements CommandExecutor, Listener{
 					return true;
 				}
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "p set " + jailPlayer.getName() + " Spieler");
-				jailPlayer.teleport(Bukkit.getServer().getWorld("Survival").getSpawnLocation());
+				jailPlayer.teleport(Bukkit.getServer().getWorld(WORLD).getSpawnLocation());
 				jailPlayer.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest entlassen!");
 				for(Player team : Bukkit.getServer().getOnlinePlayers()){
 					if(team.hasPermission("epicraft.jail.info")){
@@ -224,7 +226,7 @@ public class JailCommand implements CommandExecutor, Listener{
 				if(amount == 0){
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du hast deine Strafe erfolgreich erledigt.");
 					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "pex user " + p.getName() + " group set Spieler");
-					p.teleport(Bukkit.getServer().getWorld("Survival").getSpawnLocation());
+					p.teleport(Bukkit.getServer().getWorld(WORLD).getSpawnLocation());
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest entlassen!");
 					for(Player team : Bukkit.getServer().getOnlinePlayers()){
 						if(team.hasPermission("epicraft.jail.info")){

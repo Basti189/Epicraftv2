@@ -26,7 +26,7 @@ public class SignLift implements Listener{
 	@EventHandler
 	public void onSignChangeEvent(SignChangeEvent event){
 		if(event.getLine(0).equalsIgnoreCase("[Lift]")){
-			if(!(event.getPlayer().isOp() || event.getPlayer().hasPermission("epicraft.permission.admin"))){
+			if(!(event.getPlayer().isOp() || event.getPlayer().hasPermission("epicraft.sign.lift.create"))){
 				if(event.getPlayer().getLocation().getWorld().getName().equalsIgnoreCase("plots")){
 					return;
 				}
@@ -40,6 +40,8 @@ public class SignLift implements Listener{
 	@EventHandler
 	public void onPlayerInteractEvent(PlayerInteractEvent event){
 		Player p = event.getPlayer();
+		if(!p.hasPermission("epicraft.sign.lift"))
+			return;
 		if(!(event.getClickedBlock() instanceof Block))
 			return;
 		if (event.getClickedBlock().getType() == Material.WALL_SIGN && event.getAction() == Action.RIGHT_CLICK_BLOCK) {

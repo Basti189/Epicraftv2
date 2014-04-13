@@ -25,7 +25,7 @@ public class QuestSignCommand implements CommandExecutor{
 			return true;
 		}
 		Player p = (Player) cs;
-		if(!p.isOp()){
+		if(!(p.isOp() || p.hasPermission("epicraft.fragebogen"))){
 			p.sendMessage(plugin.error);
 			plugin.api.sendLog("[Epicraft - Fragebogen] " + p.getName() + " wollte auf den Befehl zugreifen!");
 			return true;
