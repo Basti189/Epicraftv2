@@ -96,6 +96,7 @@ public class SignLift implements Listener{
 			String lineLift = ChatColor.stripColor(sign.getLine(0));
 			if(lineLift.equalsIgnoreCase("[Lift]")){
 				String lineDir = ChatColor.stripColor(sign.getLine(2));
+				String lineDirWithColor = sign.getLine(2);
 				if(lineDir.equalsIgnoreCase("hoch")){
 					Location loc = event.getClickedBlock().getLocation();
 					int x = loc.getBlockX();
@@ -106,7 +107,7 @@ public class SignLift implements Listener{
 						if(block.getType() == Material.WALL_SIGN){
 							Sign mySign = (Sign) block.getState();
 							if(ChatColor.stripColor(mySign.getLine(0)).equalsIgnoreCase("[Lift]")){//Lift runter gefunden
-								sign.setLine(2, lineDir.replace("hoch", "runter"));
+								sign.setLine(2, lineDirWithColor.replace("hoch", "runter"));
 								sign.update();
 								return;
 							}
@@ -124,7 +125,7 @@ public class SignLift implements Listener{
 						if(block.getType() == Material.WALL_SIGN){
 							Sign mySign = (Sign) block.getState();
 							if(ChatColor.stripColor(mySign.getLine(0)).equalsIgnoreCase("[Lift]")){
-								sign.setLine(2, lineDir.replace("runter", "hoch"));
+								sign.setLine(2, lineDirWithColor.replace("runter", "hoch"));
 								sign.update();
 								return;
 							}
