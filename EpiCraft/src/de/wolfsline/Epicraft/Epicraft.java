@@ -30,6 +30,7 @@ import de.wolfsline.administration.TeleportCommand;
 import de.wolfsline.administration.TimePlayer;
 import de.wolfsline.administration.UnHideCommand;
 import de.wolfsline.administration.WhoIsCommand;
+import de.wolfsline.afk.AFK;
 import de.wolfsline.data.MySQL;
 import de.wolfsline.disco.Disco;
 import de.wolfsline.epimaster.EpiMaster;
@@ -122,6 +123,7 @@ public class Epicraft extends JavaPlugin{
 		Ticketsystem ticket = new Ticketsystem(this);
 		World world = new World(this);
 		EggCatcher catcher = new EggCatcher(this);
+		AFK afk = new AFK(this);
 		
 		//TEST
 		Disco disco = new Disco(this);
@@ -173,6 +175,7 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("permission").setExecutor(pManager);
         this.getCommand("ticket").setExecutor(ticket);
         this.getCommand("welt").setExecutor(world);
+        this.getCommand("afk").setExecutor(afk);
         
 		PluginManager pm = this.getServer().getPluginManager();
 		

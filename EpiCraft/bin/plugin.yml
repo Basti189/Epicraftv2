@@ -249,6 +249,11 @@ commands:
       - epicraft.world.sign
       - epicraft.world.sign.create
 
+  afk:
+    description: AFK Befehl
+    usage: /afk
+    permissions: epicraft.afk
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft
@@ -298,3 +303,4 @@ permissions:
       epicraft.egg.catch: true
       epicraft.home.one: true
       epicraft.home.multiple: true
+      epicraft.afk: true
