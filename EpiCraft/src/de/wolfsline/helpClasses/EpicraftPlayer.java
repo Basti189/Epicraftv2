@@ -15,6 +15,7 @@ public class EpicraftPlayer {
 	public boolean moneyForVote = true;
 	public boolean chatWorld = false;
 	public String permission = "epicraft.permission.gast";
+	public boolean isAFK = false;
 	
 	public EpicraftPlayer(Epicraft plugin, String name, String permission, boolean event, boolean chat, boolean system, boolean time, boolean money, boolean world, boolean firstEntry){
 		this.plugin = plugin;
