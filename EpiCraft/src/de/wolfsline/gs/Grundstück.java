@@ -27,9 +27,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import de.wolfsline.Epicraft.Epicraft;
@@ -83,7 +86,7 @@ public class Grundstück implements CommandExecutor, Listener{
 				if(anzahlGS == 0){ //<-- Spieler hat noch kein Grundstück
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dies ist dein 1. Grundstück.");
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Erstelle Grundstück: " + gsname + " mit den Maßen: 50*50.");
-					if(!markGS(p, 50, 50)){
+					if(!markGS(p, 50, 50, gsname)){
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Dein Grundstück schneidet ein anderes Grundsrtück!");
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Vorgang abgebrochen");
 						return true;
@@ -107,7 +110,7 @@ public class Grundstück implements CommandExecutor, Listener{
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dies ist dein " + String.valueOf(anzahlGS+1) + ". Grundstück.");
 						//p.sendMessage(plugin.namespace + ChatColor.WHITE + "Für dieses Grundstück werden dir 5000 Coins berechnet.");
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Erstelle Grundstück: " + gsname + " mit den Maßen: 25*25.");
-						if(!markGS(p, 25, 25)){
+						if(!markGS(p, 25, 25, gsname)){
 							p.sendMessage(plugin.namespace + ChatColor.RED + "Dein Grundstück schneidet ein anderes Grundsrtück!");
 							p.sendMessage(plugin.namespace + ChatColor.RED + "Vorgang abgebrochen");
 							return true;
@@ -228,7 +231,7 @@ public class Grundstück implements CommandExecutor, Listener{
 		p.sendMessage(plugin.namespace + ChatColor.WHITE + "Wir wünschen dir viel Spaß...");
 	}
 	
-	private boolean markGS(Player p, int groeße_x, int groeße_y){
+	private boolean markGS(Player p, int groeße_x, int groeße_y, String gsname){
 		byte n = 0x3; // Norden
 		byte s = 0x2; // Süden
 		byte w = 0x5; // Westen
@@ -282,6 +285,7 @@ public class Grundstück implements CommandExecutor, Listener{
 		setSign(p, (Sign)Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1+1, y1+1).getState());
 		createFirework(x1, y1, z1+2);
 		createFirework(x1, y1, z1+2);
+		BlockVector b1 = new BlockVector(x1, 0, y1);
 		
 		x1 = x+(groeße_x / 2);
 		y1 = y + (groeße_y / 2)-1;
@@ -321,7 +325,26 @@ public class Grundstück implements CommandExecutor, Listener{
 		setSign(p, (Sign)Bukkit.getServer().getWorld(WORLD).getBlockAt(x1, z1+1, y1-1).getState());
 		createFirework(x1, y1, z1+2);
 		createFirework(x1, y1, z1+2);
+		BlockVector b2 = new BlockVector(x1, 256, y1);
 		
+		WorldGuardPlugin wgp = plugin.getWorldGuard();
+		if(wgp != null){
+			RegionManager rm = wgp.getRegionManager(p.getLocation().getWorld());
+			ProtectedCuboidRegion pr = new ProtectedCuboidRegion((p.getName() + "_" + gsname), b1, b2);
+			DefaultDomain dd = new DefaultDomain();
+			dd.addPlayer(p.getName());
+			pr.setOwners(dd);
+			rm.addRegion(pr);
+			try{
+	            rm.save();
+	        }
+	        catch (Exception exp)
+	        { }
+		}
+		else{
+			p.sendMessage(plugin.namespace + ChatColor.RED + "Grundstück konnte nicht gesichert werden!");
+			p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte wende dich an einen Teamler");
+		}
 		return true;
 	}
 	
