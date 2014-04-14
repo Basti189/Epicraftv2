@@ -44,7 +44,12 @@ public class Microblock implements CommandExecutor,Listener {
 		}
 		if(args.length == 1){
 			if(label.equalsIgnoreCase("mb") || label.equalsIgnoreCase("microblock")){
-				map.put(p.getUniqueId(), mbType.getBlockName(args[0]));
+				String blockName = mbType.getBlockName(args[0]);
+				if(blockName == null){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Dieser Block ist mir nicht bekannt!");
+					return true;
+				}
+				map.put(p.getUniqueId(), blockName);
 			}
 			else if(label.equalsIgnoreCase("skull")){
 				map.put(p.getUniqueId(), args[0]);
@@ -64,6 +69,8 @@ public class Microblock implements CommandExecutor,Listener {
 			return;
 		}
 		if(!(event.getClickedBlock() instanceof Block))
+			return;
+		if(!map.containsKey(p.getUniqueId()))
 			return;
 		if(event.getClickedBlock().getType() == Material.SKULL){
 			Skull skull = (Skull) event.getClickedBlock().getState();
