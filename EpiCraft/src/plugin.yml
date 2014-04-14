@@ -255,7 +255,7 @@ commands:
 
   microblock:
     description: Setzt einen Microblock
-    aliases[mb, skull]
+    aliases: [mb, skull]
     usage: /microblock, skull <name>
     permissions:
       - epicraft.micro.block
@@ -319,3 +319,6 @@ permissions:
       epicraft.fragebogen: true
       epicraft.gs.team: true
       epicraft.wartung: true
+      epicraft.door.access: true
+      epicraft.micro.block: true
+      epicraft.micro.skull: true
