@@ -28,6 +28,7 @@ public class Microblock implements CommandExecutor,Listener {
 	
 	public Microblock(Epicraft plugin){
 		this.plugin = plugin;
+		plugin.getServer().getPluginManager().registerEvents(new MircoblockEnderchest(plugin), plugin);
 	}
 
 	@Override
