@@ -41,6 +41,7 @@ import de.wolfsline.forfun.PVP;
 import de.wolfsline.forfun.TntCommand;
 import de.wolfsline.gs.Grundstück;
 import de.wolfsline.gs.SignName;
+import de.wolfsline.healthbar.DamageListener;
 import de.wolfsline.home.HomeCommand;
 import de.wolfsline.info.TimeCommand;
 import de.wolfsline.info.InfoCommand;
@@ -222,6 +223,7 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(region, this);
 		pm.registerEvents(doorAccess, this);
 		pm.registerEvents(microblock, this);
+		pm.registerEvents(new DamageListener(this), this);
 		
 		pm.registerEvents(disco, this);
 		
