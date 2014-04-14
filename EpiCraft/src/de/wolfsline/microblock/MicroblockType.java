@@ -34,14 +34,14 @@ public class MicroblockType {
 		map.put("companioncube", "sk8erace1");
 		map.put("cow", "MHF_Cow");
 		map.put("derpysnow", "GLaDOS");
-		map.put("diamondblock", "Fyspyguy");
+		map.put("diamondblock", "Fyspyguy"); // <-- ?
 		map.put("diamondore", "akaBruce");
 		map.put("glowstone", "samstine11");
 		map.put("beachball", "PurplePenguinLPs");
 		map.put("dicewhite", "jmars213");
 		map.put("dicered", "gumbo632");
 		map.put("diceblack", "azbandit2000");
-		map.put("dirt", "zachman228");
+		map.put("dirt", "zachman228"); // <-- Creeper
 		map.put("dispenser", "scemm");
 		map.put("emeraldore", "Tereneckla");
 		map.put("enderdragon", "KingEndermen");
@@ -62,11 +62,11 @@ public class MicroblockType {
 		map.put("lime", "greenskull27");
 		map.put("machine", "aetherX");
 		map.put("melon", "MHF_Melon");
-		map.put("mossycobblestone", "Khrenan");
+		map.put("mossycobblestone", "Khrenan"); // <-- Spieler
 		map.put("muffin", "ChoclateMuffin");
 		map.put("mushroomcow", "MHF_MushroomCow");
 		map.put("netherrack", "Numba_one_Stunna");
-		map.put("notexture", "ddrl46");
+		map.put("notexture", "ddrl46"); //<-- Grafik fehlt
 		map.put("oaklog2", "MightyMega");
 		map.put("oaklog", "MHF_OakLog");
 		map.put("obsidian", "loiwiol");
@@ -104,16 +104,16 @@ public class MicroblockType {
 		map.put("ghast", "MHF_Ghast");
 		map.put("oakplanks", "terryxu");
 		map.put("gamecube", "ReflectedNicK");
-		map.put("redstoneblock", "AlexDr0ps");
+		map.put("redstoneblock", "AlexDr0ps"); //<-- Spieler
 		map.put("tv2", "nonesuchplace");
 		map.put("troll", "Trollface20");
 		map.put("eye", "Taizun");
-		map.put("parrot", "Luk3011");
+		map.put("parrot", "Luk3011"); //<-- Spieler
 		map.put("pokeball", "Chuzard");
 		map.put("cookie", "QuadratCookie");
 		map.put("orangewool", "titou36");
 		map.put("stonebrick", "Cakers");
-		map.put("swskeleton", "lesto123");
+		map.put("swskeleton", "lesto123"); //<-- Spieler
 		map.put("goldblock", "StackedGold");
 		map.put("fox", "hugge75");
 		map.put("potato", "CraftPotato13");
