@@ -1,12 +1,12 @@
 package de.wolfsline.Epicraft;
 
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -23,7 +23,6 @@ import de.wolfsline.administration.FlyCommand;
 import de.wolfsline.administration.InvSwitcherCommand;
 import de.wolfsline.administration.JailCommand;
 import de.wolfsline.administration.RestartCommand;
-import de.wolfsline.administration.SkullPlayer;
 import de.wolfsline.administration.SpawnCommand;
 import de.wolfsline.administration.TeleportCommand;
 import de.wolfsline.administration.TimePlayer;
@@ -47,6 +46,7 @@ import de.wolfsline.info.TimeCommand;
 import de.wolfsline.info.InfoCommand;
 import de.wolfsline.message.ChatListener;
 import de.wolfsline.message.WhisperExecuter;
+import de.wolfsline.microblock.Microblock;
 import de.wolfsline.modify.ColorSignListener;
 import de.wolfsline.modify.CommandListener;
 import de.wolfsline.modify.DeathListener;
@@ -115,7 +115,6 @@ public class Epicraft extends JavaPlugin{
 		invswitch = new InvSwitcherCommand(this);
 		HorseListener horse = new HorseListener(this);
 		Settings set = new Settings(this);
-		SkullPlayer skp = new SkullPlayer(this);
 		VoteListener voteListener = new VoteListener(this);
 		RestrictionCommand restriction = new RestrictionCommand(this);
 		RestartCommand restart = new RestartCommand(this);
@@ -128,6 +127,7 @@ public class Epicraft extends JavaPlugin{
 		TeleportBack back = new TeleportBack(this);
 		Region region = new Region(this);
 		DoorAccess doorAccess = new DoorAccess(this);
+		Microblock microblock = new Microblock(this);
 		
 		//TEST
 		Disco disco = new Disco(this);
@@ -171,7 +171,6 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("api").setExecutor(api);
         this.getCommand("epicraft").setExecutor(new DEBUGCLASS(this));
         this.getCommand("uhr").setExecutor(new TimeCommand(this));
-        this.getCommand("skull").setExecutor(skp);
         this.getCommand("vote").setExecutor(voteListener);
         this.getCommand("block").setExecutor(pb);
         this.getCommand("chest").setExecutor(new ChestAccess(this));
@@ -181,6 +180,7 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("welt").setExecutor(world);
         this.getCommand("afk").setExecutor(afk);
         this.getCommand("back").setExecutor(back);
+        this.getCommand("microblock").setExecutor(microblock);
         
 		PluginManager pm = this.getServer().getPluginManager();
 		
@@ -210,7 +210,6 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(restriction, this);
 		pm.registerEvents(api, this);
 		pm.registerEvents(new CreatureSpawnListener(), this);
-		pm.registerEvents(skp, this);
 		pm.registerEvents(voteListener, this);
 		pm.registerEvents(new SignLift(this), this);
 		pm.registerEvents(pb, this);
@@ -222,6 +221,7 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(back, this);
 		pm.registerEvents(region, this);
 		pm.registerEvents(doorAccess, this);
+		pm.registerEvents(microblock, this);
 		
 		pm.registerEvents(disco, this);
 		

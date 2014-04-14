@@ -3,7 +3,7 @@ version: 1.7.4
 author: Sebastian Wolf
 description: Plugin fuer EpiCraft
 main: de.wolfsline.Epicraft.Epicraft
-softdepend: [Vault, WorldGuard]
+softdepend: [WorldGuard]
 load: startup
 database: true
 
@@ -197,11 +197,6 @@ commands:
     description: Die Zeit
     usage: /uhr
 
-  skull:
-    description: Head
-    usage: /skull <name>
-    permission: epicraft.skull
-
   vote:
     description: Vote fuer Epicraft
     usage: /vote
@@ -257,6 +252,14 @@ commands:
     description: Teleportiert dich zu deinem Todespunkt zurück
     usage: /back
     permission: epicraft.tp.back
+
+  microblock:
+    description: Setzt einen Microblock
+    aliases[mb, skull]
+    usage: /microblock, skull <name>
+    permissions:
+      - epicraft.micro.block
+      - epicraft.micro.skull
 
 permissions:
   epicraft.*:

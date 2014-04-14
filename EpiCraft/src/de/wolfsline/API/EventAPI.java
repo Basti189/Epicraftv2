@@ -110,8 +110,10 @@ public class EventAPI extends Handler implements Listener, CommandExecutor{
 	public void onWeatherChangeEvent(WeatherChangeEvent event){
 		String where = event.getWorld().getName();
 		String result = "[Epicraft - Wetter] Es ";
-		if(event.toWeatherState())
+		if(event.toWeatherState()){
 			result += "regnet nun in der Welt ";
+			event.setCancelled(true); //<-- muss entfernt werden!
+		}
 		else
 			result += "scheint nun die Sonne in der Welt ";
 		result += where;
