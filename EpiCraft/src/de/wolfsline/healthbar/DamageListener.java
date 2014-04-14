@@ -1,6 +1,5 @@
 package de.wolfsline.healthbar;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -28,19 +26,14 @@ public class DamageListener implements Listener{
 
 	private static  	Epicraft plugin;
 	private static		BukkitScheduler scheduler = Bukkit.getScheduler();
-
-	//mob vars
-	public static 		boolean mobEnabled;
 	private static		String[] barArray;
-	protected static	long mobHideDelay = 20L;
-
+	protected static	long mobHideDelay = 40L;
 	private static		Map<Integer,Integer> mobTable = new HashMap<Integer, Integer>();
 
 	public DamageListener(Epicraft plugin){
 		this.plugin = plugin;
 	}
 
-	//fix for PhatLoots
 	@EventHandler (ignoreCancelled = true, priority = EventPriority.LOW)
 	 public void onEntityDeath(EntityDeathEvent event) {
 		 if (event.getEntity() instanceof LivingEntity) {
@@ -51,11 +44,10 @@ public class DamageListener implements Listener{
 	@EventHandler (ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onEntityDamageEvent(EntityDamageEvent event) {
 		Entity entity = event.getEntity();
-		if ((entity instanceof LivingEntity)){
+		if(entity instanceof Horse)
+			return;
+		if(entity instanceof LivingEntity){
 			LivingEntity living = (LivingEntity) entity;
-			if(entity instanceof Horse){
-				return;
-			}
 			if (living.getNoDamageTicks() > living.getMaximumNoDamageTicks() / 2F) 
 				return;
 			parseMobHit(living, event instanceof EntityDamageByEntityEvent);
@@ -65,9 +57,9 @@ public class DamageListener implements Listener{
 	@EventHandler (ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onEntityRegain(EntityRegainHealthEvent event) {
 		Entity entity = event.getEntity();
+		if(entity instanceof Horse)
+			return;
 		if (entity instanceof LivingEntity) {
-			if(entity instanceof Horse)
-				return;
 			parseMobHit((LivingEntity) entity, true);
 		}
 	}
