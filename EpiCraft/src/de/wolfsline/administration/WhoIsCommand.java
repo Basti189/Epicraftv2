@@ -71,7 +71,7 @@ public class WhoIsCommand implements CommandExecutor{
 							p.sendMessage("Erster Login: " + formatter.format(dateFirstPlayed));
 							p.sendMessage("Letzer Login: " + formatter.format(dateLastPlayed));
 							//p.sendMessage("Akt. Spielzeit: " + formater.format(dateTimePlayed)); <-- Fixen!!
-							p.sendMessage("Standort: " + country + " - " + city);
+							p.sendMessage("Standort: " + country);// + " - " + city);
 						}
 					}
 				}).start();
