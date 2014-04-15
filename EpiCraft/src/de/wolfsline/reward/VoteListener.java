@@ -43,7 +43,8 @@ public class VoteListener implements CommandExecutor, Listener{
 
 	@EventHandler
 	public void onVotifierEvent(VotifierEvent event){
-		Vote vote = event.getVote();
+	}
+		/*Vote vote = event.getVote();
 		Player p = Bukkit.getServer().getPlayer(vote.getUsername());
 		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(vote.getUsername());
 		this.plugin.api.sendLog("[Epicraft - Vote] " + vote.getUsername() + " hat einen Vote für den Server abgegeben");
@@ -55,7 +56,7 @@ public class VoteListener implements CommandExecutor, Listener{
 				//econ.depositPlayer(p.getName(), 100.0D);
 			}
 			else{
-				if(epiPlayer.moneyForVote){
+				if(true)//epiPlayer.moneyForVote){
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dir wurden 100 Coins gutgeschrieben!");
 					this.plugin.api.sendLog("[Epicraft - Vote] " + vote.getUsername() + " wurden 100 Coins gutgeschrieben");
 					//econ.depositPlayer(p.getName(), 100.0D);
@@ -71,15 +72,15 @@ public class VoteListener implements CommandExecutor, Listener{
 						econ.depositPlayer(vote.getUsername(), 100.0D);
 					}	
 				}*/
-			}
+			//}
 			//else{
 				//Nichts machen, da Spieler kein Bankaccount besitzt
 			//}
 				
 		//}
-		updateDatabase(vote.getUsername());
-		//Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + vote.getUsername() + " hat für unseren Server einen Vote abgegeben!");
-	}
+		//updateDatabase(vote.getUsername());
+		//Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + vote.getUsername() + " hat für unseren Server einen Vote abgegeben!");*/
+	//}
 	
 	private void updateDatabase(String username){
 		MySQL sql = this.plugin.getMySQL();

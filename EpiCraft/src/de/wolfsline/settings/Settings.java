@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.wolfsline.Epicraft.Epicraft;
+import de.wolfsline.data.MySQL;
 import de.wolfsline.helpClasses.EpicraftPlayer;
 
 public class Settings implements CommandExecutor, Listener{
@@ -30,6 +31,8 @@ public class Settings implements CommandExecutor, Listener{
 
 	public Settings(Epicraft plugin) {
 		this.plugin = plugin;
+		MySQL sql = plugin.getMySQL();
+		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Einstellungen (Benutzername VARCHAR(16), Eventnachrichten SMALLINT, Chatnachrichten SMALLINT, Chatzeit SMALLINT, Chatwelt SMALLINT, Systemnachrichten SMALLINT, Lebensanzeige SMALLINT, Berechtigung VARCHAR(30))");
 	}
 
 	@Override
@@ -118,10 +121,22 @@ public class Settings implements CommandExecutor, Listener{
 		meta.setLore(tmpList);
 		moneyForVote.setItemMeta(meta);*/
 		
+		ItemStack healthbar = new ItemStack(Material.WOOL, 1, (short) 5);
+    	meta = chatWorld.getItemMeta();
+		meta.setDisplayName("Herzen über Mobs");
+		tmpList = new ArrayList<String>();
+		if(player.healthbar)
+			tmpList.add("Status: An");
+		else
+			tmpList.add("Status: Aus");
+		meta.setLore(tmpList);
+		healthbar.setItemMeta(meta);
+		
 		inv.setItem(0, eventMessages);
 		inv.setItem(1, chatMessages);
 		inv.setItem(2, chatTime);
 		inv.setItem(3, chatWorld);
+		inv.setItem(4, healthbar);
 		//inv.setItem(4, moneyForVote);
 		/*for(int i = 5 ; i < 9 ; i++){
 			ItemStack tmpStack = new ItemStack(Material.WOOL, 1, (short) i);
@@ -237,6 +252,20 @@ public class Settings implements CommandExecutor, Listener{
 							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " bekommt nun wieder Coins fürs Voten");
 						}
 					}*/
+					else if(slot == 4){//Lebensanzeige
+						if(player.healthbar){
+							tmpList.add("Status: Aus");
+							player.healthbar = false;
+							player.update();
+							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " bekommt nicht mehr die Lebensanzeige angezeigt");
+						}
+						else{
+							tmpList.add("Status: An");
+							player.healthbar = true;
+							player.update();
+							plugin.api.sendLog("[Epicraft - Einstellungen] " + p.getName() + " bekommt die Lebensanzeige angezeigt");
+						}
+					}
 					else{
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Keine weiteren Einstellungen vorhanden!");
 					}

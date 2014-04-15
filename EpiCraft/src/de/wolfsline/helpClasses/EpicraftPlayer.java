@@ -12,31 +12,31 @@ public class EpicraftPlayer {
 	public boolean chatMessages = true;
 	public boolean systemMessages = true;
 	public boolean chatTime = false;
-	public boolean moneyForVote = true;
+	public boolean healthbar = false;
 	public boolean chatWorld = false;
 	public String permission = "epicraft.permission.gast";
 	public boolean isAFK = false;
 	
-	public EpicraftPlayer(Epicraft plugin, String name, String permission, boolean event, boolean chat, boolean system, boolean time, boolean money, boolean world, boolean firstEntry){
+	public EpicraftPlayer(Epicraft plugin, String name, String permission, boolean event, boolean chat, boolean system, boolean time, boolean healthbar, boolean world, boolean firstEntry){
 		this.plugin = plugin;
 		this.username = name;
 		this.eventMessages = event;
 		this.chatMessages = chat;
 		this.systemMessages = system;
 		this.chatTime = time;
-		this.moneyForVote = money;
+		this.healthbar = healthbar;
 		this.chatWorld = world;
 		this.permission = permission;
 		if(firstEntry){
 			//Datenbankeintrag anlegen
 			String query = "INSERT INTO Einstellungen (" +
-					"Name, " +
+					"Benutzername, " +
 					"Eventnachrichten, " +
 					"Chatnachrichten, " +
 					"Chatzeit, " +
 					"Chatwelt, " +
 					"Systemnachrichten, " +
-					"Votegeld, " +
+					"Lebensanzeige, " +
 					"Berechtigung) " +
 					"VALUES (" +
 					"'" + username + "', " + 
@@ -45,7 +45,7 @@ public class EpicraftPlayer {
 					"'" + tb(chatTime) + "', " + 
 					"'" + tb(chatWorld) + "', " + 
 					"'" + tb(systemMessages) + "', " + 
-					"'" + tb(moneyForVote) + "', " +
+					"'" + tb(healthbar) + "', " +
 					"'" + permission + "')";
 			plugin.getMySQL().queryUpdate(query);
 		}
@@ -58,9 +58,9 @@ public class EpicraftPlayer {
 				"Chatzeit='" + tb(chatTime) + "', " +
 				"Chatwelt='" + tb(chatWorld) + "', " +
 				"Systemnachrichten='" + tb(systemMessages) + "', " +
-				"Votegeld='" + tb(moneyForVote) + "', " +
+				"Lebensanzeige='" + tb(healthbar) + "', " +
 				"Berechtigung='" + permission + "' " +
-				"WHERE Name='" + username + "'";
+				"WHERE Benutzername='" + username + "'";
 		plugin.getMySQL().queryUpdate(query);
 	}
 	

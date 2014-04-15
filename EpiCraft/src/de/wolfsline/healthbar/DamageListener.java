@@ -10,16 +10,17 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import de.wolfsline.Epicraft.Epicraft;
+import de.wolfsline.helpClasses.EpicraftPlayer;
 
 public class DamageListener implements Listener{
 	
@@ -42,8 +43,16 @@ public class DamageListener implements Listener{
 	 }
 	
 	@EventHandler (ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onEntityDamageEvent(EntityDamageEvent event) {
+	public void onEntityDamageEvent(EntityDamageByEntityEvent event) {
 		Entity entity = event.getEntity();
+		Entity damageEntity = event.getDamager();
+		if(damageEntity == null ) return;
+		if(!(damageEntity instanceof Player)) return;
+		Player p = (Player) damageEntity;
+		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getName());
+		if(epiPlayer != null){
+			if(!epiPlayer.healthbar) return;
+		}
 		if(entity instanceof Horse)
 			return;
 		if(entity instanceof LivingEntity){

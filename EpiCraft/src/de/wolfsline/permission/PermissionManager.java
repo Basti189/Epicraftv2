@@ -396,7 +396,7 @@ public class PermissionManager implements CommandExecutor{
 			PreparedStatement st = null;
 			EpicraftPlayer epiPlayer = null;
 			try{
-				st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE Name='" + p.getName() + "'");
+				st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE Benutzername='" + p.getName() + "'");
 				rs = st.executeQuery();
 				rs.next();
 				boolean eventMessages = rs.getBoolean(2);
@@ -404,9 +404,9 @@ public class PermissionManager implements CommandExecutor{
 				boolean chatTime = rs.getBoolean(4);
 				boolean chatWorld = rs.getBoolean(5);
 				boolean systemMessages = rs.getBoolean(6);
-				boolean moneyForVote = rs.getBoolean(7);
+				boolean healthbar = rs.getBoolean(7);
 				String permission = rs.getString(8);
-				epiPlayer = new EpicraftPlayer(plugin, p.getName(), permission, eventMessages, chatMessages, systemMessages, chatTime, moneyForVote, chatWorld, false);
+				epiPlayer = new EpicraftPlayer(plugin, p.getName(), permission, eventMessages, chatMessages, systemMessages, chatTime, healthbar, chatWorld, false);
 				plugin.getMySQL().closeRessources(rs, st);
 			} catch (SQLException e){
 				//e.printStackTrace();
@@ -445,7 +445,7 @@ public class PermissionManager implements CommandExecutor{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try{
-			st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE Name='" + name + "'");
+			st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE Benutzername='" + name + "'");
 			rs = st.executeQuery();
 			if(rs.next()){
 				plugin.getMySQL().closeRessources(rs, st);
@@ -456,10 +456,10 @@ public class PermissionManager implements CommandExecutor{
 			boolean chatTime = rs.getBoolean(4);
 			boolean chatWorld = rs.getBoolean(5);
 			boolean systemMessages = rs.getBoolean(6);
-			boolean moneyForVote = rs.getBoolean(7);
+			boolean healthbar = rs.getBoolean(7);
 			String permission = rs.getString(8);
 			plugin.getMySQL().closeRessources(rs, st);
-			return new EpicraftPlayer(plugin, name, permission, eventMessages, chatMessages, systemMessages, chatTime, moneyForVote, chatWorld, false);
+			return new EpicraftPlayer(plugin, name, permission, eventMessages, chatMessages, systemMessages, chatTime, healthbar, chatWorld, false);
 			
 		} catch (SQLException e){
 			//e.printStackTrace();
