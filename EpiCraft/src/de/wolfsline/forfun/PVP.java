@@ -2,6 +2,7 @@ package de.wolfsline.forfun;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -27,7 +28,7 @@ import org.bukkit.potion.PotionEffectType;
 import de.wolfsline.Epicraft.Epicraft;
 
 public class PVP implements CommandExecutor, Listener {
-	private List<String> list = new ArrayList<String>();
+	private List<UUID> list = new ArrayList<UUID>();
 	private Epicraft plugin;
 
 	public PVP(Epicraft plugin) {
@@ -47,16 +48,16 @@ public class PVP implements CommandExecutor, Listener {
 			return true;
 		}
 		if(args.length == 0){
-			if(list.contains(p.getName())){
+			if(list.contains(p.getUniqueId())){
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "PVP wurde deaktiviert");
 				plugin.api.sendLog("[Epicraft - PVP] " + p.getName() + " hat sein PVP deaktiviert");
-				list.remove(p.getName());
+				list.remove(p.getUniqueId());
 				return true;
 			}
 			else{
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "PVP wurde aktiviert");
 				plugin.api.sendLog("[Epicraft - PVP] " + p.getName() + " hat sein PVP aktiviert");
-				list.add(p.getName());
+				list.add(p.getUniqueId());
 				return true;
 			}
 		}
@@ -120,8 +121,8 @@ public class PVP implements CommandExecutor, Listener {
 			return;
 		}
 			
-		if(list.contains(damager.getName())){
-			if(list.contains(victim.getName())){
+		if(list.contains(damager.getUniqueId())){
+			if(list.contains(victim.getUniqueId())){
 				//Füge schaden hinzu, OK!
 			}
 			else{
@@ -144,14 +145,14 @@ public class PVP implements CommandExecutor, Listener {
 			for(LivingEntity victims : event.getAffectedEntities()){
 				if(victims instanceof Player){
 					Player victim = (Player) victims;
-					if(victim.getName().equalsIgnoreCase(damager.getName()))
+					if(victim.getUniqueId().equals(damager.getUniqueId()))
 						return;
 					for(PotionEffect effect : event.getPotion().getEffects()){
 						if(!isBadSplashPotion(effect.getType()))
 							return;
 					}
-					if(list.contains(damager.getName())){
-						if(list.contains(victim.getName())){
+					if(list.contains(damager.getUniqueId())){
+						if(list.contains(victim.getUniqueId())){
 							//Füge schaden hinzu, OK!
 						}
 						else{
@@ -184,8 +185,8 @@ public class PVP implements CommandExecutor, Listener {
 	
 	@EventHandler
 	public void OnQuit(PlayerQuitEvent event){
-		if(list.contains(event.getPlayer().getName()))
-			list.remove(event.getPlayer().getName());
+		if(list.contains(event.getPlayer().getUniqueId()))
+			list.remove(event.getPlayer().getUniqueId());
 	}
 }
 
