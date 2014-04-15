@@ -25,7 +25,6 @@ import de.wolfsline.administration.JailCommand;
 import de.wolfsline.administration.RestartCommand;
 import de.wolfsline.administration.SpawnCommand;
 import de.wolfsline.administration.TeleportCommand;
-import de.wolfsline.administration.TimePlayer;
 import de.wolfsline.administration.UnHideCommand;
 import de.wolfsline.administration.WhoIsCommand;
 import de.wolfsline.afk.AFK;
@@ -107,7 +106,6 @@ public class Epicraft extends JavaPlugin{
 		AuthCommand auth = new AuthCommand(this);
 		UnHideCommand unhide = new UnHideCommand(this);
 		Grundstück gs = new Grundstück(this);
-		TimePlayer timeplayer = new TimePlayer(this);
 		PVP pvp = new PVP(this);
 		DebugCommand debugCommand = new DebugCommand(this);
 		JailCommand myJail = new JailCommand(this);
@@ -159,7 +157,6 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("login").setExecutor(auth);
         this.getCommand("w").setExecutor(new WhisperExecuter(this));
         this.getCommand("support").setExecutor(invswitch);
-        this.getCommand("onlinetime").setExecutor(timeplayer);
         this.getCommand("pvp").setExecutor(pvp);
         this.getCommand("fly").setExecutor(new FlyCommand(this));
         this.getCommand("ts").setExecutor(new InfoCommand(this));
@@ -197,7 +194,6 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(unhide, this);
 		pm.registerEvents(gs, this);
 		pm.registerEvents(invswitch, this);
-		pm.registerEvents(timeplayer, this);
 		pm.registerEvents(new KillCounter(this), this);
 		pm.registerEvents(pvp, this);
 		pm.registerEvents(myJail, this);
