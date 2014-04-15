@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,7 +42,7 @@ public class JailCommand implements CommandExecutor, Listener{
 	File file = new File("plugins/EpiCraft/", "Jail.yml");
 	FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 	List<myLocation> mylocation = new ArrayList<myLocation>();
-	HashMap<String, Integer> map = new HashMap<String, Integer>();
+	HashMap<UUID, Integer> map = new HashMap<UUID, Integer>();
 	
 	public JailCommand(Epicraft plugin) {
 		this.plugin = plugin;
@@ -91,7 +92,7 @@ public class JailCommand implements CommandExecutor, Listener{
 						plugin.api.sendLog("[Epicraft - Gefängnis] " + p.getName() + " sperrte " + jailPlayer.getName() + " in das Gefängnis");
 					}
 				}
-				map.put(jailPlayer.getName(), -1);
+				map.put(p.getUniqueId(), -1);
 				return true;
 			}
 			else if(args.length == 2){
@@ -121,7 +122,7 @@ public class JailCommand implements CommandExecutor, Listener{
 						plugin.api.sendLog("[Epicraft - Gefängnis] " + jailPlayer.getName() + " muss " + obsidianAmount + " Obsidianbläcke abbauen");
 					}
 				}
-				map.put(jailPlayer.getName(), obsidianAmount);
+				map.put(p.getUniqueId(), obsidianAmount);
 				return true;
 			}
 		}
@@ -216,8 +217,8 @@ public class JailCommand implements CommandExecutor, Listener{
 		if(!p.getItemInHand().getType().equals(Material.AIR))
 			return;
 		
-		for(Entry<String, Integer> myMap : map.entrySet()){
-			if(myMap.getKey().equalsIgnoreCase(p.getName())){
+		for(Entry<UUID, Integer> myMap : map.entrySet()){
+			if(myMap.getKey().equals(p.getUniqueId())){
 				int amount = myMap.getValue();
 				if(amount == -1){
 					return;
@@ -239,7 +240,7 @@ public class JailCommand implements CommandExecutor, Listener{
 				else{
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Noch " + amount + " Blöcke, bis zur Entlassung!");
 					plugin.api.sendLog("[Epicraft - Gefängnis] " + p.getName() + " muss noch " + amount + " Obsidianblöcke abbauen, um entlassen zu werden");
-					map.put(p.getName(), amount);
+					map.put(p.getUniqueId(), amount);
 					try {
 						saveData();
 					} 
@@ -314,7 +315,7 @@ public class JailCommand implements CommandExecutor, Listener{
 		File file = new File("plugins/EpiCraft/", "JailUserdata.dat");
 		FileInputStream f = new FileInputStream(file);
 	    ObjectInputStream s = new ObjectInputStream(f);
-		map = (HashMap<String, Integer>) s.readObject();
+		map = (HashMap<UUID, Integer>) s.readObject();
 		s.close();
 	}
 
