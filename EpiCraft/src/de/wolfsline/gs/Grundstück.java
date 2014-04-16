@@ -3,14 +3,15 @@ package de.wolfsline.gs;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -43,7 +44,7 @@ public class Grundstück implements CommandExecutor, Listener{
 	private final String WORLD = "world";
 	
 	private Data data;
-	private HashMap<String, String> map = new HashMap<String, String>();
+	private HashMap<UUID, String> map = new HashMap<UUID, String>();
 	
 	public Grundstück(Epicraft plugin){
 		this.plugin = plugin;
@@ -73,11 +74,11 @@ public class Grundstück implements CommandExecutor, Listener{
 				p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keine Grundstücke!");
 				return true;
 			}
-			data.showGSfromPlayer(p, p.getName());
+			data.showGSfromPlayer(p, p.getUniqueId());
 			return true;
 		}
 		else if(args.length == 1){
-			if(args[0].equalsIgnoreCase("test")){
+			/*if(args[0].equalsIgnoreCase("test")){
 				Location loc = p.getTargetBlock(null, 200).getLocation();
 				int x = (int) loc.getX();
 				int y = (int) loc.getZ();
@@ -86,7 +87,7 @@ public class Grundstück implements CommandExecutor, Listener{
 				ecke(x, y, z+1, Material.WOOD);
 				ecke(x, y, z+2, Material.TORCH);
 				return true;
-			}
+			}*/
 		}
 		else if(args.length == 2){
 			if(args[0].equalsIgnoreCase("neu") || args[0].equalsIgnoreCase("new")){//Neues Grundstück anlegen //gs neu GSNAME
@@ -100,19 +101,19 @@ public class Grundstück implements CommandExecutor, Listener{
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Vorgang abgebrochen");
 						return true;
 					}
-					data.newGS((int)p.getLocation().getX(), (int)p.getLocation().getY(), (int)p.getLocation().getZ(), gsname, p.getName(), 50, 50);
+					data.newGS((int)p.getLocation().getX(), (int)p.getLocation().getY(), (int)p.getLocation().getZ(), gsname, p, 50, 50);
 					starterKit(p);
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Grundstück wurde erstellt.");
 					plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " hat sein 1. Grundstück erstellt");
 					return true;
 				}
 				else{ //<-- Spieler hat schon ein Grundstück
-					if(!data.hasPlayerGSwithName(p.getName(), gsname)){
+					if(!data.hasPlayerGSwithName(p.getUniqueId(), gsname)){
 						/*if(!econ.has(p.getName(), 5000)){
 							p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keine 5000 Coins!");
 							return true;
 						}*/
-						if(!data.PlayerGSSizeOk(p.getName())){
+						if(!data.PlayerGSSizeOk(p.getUniqueId())){
 							p.sendMessage(plugin.namespace + ChatColor.RED + "Jedes Grundstück muss mind. 50*50 Blöcke groß sein, bevor du ein weiteres kaufen kannst!");
 							return true;
 						}
@@ -124,7 +125,7 @@ public class Grundstück implements CommandExecutor, Listener{
 							p.sendMessage(plugin.namespace + ChatColor.RED + "Vorgang abgebrochen");
 							return true;
 						}
-						data.newGS((int)p.getLocation().getX(), (int)p.getLocation().getY(), (int)p.getLocation().getZ(), gsname, p.getName(), 25, 25);
+						data.newGS((int)p.getLocation().getX(), (int)p.getLocation().getY(), (int)p.getLocation().getZ(), gsname, p, 25, 25);
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Grundstück wurde erstellt.");
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Wir wünschen dir weiterhin viel Spaß...");
 						//econ.withdrawPlayer(p.getName(), 5000.0D);
@@ -145,14 +146,16 @@ public class Grundstück implements CommandExecutor, Listener{
 					return true;
 				}
 				String name = args[1];
-				List<String> gs = data.getGSFromPlayer(name);
+				UUID targetUUID = plugin.uuid.getUUIDFromPlayer(name);
+				//Hole UUID
+				List<String> gs = data.getGSFromPlayer(targetUUID);
 				if(gs.isEmpty()){
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Spieler hat keine Grundstücke!");
 					return true;
 				}
 				Inventory inv = Bukkit.createInventory(null, 2*9, name + "'s Grundstücke");
 				int i = 0;
-				map.put(p.getName(), name);
+				map.put(p.getUniqueId(), name);
 				for(String gsname : gs){
 					ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
 					ItemMeta meta = stack.getItemMeta();
@@ -174,7 +177,12 @@ public class Grundstück implements CommandExecutor, Listener{
 					plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " wollte auf den Show-Befehl zugreifen!");
 					return true;
 				}
-				data.showGSfromPlayer(p, args[1]);
+				UUID targetUUID = plugin.uuid.getUUIDFromPlayer(args[1]);
+				if(targetUUID == null){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Die UUID des Spielers konnte nicht gefunden werden!");
+					return true;
+				}
+				data.showGSfromPlayer(p, targetUUID);
 				return true;
 			}
 		}
@@ -185,27 +193,32 @@ public class Grundstück implements CommandExecutor, Listener{
 					plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " wollte auf den Löschen-Befehl zugreifen!");
 					return true;
 				}
-				String name = args[1];
+				UUID targetUUID = plugin.uuid.getUUIDFromPlayer(args[1]);
+				int iid = plugin.uuid.getIIDFromUUID(targetUUID);
+				if(targetUUID == null){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Die UUID des Spielers konnte nicht gefunden werden!");
+					return true;
+				}
 				String gsname = args[2];
 				//Prüfe ob Grundstück existiert
-				if(data.hasPlayerGSwithName(name, gsname)){
-					data.delGS(name, gsname);
+				if(data.hasPlayerGSwithName(targetUUID, gsname)){
+					data.delGS(targetUUID, gsname);
 					WorldGuardPlugin wgp = plugin.getWorldGuard();
 					if(wgp != null){
 						RegionManager rm = wgp.getRegionManager(Bukkit.getServer().getWorld(WORLD));
-						rm.removeRegion(name + "_" + gsname);
+						rm.removeRegion(iid + "_" + gsname);
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Protection wurde entfernt");
 					}
 					else{
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Protection konnte nicht entfernt werden!");
-						p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte Region \"" + name + "_" + gsname + "\" manuell entfernen");
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte Region \"" + args[1] + "_" + gsname + "\" manuell entfernen");
 					}
-					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Grundstück von " + name + " wurde gelöscht.");
-					plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " löscht von " + name + " das Grundstück: " + gsname);
+					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Grundstück von " + args[1] + " wurde gelöscht.");
+					plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " löscht von " + args[1] + " das Grundstück: " + gsname);
 					return true;
 				}
 				else{
-					p.sendMessage(plugin.namespace + ChatColor.RED + name + " hat kein Grundstück mit dem Namen: " + gsname + "!");
+					p.sendMessage(plugin.namespace + ChatColor.RED + args[1] + " hat kein Grundstück mit dem Namen: " + gsname + "!");
 					return true;
 				}
 			}
@@ -341,7 +354,7 @@ public class Grundstück implements CommandExecutor, Listener{
 		WorldGuardPlugin wgp = plugin.getWorldGuard();
 		if(wgp != null){
 			RegionManager rm = wgp.getRegionManager(p.getLocation().getWorld());
-			ProtectedCuboidRegion pr = new ProtectedCuboidRegion((p.getName() + "_" + gsname), b1, b2);
+			ProtectedCuboidRegion pr = new ProtectedCuboidRegion((plugin.uuid.getIIDFromUUID(p.getUniqueId()) + "_" + gsname), b1, b2);
 			DefaultDomain dd = new DefaultDomain();
 			dd.addPlayer(p.getName());
 			pr.setOwners(dd);
@@ -407,7 +420,7 @@ public class Grundstück implements CommandExecutor, Listener{
 	@EventHandler
 	public void onClickInventory(InventoryClickEvent e){
 		Player p = (Player) e.getWhoClicked();
-		if(!map.containsKey(p.getName()))
+		if(!map.containsKey(p.getUniqueId()))
 			return;
 		if(e.getSlot() == e.getRawSlot()){
 			ItemStack stack = e.getCurrentItem();
@@ -419,9 +432,10 @@ public class Grundstück implements CommandExecutor, Listener{
 				gsname = gsname.replaceAll(" ", "");
 				gsname = gsname.replaceAll(":", "");
 				gsname = gsname.replaceAll("Grundstück", "");
-				String name = map.get(p.getName());
+				String name = map.get(p.getUniqueId());
+				UUID targetUUID = plugin.uuid.getUUIDFromPlayer(name);
 				p.closeInventory();
-				if(!data.warpPlayerto(p, name, gsname)){
+				if(!data.warpPlayerto(p, targetUUID, gsname)){
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Es ist ein Fehler aufgetreten!");
 					return;
 				}
@@ -429,7 +443,7 @@ public class Grundstück implements CommandExecutor, Listener{
 				p.setFlying(true);
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest teleportiert!");
 				plugin.api.sendLog("[Epicraft - Grundstück] " + p.getName() + " wurde zum Grundstück " + gsname + " von " + name + " teleportiert");
-				map.remove(p.getName());
+				map.remove(p.getUniqueId());
 			}
 		}
 	}

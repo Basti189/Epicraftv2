@@ -81,5 +81,49 @@ public class MyUUID implements Listener{
 		}
 		return -1;
 	}
+	
+	public UUID getUUIDFromPlayer(String name){
+		MySQL sql = this.plugin.getMySQL();
+		Connection conn = sql.getConnection();
+		ResultSet rs = null;
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("SELECT UUID FROM UUID WHERE Benutzername='" + name + "'");
+			rs = st.executeQuery();
+			if(rs.next()){
+				sql.closeRessources(rs, st);
+				return UUID.fromString(rs.getString(1));
+			}
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			sql.closeRessources(rs, st);
+		}
+		return null;
+	}
+	
+	public String getNameFromUUID(UUID uuid){
+		MySQL sql = this.plugin.getMySQL();
+		Connection conn = sql.getConnection();
+		ResultSet rs = null;
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("SELECT Bentutzername FROM UUID WHERE UUID='" + uuid.toString() + "'");
+			rs = st.executeQuery();
+			if(rs.next()){
+				sql.closeRessources(rs, st);
+				return rs.getString(1);
+			}
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			sql.closeRessources(rs, st);
+		}
+		return "";
+	}
 
 }

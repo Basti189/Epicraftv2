@@ -206,18 +206,20 @@ public class AuthCommand implements CommandExecutor, Listener{
 		try {
 			st = conn.prepareStatement("SELECT Passwort FROM Auth WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
-			rs.next();
-			if(rs.getString(1).equals(convertedPassword))
-				login = true;
-			sql.closeRessources(rs, st);
-			if(login){
-				String update = "UPDATE Auth SET `letzter Login`='" + date + "', IP4='" + Adress + "' WHERE UUID='" + p.getUniqueId() + "'";
-				sql.queryUpdate(update);
+			if(rs.next()){
+				if(rs.getString(1).equals(convertedPassword))
+					login = true;
+				sql.closeRessources(rs, st);
+				if(login){
+					String update = "UPDATE Auth SET `letzter Login`='" + date + "', IP4='" + Adress + "' WHERE UUID='" + p.getUniqueId() + "'";
+					sql.queryUpdate(update);
+				}
 			}
 			return login;
 		} 
 		catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			sql.closeRessources(rs, st);
 			return false;
 		}
 	}

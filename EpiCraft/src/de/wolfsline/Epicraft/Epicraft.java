@@ -83,6 +83,7 @@ public class Epicraft extends JavaPlugin{
 	private MySQL sql;
 	public EventAPI api;
 	public PermissionManager pManager;
+	public MyUUID uuid;
 	
 	
 	@Override
@@ -97,6 +98,7 @@ public class Epicraft extends JavaPlugin{
 	public void onEnable(){
 		//Logger log = Bukkit.getServer().getLogger();
 		//log.addHandler(new EventAPI());
+		uuid = new MyUUID(this);
 		api = new EventAPI();
 		pManager = new PermissionManager(this);
 		this.sql = new MySQL();
@@ -221,7 +223,7 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(doorAccess, this);
 		pm.registerEvents(microblock, this);
 		pm.registerEvents(new DamageListener(this), this);
-		pm.registerEvents(new MyUUID(this), this);
+		pm.registerEvents(uuid, this);
 		
 		pm.registerEvents(disco, this);
 		
