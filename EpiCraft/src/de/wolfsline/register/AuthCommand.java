@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -27,13 +28,13 @@ import de.wolfsline.data.MySQL;
 public class AuthCommand implements CommandExecutor, Listener{
 
 	private Epicraft plugin;
-	public HashMap<String, Boolean> map;
+	public HashMap<UUID, Boolean> map;
 	
 	public AuthCommand(Epicraft plugin) {
 		this.plugin = plugin;
-		map = new HashMap<String, Boolean>();
+		map = new HashMap<UUID, Boolean>();
 		MySQL sql = this.plugin.getMySQL();
-		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Auth (Benutzername VARCHAR(16), Passwort VARCHAR(255), IP4 VARCHAR(40), `letzter Login` VARCHAR(15), `E-Mail` VARCHAR(255) )");
+		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Auth (UUID VARCHAR(36), Passwort VARCHAR(255), IP4 VARCHAR(40), `letzter Login` VARCHAR(15), `E-Mail` VARCHAR(255) )");
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 				if(loginPlayer(p, convertedPassword)){
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Erfolgreich eingeloggt!");
 					plugin.api.sendLog("[Epicraft - Passwort] " + p.getName() + " hat sich erfolgreich angemeldet");
-					map.remove(p.getName());
+					map.remove(p.getUniqueId());
 					return true;
 				}
 				else{
@@ -90,7 +91,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "/email add <email> <email>");
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du weiﬂt nicht wozu? Frag ein Teammitglied");
 					plugin.api.sendLog("[Epicraft - Passwort] " + p.getName() + " hat sich erfolgreich registriert");
-					map.remove(p.getName());
+					map.remove(p.getUniqueId());
 					return true;
 				}
 				return true;
@@ -126,7 +127,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 					String convertedPassword = StringToSHA256(oldpw);
 					if(loginPlayer(p, convertedPassword)){
 						MySQL sql = this.plugin.getMySQL();
-						String update = "UPDATE auth SET password='" + StringToSHA256(newpw) + "' WHERE username='" + p.getName() + "'";
+						String update = "UPDATE auth SET password='" + StringToSHA256(newpw) + "' WHERE UUID='" + p.getUniqueId() + "'";
 						sql.queryUpdate(update);
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Passwort wurde erfolgreich ge‰ndert.");
 						plugin.api.sendLog("[Epicraft - Passwort] " + p.getName() + " hat sein Passwort erfolgreich ge‰ndert");
@@ -176,7 +177,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM Auth WHERE Benutzername='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT * FROM Auth WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				sql.closeRessources(rs, st);
@@ -188,7 +189,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 			e.printStackTrace();
 			return false;
 		}
-		String update = "INSERT INTO Auth (Benutzername, Passwort, IP4, `letzter Login`, `E-Mail`) VALUES ('" + p.getName() + "', '" + convertedPassword + "', '" + Adress + "', '" + date + "', 'your@email.com')";
+		String update = "INSERT INTO Auth (UUID, Passwort, IP4, `letzter Login`, `E-Mail`) VALUES ('" + p.getUniqueId() + "', '" + convertedPassword + "', '" + Adress + "', '" + date + "', 'your@email.com')";
 		sql.queryUpdate(update);
 		return true;
 	}
@@ -203,14 +204,14 @@ public class AuthCommand implements CommandExecutor, Listener{
 		PreparedStatement st = null;
 		boolean login = false;
 		try {
-			st = conn.prepareStatement("SELECT Passwort FROM Auth WHERE Benutzername='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT Passwort FROM Auth WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			rs.next();
 			if(rs.getString(1).equals(convertedPassword))
 				login = true;
 			sql.closeRessources(rs, st);
 			if(login){
-				String update = "UPDATE Auth SET `letzter Login`='" + date + "', IP4='" + Adress + "' WHERE Benutzername='" + p.getName() + "'";
+				String update = "UPDATE Auth SET `letzter Login`='" + date + "', IP4='" + Adress + "' WHERE UUID='" + p.getUniqueId() + "'";
 				sql.queryUpdate(update);
 			}
 			return login;
@@ -228,7 +229,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT IP4 FROM Auth WHERE Benutzername='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT IP4 FROM Auth WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				if(rs.getString(1).equalsIgnoreCase(Adress)){
@@ -251,7 +252,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT `E-Mail` FROM Auth WHERE Benutzername='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT `E-Mail` FROM Auth WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				if(!rs.getString(1).equalsIgnoreCase("your@email.com")){
@@ -266,14 +267,14 @@ public class AuthCommand implements CommandExecutor, Listener{
 			return false;
 		}
 		sql = this.plugin.getMySQL();
-		String update = "UPDATE Auth SET `E-Mail`='" + email + "' WHERE Benutzername='" + p.getName() + "'";
+		String update = "UPDATE Auth SET `E-Mail`='" + email + "' WHERE UUID='" + p.getUniqueId() + "'";
 		sql.queryUpdate(update);
 		return true;
 	}
 	
 	@EventHandler
 	public void PlayerMoveEvent(PlayerMoveEvent event){
-		if(map.containsKey(event.getPlayer().getName())){
+		if(map.containsKey(event.getPlayer().getUniqueId())){
 			event.setTo(event.getFrom());
 		}
 	}
@@ -286,12 +287,12 @@ public class AuthCommand implements CommandExecutor, Listener{
 			return;
 		}
 		p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte einloggen oder registrieren!");
-		map.put(p.getName(), false);
+		map.put(p.getUniqueId(), false);
 	}
 	
 	@EventHandler
 	public void PlayerCommandListener(PlayerCommandPreprocessEvent e){
-		if(map.containsKey(e.getPlayer().getName())){
+		if(map.containsKey(e.getPlayer().getUniqueId())){
 			if(e.getMessage().startsWith("/login") || e.getMessage().startsWith("/register")){
 				return;
 			}
@@ -305,7 +306,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 	
 	@EventHandler
 	public void PlayerBreakBlockEvent(BlockBreakEvent event){
-		if(map.containsKey(event.getPlayer().getName())){
+		if(map.containsKey(event.getPlayer().getUniqueId())){
 			event.setCancelled(true);
 		}
 	}
