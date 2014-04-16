@@ -18,7 +18,7 @@ public class Question {
 	public Question(Epicraft plugin) {
 		this.plugin = plugin;
 		MySQL sql = this.plugin.getMySQL();
-		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Fragebogen (Benutzername VARCHAR(16), Frage1 SMALLINT, Frage2 SMALLINT, Frage3 SMALLINT, Frage4 SMALLINT, Frage5 SMALLINT, Frage6 SMALLINT, Frage7 SMALLINT, Frage8 SMALLINT, Frage9 SMALLINT, Frage10 SMALLINT, Startzeit VARCHAR(10), Startdatum VARCHAR(10), Endzeit VARCHAR(10), Enddatum VARCHAR(10) )");
+		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Fragebogen (UUID VARCHAR(36), Frage1 SMALLINT, Frage2 SMALLINT, Frage3 SMALLINT, Frage4 SMALLINT, Frage5 SMALLINT, Frage6 SMALLINT, Frage7 SMALLINT, Frage8 SMALLINT, Frage9 SMALLINT, Frage10 SMALLINT, Startzeit VARCHAR(10), Startdatum VARCHAR(10), Endzeit VARCHAR(10), Enddatum VARCHAR(10) )");
 	}
 	
 	public void start(Player p){
@@ -28,7 +28,7 @@ public class Question {
 		MySQL sql = this.plugin.getMySQL();
 		String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 		String date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
-		String update = "INSERT INTO Fragebogen (Benutzername, Frage1, Frage2, Frage3, Frage4, Frage5, Frage6, Frage7, Frage8, Frage9, Frage10, Startzeit, Startdatum) VALUES ('" + p.getName() + "', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '" + time + "', '" + date + "')"; 
+		String update = "INSERT INTO Fragebogen (UUID, Frage1, Frage2, Frage3, Frage4, Frage5, Frage6, Frage7, Frage8, Frage9, Frage10, Startzeit, Startdatum) VALUES ('" + p.getUniqueId() + "', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '" + time + "', '" + date + "')"; 
 		sql.queryUpdate(update);
 	}
 	
@@ -37,7 +37,7 @@ public class Question {
 		int wert = 0;
 		if(state)
 			wert = 1;
-		String update = "UPDATE Fragebogen SET Frage" + String.valueOf(q) + "='" + String.valueOf(wert) + "' WHERE Benutzername='" + p.getName() + "'";
+		String update = "UPDATE Fragebogen SET Frage" + String.valueOf(q) + "='" + String.valueOf(wert) + "' WHERE UUID='" + p.getUniqueId() + "'";
 		sql.queryUpdate(update);
 	}
 	
@@ -47,7 +47,7 @@ public class Question {
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM Fragebogen WHERE Benutzername='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT * FROM Fragebogen WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			rs.next();
 			for(int i = 2 ; i <= 11 ; i++){
@@ -59,7 +59,7 @@ public class Question {
 			sql.closeRessources(rs, st);
 			String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 			String date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
-			String update = "UPDATE Fragebogen SET Endzeit='" + time + "', Enddatum='" + date + "' WHERE Benutzername='" + p.getName() + "'";
+			String update = "UPDATE Fragebogen SET Endzeit='" + time + "', Enddatum='" + date + "' WHERE UUID='" + p.getUniqueId() + "'";
 			sql.queryUpdate(update);
 			return true;
 		} 
@@ -75,9 +75,9 @@ public class Question {
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT Benutzername FROM Fragebogen WHERE Benutzername='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT UUID FROM Fragebogen WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
-			while(rs.next()){
+			if(rs.next()){
 				sql.closeRessources(rs, st);
 				return true;
 			}

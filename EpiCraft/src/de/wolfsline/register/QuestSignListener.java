@@ -3,6 +3,7 @@ package de.wolfsline.register;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,7 +29,7 @@ public class QuestSignListener implements Listener{
 	private Epicraft plugin;
 	private final String WORLD = "world";
 	
-	private HashMap<String, Integer> map;
+	private HashMap<UUID, Integer> map;
 	private Question qn;
 	private final String[] correctAnswer = {"a","c","b","d","b","c","a","d","b","d"};
 	private String[] Questions = {"Frage1:","Frage2:","Frage3:","Frage4:","Frage5:","Frage6:","Frage7:","Frage8:","Frage9:","Frage10:"};
@@ -39,7 +40,7 @@ public class QuestSignListener implements Listener{
 	
 	public QuestSignListener(Epicraft plugin) {
 		this.plugin = plugin;
-		this.map = new HashMap<String, Integer>();
+		this.map = new HashMap<UUID, Integer>();
 		this.qn = new Question(plugin);
 		
 		String quest = "fragen.";
@@ -123,7 +124,7 @@ public class QuestSignListener implements Listener{
 				}
 				if(linie[1].equals("[Start]")){
 					plugin.api.sendLog("[Epicraft - Fragebogen] " + p.getName() + " hat den Fragebogen gestartet");
-					map.put(p.getName(), 1);
+					map.put(p.getUniqueId(), 1);
 					qn.start(p);
 					p.teleport(this.raum);
 					EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getUniqueId());
@@ -138,14 +139,14 @@ public class QuestSignListener implements Listener{
 					return;
 				}
 				else if(linie[1].equalsIgnoreCase("a") || linie[1].equalsIgnoreCase("b") || linie[1].equalsIgnoreCase("c") || linie[1].equalsIgnoreCase("d")){
-					if(map.containsKey(p.getName())){
-						if(correctAnswer[map.get(p.getName())-1].equalsIgnoreCase(linie[1])){
-							qn.update(p, map.get(p.getName()), true);
-							plugin.api.sendLog("[Epicraft - Fragebogen] " + p.getName() + " hat Frage " + map.get(p.getName()) + " richtig beantwortet");
+					if(map.containsKey(p.getUniqueId())){
+						if(correctAnswer[map.get(p.getUniqueId())-1].equalsIgnoreCase(linie[1])){
+							qn.update(p, map.get(p.getUniqueId()), true);
+							plugin.api.sendLog("[Epicraft - Fragebogen] " + p.getName() + " hat Frage " + map.get(p.getUniqueId()) + " richtig beantwortet");
 						}
 						else{
-							qn.update(p, map.get(p.getName()), false);
-							plugin.api.sendLog("[Epicraft - Fragebogen] " + p.getName() + " hat Frage " + map.get(p.getName()) + " falsch beantwortet");
+							qn.update(p, map.get(p.getUniqueId()), false);
+							plugin.api.sendLog("[Epicraft - Fragebogen] " + p.getName() + " hat Frage " + map.get(p.getUniqueId()) + " falsch beantwortet");
 						}
 						up(p);
 					}
@@ -155,20 +156,20 @@ public class QuestSignListener implements Listener{
 	}
 	
 	private void sendQuestion(Player p){
-		p.sendMessage(ChatColor.GOLD + "---------------[Frage " + map.get(p.getName()) + "]---------------");
-		p.sendMessage(ChatColor.GOLD + "Frage: " + Questions[map.get(p.getName())-1]);
-		p.sendMessage(ChatColor.GOLD + "Antwort a: " + Answer[map.get(p.getName())-1][0]);
-		p.sendMessage(ChatColor.GOLD + "Antwort b: " + Answer[map.get(p.getName())-1][1]);
-		p.sendMessage(ChatColor.GOLD + "Antwort c: " + Answer[map.get(p.getName())-1][2]);
-		p.sendMessage(ChatColor.GOLD + "Antwort d: " + Answer[map.get(p.getName())-1][3]);
-		p.sendMessage(ChatColor.GOLD + "---------------[Frage " + map.get(p.getName()) + "]---------------");
+		p.sendMessage(ChatColor.GOLD + "---------------[Frage " + map.get(p.getUniqueId()) + "]---------------");
+		p.sendMessage(ChatColor.GOLD + "Frage: " + Questions[map.get(p.getUniqueId())-1]);
+		p.sendMessage(ChatColor.GOLD + "Antwort a: " + Answer[map.get(p.getUniqueId())-1][0]);
+		p.sendMessage(ChatColor.GOLD + "Antwort b: " + Answer[map.get(p.getUniqueId())-1][1]);
+		p.sendMessage(ChatColor.GOLD + "Antwort c: " + Answer[map.get(p.getUniqueId())-1][2]);
+		p.sendMessage(ChatColor.GOLD + "Antwort d: " + Answer[map.get(p.getUniqueId())-1][3]);
+		p.sendMessage(ChatColor.GOLD + "---------------[Frage " + map.get(p.getUniqueId()) + "]---------------");
 	}
 	
 	public void up(Player p){
-		int i = map.get(p.getName());
+		int i = map.get(p.getUniqueId());
 		if(i == 10){
 			if(qn.questionAllRight(p)){
-				map.remove(p.getName());
+				map.remove(p.getUniqueId());
 				p.teleport(this.start);
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Glückwunsch! Du hast alle Fragen richtig beantwortet");
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du gehörst nun zu den Spielern");
@@ -189,12 +190,12 @@ public class QuestSignListener implements Listener{
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast mind. eine Frage falsch beantwortet");
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte wiederhole den Test");
 			plugin.api.sendLog("[Epicraft - Fragebogen] " + p.getName() + " hat den Fragebogen nicht bestanden");
-			map.remove(p.getName());
+			map.remove(p.getUniqueId());
 			return;
 		}
 		if(i < 10)
 			i++;
-		map.put(p.getName(), i);
+		map.put(p.getUniqueId(), i);
 		sendQuestion(p);
 	}
 	
@@ -234,7 +235,7 @@ public class QuestSignListener implements Listener{
 	
 	@EventHandler
 	public void PlayerCommandListener(PlayerCommandPreprocessEvent e){
-		if(map.containsKey(e.getPlayer().getName())){
+		if(map.containsKey(e.getPlayer().getUniqueId())){
 			e.setCancelled(true);
 			e.getPlayer().sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
 		}	
@@ -243,9 +244,9 @@ public class QuestSignListener implements Listener{
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void PlayerLogoutEvent(PlayerQuitEvent event){
 		Player p = event.getPlayer();
-		if(!map.containsKey(p.getName()))
+		if(!map.containsKey(p.getUniqueId()))
 			return;
-		map.remove(p.getName());
+		map.remove(p.getUniqueId());
 		p.teleport(this.start);
 		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getUniqueId());
 		if(epiPlayer != null){
