@@ -126,7 +126,7 @@ public class ChatListener implements Listener, CommandExecutor{
 			msg = ChatColor.translateAlternateColorCodes('$', msg);
 		}
 		
-		EpicraftPlayer epiSender = plugin.pManager.getEpicraftPlayer(p.getName());
+		EpicraftPlayer epiSender = plugin.pManager.getEpicraftPlayer(p.getUniqueId());
 		if(epiSender != null){
 			if(epiSender.chatMessages == false){
 				p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst zur Zeit keine Nachrichten senden!");
@@ -151,7 +151,7 @@ public class ChatListener implements Listener, CommandExecutor{
 			//Einstellung des Spielers aufrufen
 			if(channel != mapChannel.get(player.getName()))
 				continue;
-			EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(player.getName());
+			EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(player.getUniqueId());
 			
 			if(epiPlayer == null){ // TRUE = Annehmen, das alle Einstellungen auf TRUE stehen
 				player.sendMessage(ChatColor.GOLD + "[" + ChatColor.GRAY + BukkitWorld2Name(p.getWorld()) + ChatColor.GOLD + "]" 

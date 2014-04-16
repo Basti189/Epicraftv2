@@ -49,7 +49,7 @@ public class DamageListener implements Listener{
 		if(damageEntity == null ) return;
 		if(!(damageEntity instanceof Player)) return;
 		Player p = (Player) damageEntity;
-		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getName());
+		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getUniqueId());
 		if(epiPlayer != null){
 			if(!epiPlayer.healthbar) return;
 		}

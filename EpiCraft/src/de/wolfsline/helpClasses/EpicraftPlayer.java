@@ -1,12 +1,14 @@
 package de.wolfsline.helpClasses;
 
+import java.util.UUID;
+
 import de.wolfsline.Epicraft.Epicraft;
 
 public class EpicraftPlayer {
 	
 	private Epicraft plugin;
 
-	public String username = "";
+	public UUID uuid;
 	
 	public boolean eventMessages = true;
 	public boolean chatMessages = true;
@@ -17,9 +19,9 @@ public class EpicraftPlayer {
 	public String permission = "epicraft.permission.gast";
 	public boolean isAFK = false;
 	
-	public EpicraftPlayer(Epicraft plugin, String name, String permission, boolean event, boolean chat, boolean system, boolean time, boolean healthbar, boolean world, boolean firstEntry){
+	public EpicraftPlayer(Epicraft plugin, UUID uuid, String permission, boolean event, boolean chat, boolean system, boolean time, boolean healthbar, boolean world, boolean firstEntry){
 		this.plugin = plugin;
-		this.username = name;
+		this.uuid = uuid;
 		this.eventMessages = event;
 		this.chatMessages = chat;
 		this.systemMessages = system;
@@ -30,7 +32,7 @@ public class EpicraftPlayer {
 		if(firstEntry){
 			//Datenbankeintrag anlegen
 			String query = "INSERT INTO Einstellungen (" +
-					"Benutzername, " +
+					"UUID, " +
 					"Eventnachrichten, " +
 					"Chatnachrichten, " +
 					"Chatzeit, " +
@@ -39,7 +41,7 @@ public class EpicraftPlayer {
 					"Lebensanzeige, " +
 					"Berechtigung) " +
 					"VALUES (" +
-					"'" + username + "', " + 
+					"'" + uuid.toString() + "', " + 
 					"'" + tb(eventMessages) + "', " + 
 					"'" + tb(chatMessages) + "', " + 
 					"'" + tb(chatTime) + "', " + 
@@ -60,7 +62,7 @@ public class EpicraftPlayer {
 				"Systemnachrichten='" + tb(systemMessages) + "', " +
 				"Lebensanzeige='" + tb(healthbar) + "', " +
 				"Berechtigung='" + permission + "' " +
-				"WHERE Benutzername='" + username + "'";
+				"WHERE UUID='" + uuid + "'";
 		plugin.getMySQL().queryUpdate(query);
 	}
 	

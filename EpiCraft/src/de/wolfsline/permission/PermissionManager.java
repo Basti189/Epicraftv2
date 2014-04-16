@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,7 +29,7 @@ public class PermissionManager implements CommandExecutor{
 	}
 	
 	public void setPermissionToPlayer(Player p){
-		EpicraftPlayer epicraftPlayer = getEpicraftPlayer(p.getName());
+		EpicraftPlayer epicraftPlayer = getEpicraftPlayer(p.getUniqueId());
 		if(epicraftPlayer == null)
 			return;
 		removePermissionFromPlayer(p);
@@ -269,7 +270,7 @@ public class PermissionManager implements CommandExecutor{
 				return true;
 			}
 			if(args[0].equals("set")){
-				EpicraftPlayer epicraftPlayer = getEpicraftPlayer(player.getName());
+				EpicraftPlayer epicraftPlayer = getEpicraftPlayer(player.getUniqueId());
 				if(epicraftPlayer == null){
 					cs.sendMessage(plugin.namespace + ChatColor.RED + "Spieler ist nicht online!");
 					return true;
@@ -380,9 +381,9 @@ public class PermissionManager implements CommandExecutor{
 	}
 	
 	//Rückgabe EpicraftPlayer -> Einstellungen des Spielers
-	public EpicraftPlayer getEpicraftPlayer(String name){
+	public EpicraftPlayer getEpicraftPlayer(UUID uuid){
 		for(EpicraftPlayer tmpEpiPlayer : listEpicraftPlayer){
-			if(tmpEpiPlayer.username.equals(name))
+			if(tmpEpiPlayer.uuid.equals(uuid))
 				return tmpEpiPlayer;
 		}
 		return null;
@@ -406,14 +407,14 @@ public class PermissionManager implements CommandExecutor{
 				boolean systemMessages = rs.getBoolean(6);
 				boolean healthbar = rs.getBoolean(7);
 				String permission = rs.getString(8);
-				epiPlayer = new EpicraftPlayer(plugin, p.getName(), permission, eventMessages, chatMessages, systemMessages, chatTime, healthbar, chatWorld, false);
+				epiPlayer = new EpicraftPlayer(plugin, p.getUniqueId(), permission, eventMessages, chatMessages, systemMessages, chatTime, healthbar, chatWorld, false);
 				plugin.getMySQL().closeRessources(rs, st);
 			} catch (SQLException e){
 				//e.printStackTrace();
 				plugin.api.sendLog("[Epicraft - Login] Neuer Datenbankeintrag für " + p.getName());
 			}
 			if(epiPlayer == null)
-				epiPlayer = new EpicraftPlayer(plugin, p.getName(), "epicraft.permission.gast", true, true, true, false, true, false, true);
+				epiPlayer = new EpicraftPlayer(plugin, p.getUniqueId(), "epicraft.permission.gast", true, true, true, false, true, false, true);
 			listEpicraftPlayer.add(epiPlayer);
 			plugin.pManager.setPermissionToPlayer(p);
 			plugin.pManager.substringNameAndColor(p);
@@ -433,19 +434,19 @@ public class PermissionManager implements CommandExecutor{
 		else{
 			//Player aus der Liste entfernen
 			for(Iterator<EpicraftPlayer> it = listEpicraftPlayer.iterator() ; it.hasNext();){
-				if(it.next().username.equals(p.getName())){
+				if(it.next().uuid.equals(p.getUniqueId())){
 					it.remove();
 				}
 			}
 		}
 	}
 	
-	public EpicraftPlayer getEpicraftPlayerFromOfflinePlayer(String name){
+	public EpicraftPlayer getEpicraftPlayerFromOfflinePlayer(UUID uuid){
 		Connection conn = plugin.getMySQL().getConnection();
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try{
-			st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE Benutzername='" + name + "'");
+			st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE UUID='" + uuid + "'");
 			rs = st.executeQuery();
 			if(rs.next()){
 				plugin.getMySQL().closeRessources(rs, st);
@@ -459,7 +460,7 @@ public class PermissionManager implements CommandExecutor{
 			boolean healthbar = rs.getBoolean(7);
 			String permission = rs.getString(8);
 			plugin.getMySQL().closeRessources(rs, st);
-			return new EpicraftPlayer(plugin, name, permission, eventMessages, chatMessages, systemMessages, chatTime, healthbar, chatWorld, false);
+			return new EpicraftPlayer(plugin, uuid, permission, eventMessages, chatMessages, systemMessages, chatTime, healthbar, chatWorld, false);
 			
 		} catch (SQLException e){
 			//e.printStackTrace();

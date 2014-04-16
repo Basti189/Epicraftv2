@@ -2,6 +2,7 @@ package de.wolfsline.settings;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,12 +28,12 @@ import de.wolfsline.helpClasses.EpicraftPlayer;
 public class Settings implements CommandExecutor, Listener{
 	
 	private Epicraft plugin;
-	private List<String> inInventory = new ArrayList<String>();
+	private List<UUID> inInventory = new ArrayList<UUID>();
 
 	public Settings(Epicraft plugin) {
 		this.plugin = plugin;
 		MySQL sql = plugin.getMySQL();
-		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Einstellungen (Benutzername VARCHAR(16), Eventnachrichten SMALLINT, Chatnachrichten SMALLINT, Chatzeit SMALLINT, Chatwelt SMALLINT, Systemnachrichten SMALLINT, Lebensanzeige SMALLINT, Berechtigung VARCHAR(30))");
+		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Einstellungen (UUID VARCHAR(36), Eventnachrichten SMALLINT, Chatnachrichten SMALLINT, Chatzeit SMALLINT, Chatwelt SMALLINT, Systemnachrichten SMALLINT, Lebensanzeige SMALLINT, Berechtigung VARCHAR(30))");
 	}
 
 	@Override
@@ -57,7 +58,7 @@ public class Settings implements CommandExecutor, Listener{
 	
 	private void openInv(Player p){
 		int lines = 1;
-		EpicraftPlayer player = plugin.pManager.getEpicraftPlayer(p.getName());
+		EpicraftPlayer player = plugin.pManager.getEpicraftPlayer(p.getUniqueId());
 		if(player == null){
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Deine Einstellungen können nicht aufgerufen werden!");
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Besteht das Problem weiterhin, wende dich bitte an einen Teamler");
@@ -148,20 +149,20 @@ public class Settings implements CommandExecutor, Listener{
 			tmpStack.setItemMeta(tmpMeta);
 			inv.setItem(i, tmpStack);
 		}*/
-		this.inInventory.add(p.getName());
+		this.inInventory.add(p.getUniqueId());
 		p.openInventory(inv);
 	}
 	
 	@EventHandler
 	public void onQuitEvent(PlayerQuitEvent e){
 		Player p = e.getPlayer();
-		this.inInventory.remove(p.getName());
+		this.inInventory.remove(p.getUniqueId());
 	}
 	
 	
 	@EventHandler
 	public void OnPickUpItem(PlayerPickupItemEvent event){
-		if(inInventory.contains(event.getPlayer().getName()))
+		if(inInventory.contains(event.getPlayer().getUniqueId()))
 			event.setCancelled(true);
 	}
 	
@@ -169,14 +170,14 @@ public class Settings implements CommandExecutor, Listener{
 	public void onInventoryClickEvent(InventoryClickEvent event){
 		try{
 			Player p = (Player) event.getWhoClicked();
-			if(inInventory.contains(p.getName())){
+			if(inInventory.contains(p.getUniqueId())){
 				event.setCancelled(true);
 				if(event.getSlot() == event.getRawSlot()){
 					int slot = event.getSlot();
 					ItemStack stack = event.getCurrentItem();
 					ItemMeta meta = stack.getItemMeta();
 					List<String> tmpList = new ArrayList<String>();
-					EpicraftPlayer player = plugin.pManager.getEpicraftPlayer(p.getName());
+					EpicraftPlayer player = plugin.pManager.getEpicraftPlayer(p.getUniqueId());
 					if(player == null){
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Deine Einstellungen können nicht verändert werden!");
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Besteht das Problem weiterhin, wende dich bitte an einen Teamler");
@@ -284,8 +285,8 @@ public class Settings implements CommandExecutor, Listener{
 	
 	@EventHandler
 	public void onInventoryCloseEvent(InventoryCloseEvent event){
-		if(inInventory.contains(event.getPlayer().getName())){
-			inInventory.remove(event.getPlayer().getName());
+		if(inInventory.contains(event.getPlayer().getUniqueId())){
+			inInventory.remove(event.getPlayer().getUniqueId());
 			plugin.api.sendLog("[Epicraft - Einstellungen] " + event.getPlayer().getName() + " hat die Einstellungen geschlossen");
 		}
 		

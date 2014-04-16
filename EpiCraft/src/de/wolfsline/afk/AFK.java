@@ -32,7 +32,7 @@ public class AFK implements CommandExecutor, Listener{
 			plugin.api.sendLog("[Epicraft - AFK] " + p.getName() + " hat versucht auf den Befehl zuzugreifen");
 			return true;
 		}
-		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getName());
+		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getUniqueId());
 		if(epiPlayer == null){
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Es ist ein Fehler aufgetreten!");
 			return true;
@@ -62,7 +62,7 @@ public class AFK implements CommandExecutor, Listener{
 	@EventHandler
 	public void onPlayerMoveEvent(PlayerMoveEvent event){
 		Player p = event.getPlayer();
-		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getName());
+		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getUniqueId());
 		if(epiPlayer == null){
 			return;
 		}

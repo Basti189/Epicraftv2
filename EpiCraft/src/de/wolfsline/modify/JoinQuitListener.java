@@ -65,10 +65,10 @@ public class JoinQuitListener implements Listener {
 		else{
 			e.setJoinMessage("");
 			for(Player player : Bukkit.getServer().getOnlinePlayers()){
-				EpicraftPlayer playerSettings = plugin.pManager.getEpicraftPlayer(player.getName());
+				EpicraftPlayer playerSettings = plugin.pManager.getEpicraftPlayer(player.getUniqueId());
 				if(playerSettings == null)
 					continue;
-				if(playerSettings.username.equalsIgnoreCase(player.getName())){
+				if(playerSettings.uuid.equals(player.getUniqueId())){
 					if(playerSettings.eventMessages)
 						player.sendMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server betreten  ***");
 					break;
@@ -131,10 +131,10 @@ public class JoinQuitListener implements Listener {
 			
 		Player p = e.getPlayer();
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
-			EpicraftPlayer playerSettings = plugin.pManager.getEpicraftPlayer(player.getName());
+			EpicraftPlayer playerSettings = plugin.pManager.getEpicraftPlayer(player.getUniqueId());
 			if(playerSettings == null)
 				continue;
-			if(playerSettings.username.equalsIgnoreCase(player.getName())){
+			if(playerSettings.uuid.equals(player.getUniqueId())){
 				if(playerSettings.eventMessages)
 					player.sendMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server verlassen  ***");
 				break;
@@ -149,10 +149,10 @@ public class JoinQuitListener implements Listener {
 		Player p = e.getPlayer();
 		e.setLeaveMessage("");
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
-			EpicraftPlayer playerSettings = plugin.pManager.getEpicraftPlayer(player.getName());
+			EpicraftPlayer playerSettings = plugin.pManager.getEpicraftPlayer(player.getUniqueId());
 			if(playerSettings == null)
 				continue;
-			if(playerSettings.username.equalsIgnoreCase(player.getName())){
+			if(playerSettings.uuid.equals(player.getUniqueId())){
 				if(playerSettings.eventMessages)
 					player.sendMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server unfreiwillig verlassen  ***");
 				break;
