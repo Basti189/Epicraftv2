@@ -37,7 +37,7 @@ public class Data {
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT Title FROM Grundstuecke WHERE UUID='" + uuid.toString() + "'");
+			st = conn.prepareStatement("SELECT Title FROM Grundstuecke WHERE UUID='" + uuid + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				if(rs.getString(1).equalsIgnoreCase(gsname)){
@@ -61,7 +61,7 @@ public class Data {
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM Grundstuecke WHERE UUID='" + uuid.toString() + "'");
+			st = conn.prepareStatement("SELECT * FROM Grundstuecke WHERE UUID='" + uuid + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				int große_X = rs.getInt(6);
@@ -91,7 +91,7 @@ public class Data {
 	
 	public void delGS(UUID uuid, String gsname)  {
 		MySQL sql = this.plugin.getMySQL();
-		String update = "DELETE FROM Grundstuecke WHERE Title='" + gsname + "' AND UUID='" + uuid.toString() + "'";
+		String update = "DELETE FROM Grundstuecke WHERE Title='" + gsname + "' AND UUID='" + uuid + "'";
 		sql.queryUpdate(update);
 	}
 	
@@ -125,7 +125,7 @@ public class Data {
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM Grundstuecke WHERE Title='" + gsname + "' AND UUID='" + targetUUID.toString() + "'");
+			st = conn.prepareStatement("SELECT * FROM Grundstuecke WHERE Title='" + gsname + "' AND UUID='" + targetUUID + "'");
 			rs = st.executeQuery();
 			if(!rs.next()){
 				sql.closeRessources(rs, st);
@@ -158,7 +158,7 @@ public class Data {
 		PreparedStatement st = null;
 		List<String> gs = new ArrayList<String>();
 		try {
-			st = conn.prepareStatement("SELECT Title FROM Grundstuecke WHERE UUID='" + uuid.toString() + "'");
+			st = conn.prepareStatement("SELECT Title FROM Grundstuecke WHERE UUID='" + uuid + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				String gsname = rs.getString(1);
@@ -181,7 +181,7 @@ public class Data {
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM Grundstuecke WHERE UUID='" + targetUUID.toString() + "'");
+			st = conn.prepareStatement("SELECT * FROM Grundstuecke WHERE UUID='" + targetUUID + "'");
 			rs = st.executeQuery();
 			if(p.getUniqueId().equals(targetUUID)){
 				p.sendMessage(ChatColor.GOLD + "---------------[Dein(e) Grundstück(e)]---------------");
@@ -202,6 +202,7 @@ public class Data {
 			else{
 				p.sendMessage(ChatColor.GOLD + "---------------[" + name + "'s Grundstück(e)]---------------");
 			}
+			sql.closeRessources(rs, st);
 			return true;
 			
 		} 

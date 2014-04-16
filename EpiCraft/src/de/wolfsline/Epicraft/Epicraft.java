@@ -98,10 +98,10 @@ public class Epicraft extends JavaPlugin{
 	public void onEnable(){
 		//Logger log = Bukkit.getServer().getLogger();
 		//log.addHandler(new EventAPI());
-		uuid = new MyUUID(this);
 		api = new EventAPI();
 		pManager = new PermissionManager(this);
 		this.sql = new MySQL();
+		uuid = new MyUUID(this);
 		//this.setupEconomy();
 		
 		QuestSignListener qsl = new QuestSignListener(this);
@@ -182,6 +182,7 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("afk").setExecutor(afk);
         this.getCommand("back").setExecutor(back);
         this.getCommand("microblock").setExecutor(microblock);
+        this.getCommand("uuid").setExecutor(uuid);
         
 		PluginManager pm = this.getServer().getPluginManager();
 		

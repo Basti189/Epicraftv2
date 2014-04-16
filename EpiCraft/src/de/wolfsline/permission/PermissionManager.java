@@ -397,7 +397,7 @@ public class PermissionManager implements CommandExecutor{
 			PreparedStatement st = null;
 			EpicraftPlayer epiPlayer = null;
 			try{
-				st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE Benutzername='" + p.getName() + "'");
+				st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE UUID='" + p.getUniqueId() + "'");
 				rs = st.executeQuery();
 				rs.next();
 				boolean eventMessages = rs.getBoolean(2);
@@ -448,7 +448,7 @@ public class PermissionManager implements CommandExecutor{
 		try{
 			st = conn.prepareStatement("SELECT * FROM Einstellungen WHERE UUID='" + uuid + "'");
 			rs = st.executeQuery();
-			if(rs.next()){
+			if(!rs.next()){
 				plugin.getMySQL().closeRessources(rs, st);
 				return null;
 			}

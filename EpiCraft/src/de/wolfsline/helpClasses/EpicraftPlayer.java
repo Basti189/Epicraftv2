@@ -41,7 +41,7 @@ public class EpicraftPlayer {
 					"Lebensanzeige, " +
 					"Berechtigung) " +
 					"VALUES (" +
-					"'" + uuid.toString() + "', " + 
+					"'" + uuid + "', " + 
 					"'" + tb(eventMessages) + "', " + 
 					"'" + tb(chatMessages) + "', " + 
 					"'" + tb(chatTime) + "', " + 

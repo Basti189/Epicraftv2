@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,13 +18,24 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import de.wolfsline.Epicraft.Epicraft;
 import de.wolfsline.data.MySQL;
 
-public class MyUUID implements Listener{
+public class MyUUID implements CommandExecutor, Listener{
 	
 	private Epicraft plugin;
 	
 	public MyUUID(Epicraft plugin){
 		this.plugin = plugin;
 		plugin.getMySQL().queryUpdate("CREATE TABLE IF NOT EXISTS UUID (IID INT AUTO_INCREMENT PRIMARY KEY, UUID VARCHAR(36), Benutzername VARCHAR(16))");
+	}
+	
+	@Override
+	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+		if(!(cs instanceof Player)){
+			cs.sendMessage(ChatColor.RED + "Du bist kein Spieler!");
+			return true;
+		}
+		Player p = (Player) cs;
+		p.sendMessage(plugin.namespace + ChatColor.WHITE + "Deine UUID: " + p.getUniqueId());
+		return true;
 	}
 	
 	@EventHandler
@@ -66,11 +81,12 @@ public class MyUUID implements Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT IID FROM UUID WHERE UUID='" + uuid.toString() + "'");
+			st = conn.prepareStatement("SELECT IID FROM UUID WHERE UUID='" + uuid + "'");
 			rs = st.executeQuery();
 			if(rs.next()){
+				int iid = rs.getInt(1);
 				sql.closeRessources(rs, st);
-				return rs.getInt(1);
+				return iid;
 			}
 		} 
 		catch (SQLException e) {
@@ -91,8 +107,9 @@ public class MyUUID implements Listener{
 			st = conn.prepareStatement("SELECT UUID FROM UUID WHERE Benutzername='" + name + "'");
 			rs = st.executeQuery();
 			if(rs.next()){
+				UUID uuid = UUID.fromString(rs.getString(1));
 				sql.closeRessources(rs, st);
-				return UUID.fromString(rs.getString(1));
+				return uuid;
 			}
 		} 
 		catch (SQLException e) {
@@ -110,11 +127,12 @@ public class MyUUID implements Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT Bentutzername FROM UUID WHERE UUID='" + uuid.toString() + "'");
+			st = conn.prepareStatement("SELECT Benutzername FROM UUID WHERE UUID='" + uuid + "'");
 			rs = st.executeQuery();
 			if(rs.next()){
+				String result = rs.getString(1);
 				sql.closeRessources(rs, st);
-				return rs.getString(1);
+				return result;
 			}
 		} 
 		catch (SQLException e) {
@@ -125,5 +143,4 @@ public class MyUUID implements Listener{
 		}
 		return "";
 	}
-
 }
