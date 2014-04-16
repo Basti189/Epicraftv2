@@ -261,6 +261,10 @@ commands:
       - epicraft.micro.block
       - epicraft.micro.skull
 
+  uuid:
+    description: Zeigt dir deine UUID an
+    usage: /uuid
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft

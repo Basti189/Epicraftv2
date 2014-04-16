@@ -126,10 +126,13 @@ public class HorseListener implements CommandExecutor, Listener{
 	}
 	
 	@EventHandler
-	public void onPlayerUnleashEntityEvent(PlayerUnleashEntityEvent event){
+	public void onPlayerUnleashEntityEvent(PlayerUnleashEntityEvent event){ //UUID von OWNER?
 		Player p = event.getPlayer();
 		if(event.getEntity() instanceof Horse){
 			Horse horse = (Horse) event.getEntity();
+			AnimalTamer tamer = horse.getOwner();
+			if(tamer == null)
+				return;
 			if(!horse.getOwner().getName().equalsIgnoreCase(p.getName())){
 				if(p.hasPermission("epicraft.horse.team") || p.isOp()){
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Zugriff auf das Maultier von " + horse.getOwner().getName() + " gewährt!");
