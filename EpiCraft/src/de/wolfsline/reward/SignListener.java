@@ -31,7 +31,7 @@ public class SignListener implements Listener {
 	public SignListener(Epicraft plugin) {
 		this.plugin = plugin;
 		MySQL sql = this.plugin.getMySQL();
-		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Events (Benutzername VARCHAR(16), Event VARCHAR(20), Zeit VARCHAR(10), Datum VARCHAR(10))");
+		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Events (UUID VARCHAR(36), Event VARCHAR(20), Zeit VARCHAR(10), Datum VARCHAR(10))");
 	}
 
 	@EventHandler
@@ -90,7 +90,7 @@ public class SignListener implements Listener {
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT Event FROM Events WHERE Benutzername='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT Event FROM Events WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				if(rs.getString(1).equalsIgnoreCase(event)){
@@ -112,7 +112,7 @@ public class SignListener implements Listener {
 		MySQL sql = this.plugin.getMySQL();
 		String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 		String date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
-		String update = "INSERT INTO Events (Benutzername, Event, Zeit, Datum) VALUES ('" + p.getName() + "', '" + event + "', '" + time + "', '" + date + "')";
+		String update = "INSERT INTO Events (UUID, Event, Zeit, Datum) VALUES ('" + p.getUniqueId() + "', '" + event + "', '" + time + "', '" + date + "')";
 		sql.queryUpdate(update);
 	}
 	

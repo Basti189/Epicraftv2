@@ -126,7 +126,7 @@ public class QuestSignListener implements Listener{
 					map.put(p.getName(), 1);
 					qn.start(p);
 					p.teleport(this.raum);
-					EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getName());
+					EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getUniqueId());
 					if(epiPlayer != null){
 						epiPlayer.chatMessages = false;
 						epiPlayer.update();
@@ -175,7 +175,7 @@ public class QuestSignListener implements Listener{
 				for(Player player : Bukkit.getServer().getOnlinePlayers()){
 					if(player.getName().equals(p.getName()))
 						continue;
-					EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(player.getName());
+					EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(player.getUniqueId());
 					if(epiPlayer == null)
 						continue;
 					if(epiPlayer.eventMessages)
@@ -247,7 +247,7 @@ public class QuestSignListener implements Listener{
 			return;
 		map.remove(p.getName());
 		p.teleport(this.start);
-		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getName());
+		EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(p.getUniqueId());
 		if(epiPlayer != null){
 			epiPlayer.chatMessages = true;
 			epiPlayer.update();
