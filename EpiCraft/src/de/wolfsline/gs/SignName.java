@@ -1,6 +1,7 @@
 package de.wolfsline.gs;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
@@ -18,7 +19,7 @@ public class SignName implements CommandExecutor, Listener{
 
 	private Epicraft plugin;
 	
-	private HashMap<String, Boolean> signmap = new HashMap<String, Boolean>();
+	private HashMap<UUID, Boolean> signmap = new HashMap<UUID, Boolean>();
 	
 	public SignName(Epicraft plugin) {
 		this.plugin = plugin;
@@ -35,8 +36,8 @@ public class SignName implements CommandExecutor, Listener{
 			return true;
 		}
 		boolean tmp = false;
-		if(signmap.containsKey(p.getName())){
-			tmp = signmap.get(p.getName());
+		if(signmap.containsKey(p.getUniqueId())){
+			tmp = signmap.get(p.getUniqueId());
 		}
 		if(tmp){
 			p.sendMessage(plugin.namespace + ChatColor.WHITE + "Schilder werden nun nicht mehr beschriftet");
@@ -48,7 +49,7 @@ public class SignName implements CommandExecutor, Listener{
 			plugin.api.sendLog("[Epicraft - Grundstücksschilder] " + p.getName() + " beschriftet nun Schilder automatisch");
 			tmp = true;
 		}
-		signmap.put(p.getName(), tmp);
+		signmap.put(p.getUniqueId(), tmp);
 		return true;
 	}
 	
@@ -56,8 +57,8 @@ public class SignName implements CommandExecutor, Listener{
 	public void onSignChange(SignChangeEvent event){
 		Sign sign = (Sign) event.getBlock().getState();
 		Player p = event.getPlayer();
-		if(signmap.containsKey(p.getName())){
-			if(signmap.get(p.getName())){
+		if(signmap.containsKey(p.getUniqueId())){
+			if(signmap.get(p.getUniqueId())){
 				event.setLine(0, "---------------");
 				event.setLine(1, "Grundstück von");
 				event.setLine(2, p.getName());
