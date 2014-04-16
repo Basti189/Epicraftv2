@@ -20,7 +20,7 @@ public class KillCounter implements Listener{
 	public KillCounter(Epicraft plugin){
 		this.plugin = plugin;
 		MySQL sql = this.plugin.getMySQL();
-		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Statistik (Benutzername VARCHAR(16), Mob VARCHAR(50), Anzahl INT)");
+		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Statistik (UUID VARCHAR(36), Mob VARCHAR(50), Anzahl INT)");
 	}
 	
 	@EventHandler
@@ -45,13 +45,13 @@ public class KillCounter implements Listener{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM Statistik WHERE Benutzername='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT * FROM Statistik WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				if(rs.getString(2).equalsIgnoreCase(mob)){
 					int count = rs.getInt(3);
 					sql.closeRessources(rs, st);
-					String update = "UPDATE Statistik SET Anzahl='" + String.valueOf(count+1) + "' WHERE Benutzername='" + p.getName() + "' and Mob='" + mob + "'";
+					String update = "UPDATE Statistik SET Anzahl='" + String.valueOf(count+1) + "' WHERE UUID='" + p.getUniqueId() + "' and Mob='" + mob + "'";
 					sql.queryUpdate(update);
 					return true;
 				}
@@ -68,7 +68,7 @@ public class KillCounter implements Listener{
 	
 	private void newEntry(Player p, String mob){
 		MySQL sql = this.plugin.getMySQL();
-		String update = "INSERT INTO Statistik (Benutzername, Mob, Anzahl) VALUES ('" + p.getName() + "', '" + mob + "', '1' )";
+		String update = "INSERT INTO Statistik (UUID, Mob, Anzahl) VALUES ('" + p.getUniqueId() + "', '" + mob + "', '1' )";
 		sql.queryUpdate(update);
 	}
 
