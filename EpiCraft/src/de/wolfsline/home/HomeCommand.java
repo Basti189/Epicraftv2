@@ -24,7 +24,7 @@ public class HomeCommand implements CommandExecutor{
 		this.plugin = plugin;
 		
 		MySQL sql = this.plugin.getMySQL();
-		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Home (Benutzername VARCHAR(16), Title VARCHAR(50), X INT, Y INT, Z INT)");
+		sql.queryUpdate("CREATE TABLE IF NOT EXISTS Home (UUID VARCHAR(36), Title VARCHAR(50), X INT, Y INT, Z INT)");
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class HomeCommand implements CommandExecutor{
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Der Name " + title + " ist zu lang!");
 					return true;
 				}
-				if(hasPlayerHomeWithName(p.getName(), title)){
+				if(hasPlayerHomeWithName(p, title)){
 					updateHome(p, title);
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Homepunkt " + title + " wurde überschrieben");
 					plugin.api.sendLog("[Epicraft - Home] " + p.getName() + " hat den Homepunkt mit dem Namen " + title + " neu gesetzt");
@@ -88,7 +88,7 @@ public class HomeCommand implements CommandExecutor{
 			return true;
 		}
 		else if(label.equalsIgnoreCase("listhome")){
-			showHomePoints(p, p.getName());
+			showHomePoints(p);
 			return true;
 		}
 		else if(label.equalsIgnoreCase("rehome")){
@@ -97,7 +97,7 @@ public class HomeCommand implements CommandExecutor{
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Der Name " + args[1] + " ist zu lang!");
 					return true;
 				}
-				if(renameHomePoint(p.getName(), args[0], args[1])){
+				if(renameHomePoint(p, args[0], args[1])){
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Homepunkt " + args[0] + " wurde umbenannt zu " + args[1]);
 					return true;
 				}
@@ -122,7 +122,7 @@ public class HomeCommand implements CommandExecutor{
 		PreparedStatement st = null;
 		int i = 0;
 		try {
-			st = conn.prepareStatement("SELECT Benutzername FROM Grundstuecke WHERE Benutzername='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT UUID FROM Grundstuecke WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				i++;
@@ -144,7 +144,7 @@ public class HomeCommand implements CommandExecutor{
 		PreparedStatement st = null;
 		int i = 0;
 		try {
-			st = conn.prepareStatement("SELECT Benutzername FROM Home WHERE Benutzername='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT UUID FROM Home WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				i++;
@@ -161,17 +161,17 @@ public class HomeCommand implements CommandExecutor{
 	
 	private void newHome(Player p, String title){
 		MySQL sql = this.plugin.getMySQL();
-		String update = "INSERT INTO Home (Benutzername, Title, X, Y, Z) VALUES ('" + p.getName() + "', '" + title + "', '" + p.getLocation().getX() + "', '" + p.getLocation().getY() + "', '" + p.getLocation().getZ() + "')";
+		String update = "INSERT INTO Home (UUID, Title, X, Y, Z) VALUES ('" + p.getUniqueId() + "', '" + title + "', '" + p.getLocation().getX() + "', '" + p.getLocation().getY() + "', '" + p.getLocation().getZ() + "')";
 		sql.queryUpdate(update);
 	}
 
-	private boolean hasPlayerHomeWithName(String name, String title){
+	private boolean hasPlayerHomeWithName(Player p, String title){
 		MySQL sql = this.plugin.getMySQL();
 		Connection conn = sql.getConnection();
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT Title FROM Home WHERE Benutzername='" + name + "'");
+			st = conn.prepareStatement("SELECT Title FROM Home WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				if(rs.getString(1).equalsIgnoreCase(title)){
@@ -189,18 +189,18 @@ public class HomeCommand implements CommandExecutor{
 		return false;
 	}
 	
-	private boolean renameHomePoint(String name, String title, String newTitle){
+	private boolean renameHomePoint(Player p, String title, String newTitle){
 		MySQL sql = this.plugin.getMySQL();
 		Connection conn = sql.getConnection();
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT Title FROM Home WHERE Benutzername='" + name + "'");
+			st = conn.prepareStatement("SELECT Title FROM Home WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				if(rs.getString(1).equalsIgnoreCase(title)){
 					sql.closeRessources(rs, st);
-					sql.queryUpdate("UPDATE Home SET Title='" + newTitle + "' WHERE Title='" + title + "'");
+					sql.queryUpdate("UPDATE Home SET Title='" + newTitle + "' WHERE Title='" + title + "' AND UUID='" + p.getUniqueId() + "'");
 					return true;
 				}
 			}
@@ -216,7 +216,7 @@ public class HomeCommand implements CommandExecutor{
 	
 	private void updateHome(Player p, String title){
 		MySQL sql = this.plugin.getMySQL();
-		String update = "UPDATE Home SET X='" + p.getLocation().getX() + "', Y='" + p.getLocation().getY() + "', Z='" + p.getLocation().getZ() + "' WHERE Title='" + title + "'";
+		String update = "UPDATE Home SET X='" + p.getLocation().getX() + "', Y='" + p.getLocation().getY() + "', Z='" + p.getLocation().getZ() + "' WHERE Title='" + title + "' AND UUID='" + p.getUniqueId() + "'";
 		sql.queryUpdate(update);
 	}
 
@@ -226,7 +226,7 @@ public class HomeCommand implements CommandExecutor{
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM Home WHERE Title='" + title + "' AND Benutzername='" + p.getName() + "'");
+			st = conn.prepareStatement("SELECT * FROM Home WHERE Title='" + title + "' AND UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			if(rs.next()){
 				Location loc = new Location(Bukkit.getServer().getWorld(WORLD), rs.getInt(3), rs.getInt(4), rs.getInt(5));
@@ -251,14 +251,14 @@ public class HomeCommand implements CommandExecutor{
 		}
 	}
 
-	private void showHomePoints(Player p, String name){
+	private void showHomePoints(Player p){
 		MySQL sql = this.plugin.getMySQL();
 		Connection conn = sql.getConnection();
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		String home = plugin.namespace + ChatColor.WHITE + " ";
 		try {
-			st = conn.prepareStatement("SELECT Title FROM Home WHERE Benutzername='" + name + "'");
+			st = conn.prepareStatement("SELECT Title FROM Home WHERE UUID='" + p.getUniqueId() + "'");
 			rs = st.executeQuery();
 			while(rs.next()){
 				home += rs.getString(1);
