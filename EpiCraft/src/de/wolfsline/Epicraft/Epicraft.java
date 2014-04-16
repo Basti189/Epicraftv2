@@ -15,6 +15,7 @@ import de.wolfsline.API.EventAPI;
 import de.wolfsline.DEBUG.DEBUGCLASS;
 import de.wolfsline.DEBUG.PlayerBLock;
 import de.wolfsline.Ticketsystem.Ticketsystem;
+import de.wolfsline.UUID.MyUUID;
 import de.wolfsline.administration.ChestAccess;
 import de.wolfsline.administration.DebugCommand;
 import de.wolfsline.administration.DoorAccess;
@@ -220,6 +221,7 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(doorAccess, this);
 		pm.registerEvents(microblock, this);
 		pm.registerEvents(new DamageListener(this), this);
+		pm.registerEvents(new MyUUID(this), this);
 		
 		pm.registerEvents(disco, this);
 		
