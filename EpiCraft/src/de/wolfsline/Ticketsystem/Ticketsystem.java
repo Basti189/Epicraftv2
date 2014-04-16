@@ -69,6 +69,11 @@ public class Ticketsystem implements CommandExecutor{
 						p.sendMessage(plugin.namespace + ChatColor.RED + "/ticket show <ZAHL>");
 						return true;
 					}
+					catch (IndexOutOfBoundsException ioobe){
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Keine Zahl eingegeben!");
+						p.sendMessage(plugin.namespace + ChatColor.RED + "/ticket show <ZAHL>");
+						return true;
+					}
 					data.showTicketWithNumber(p, ID, false);
 					return true;
 				}
