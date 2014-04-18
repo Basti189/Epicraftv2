@@ -1,23 +1,21 @@
 package de.wolfsline.security;
 
-import org.bukkit.BanList;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Spider;
-import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.bukkit.WorldGuardRegionMoveEvent;
 
 import de.wolfsline.Epicraft.Epicraft;
 
@@ -35,6 +33,24 @@ public class Region implements Listener{
 	public void onFireDestroyBlock(BlockBurnEvent event){
 		event.setCancelled(true);
 	}*/
+	
+	@EventHandler
+	public void onEntityDamageByEntity(EntityDamageByEntityEvent event){
+		Entity damager = event.getDamager();
+		Entity victim = event.getEntity();
+		if(damager instanceof Player){
+			Player p = (Player) damager;
+			Location loc = victim.getLocation();
+			WorldGuardPlugin wgPlugin = plugin.getWorldGuard();
+			if(wgPlugin == null){
+				return;
+			}
+			boolean canBuild = wgPlugin.canBuild(p, loc.getBlock());
+			if(!canBuild){
+				event.setCancelled(true);
+			}
+		}
+	}
 	
 	@EventHandler
 	public void onBlockIgnite(BlockIgniteEvent event) {

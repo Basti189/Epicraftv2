@@ -261,6 +261,11 @@ commands:
       - epicraft.micro.block
       - epicraft.micro.skull
 
+  more:
+    description: Auf 64 aufstocken
+    usage: /more
+    permission: epicraft.more
+
   uuid:
     description: Zeigt dir deine UUID an
     usage: /uuid
@@ -326,3 +331,4 @@ permissions:
       epicraft.door.access: true
       epicraft.micro.block: true
       epicraft.micro.skull: true
+      epicraft.more: true

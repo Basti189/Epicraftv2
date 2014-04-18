@@ -1,6 +1,8 @@
 package de.wolfsline.Epicraft;
 
 
+import java.sql.SQLException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -37,6 +39,7 @@ import de.wolfsline.forfun.EggCatcher;
 import de.wolfsline.forfun.GunListener;
 import de.wolfsline.forfun.HeadCommand;
 import de.wolfsline.forfun.LightningCommand;
+import de.wolfsline.forfun.More;
 import de.wolfsline.forfun.PVP;
 import de.wolfsline.forfun.TntCommand;
 import de.wolfsline.gs.Grundstück;
@@ -130,6 +133,7 @@ public class Epicraft extends JavaPlugin{
 		Region region = new Region(this);
 		DoorAccess doorAccess = new DoorAccess(this);
 		Microblock microblock = new Microblock(this);
+		More more = new More(this);
 		
 		//TEST
 		Disco disco = new Disco(this);
@@ -183,6 +187,7 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("back").setExecutor(back);
         this.getCommand("microblock").setExecutor(microblock);
         this.getCommand("uuid").setExecutor(uuid);
+        this.getCommand("more").setExecutor(more);
         
 		PluginManager pm = this.getServer().getPluginManager();
 		
@@ -236,8 +241,16 @@ public class Epicraft extends JavaPlugin{
 	}
 	
 	public MySQL getMySQL(){
-		this.sql.closeConnection();
-		this.sql = new MySQL();
+		//this.sql.closeConnection();
+		//this.sql = new MySQL();
+		try {
+			if(sql.getConnection().isClosed()){
+				sql.openConnection();
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return this.sql;
 	}
 	
