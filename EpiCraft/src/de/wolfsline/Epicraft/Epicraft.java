@@ -14,8 +14,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import de.wolfsline.API.EventAPI;
-import de.wolfsline.DEBUG.DEBUGCLASS;
-import de.wolfsline.DEBUG.PlayerBLock;
 import de.wolfsline.Ticketsystem.Ticketsystem;
 import de.wolfsline.UUID.MyUUID;
 import de.wolfsline.administration.ChestAccess;
@@ -139,9 +137,6 @@ public class Epicraft extends JavaPlugin{
 		Disco disco = new Disco(this);
 		this.getCommand("disco").setExecutor(disco);
 		
-		
-		PlayerBLock pb = new PlayerBLock();
-		
 		this.getCommand("spawn").setExecutor(new SpawnCommand(this));
 		this.getCommand("gs").setExecutor(gs);
 		this.getCommand("hide").setExecutor(unhide);
@@ -174,10 +169,8 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("secure").setExecutor(chestPasswort);
         this.getCommand("horse").setExecutor(horse);
         this.getCommand("api").setExecutor(api);
-        this.getCommand("epicraft").setExecutor(new DEBUGCLASS(this));
         this.getCommand("uhr").setExecutor(new TimeCommand(this));
         this.getCommand("vote").setExecutor(voteListener);
-        this.getCommand("block").setExecutor(pb);
         this.getCommand("chest").setExecutor(new ChestAccess(this));
         this.getCommand("whois").setExecutor(new WhoIsCommand(this));
         this.getCommand("permission").setExecutor(pManager);
@@ -218,7 +211,6 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(new CreatureSpawnListener(), this);
 		pm.registerEvents(voteListener, this);
 		pm.registerEvents(new SignLift(this), this);
-		pm.registerEvents(pb, this);
 		pm.registerEvents(new EpiMaster(this), this);
 		pm.registerEvents(restart, this);
 		pm.registerEvents(world, this);
