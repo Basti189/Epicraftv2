@@ -8,15 +8,25 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Egg;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fish;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.LeashHitch;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerUnleashEntityEvent;
+
 import de.wolfsline.Epicraft.Epicraft;
 
 public class HorseListener implements CommandExecutor, Listener{
@@ -151,16 +161,121 @@ public class HorseListener implements CommandExecutor, Listener{
 	public void onEntityDamageEvent(EntityDamageByEntityEvent event){
 		if(event.getEntity() instanceof Horse){
 			Horse horse = (Horse) event.getEntity();
+			Entity d = event.getDamager();
+			Player damager = null;
+			AnimalTamer tamer = horse.getOwner();
 			if(event.getDamager() instanceof Player){
-				Player damager = (Player) event.getDamager();
-				AnimalTamer tamer = horse.getOwner();
+				damager = (Player) event.getDamager();
 				if(tamer != null){
 					if(tamer.getName().equalsIgnoreCase(damager.getName())){
 						return;
 					}
+				}
+				damager.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst dem Maultier von " + tamer.getName() + " keinen schaden hinzufügen!");
+				plugin.api.sendLog("[Epicraft - Pferd] " + damager.getName() + " versucht dem Maultier von " + tamer.getName() + " schaden zuzufügen");
+				event.setCancelled(true);
+			}
+			else if(d instanceof Arrow){
+				Arrow arrow = (Arrow) d;
+				if(arrow.getShooter() instanceof Player){
+					damager = (Player) arrow.getShooter();
+					if(tamer != null){
+						if(tamer.getName().equalsIgnoreCase(damager.getName())){
+							return;
+						}
+					}
 					damager.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst dem Maultier von " + tamer.getName() + " keinen schaden hinzufügen!");
 					plugin.api.sendLog("[Epicraft - Pferd] " + damager.getName() + " versucht dem Maultier von " + tamer.getName() + " schaden zuzufügen");
+				}
+				else{
+					return;
+				}
+			}
+			else if(d instanceof Fish){
+				Fish fish = (Fish) d;
+				if(fish.getShooter() instanceof Player){
+					damager = (Player) fish.getShooter();
+					if(tamer != null){
+						if(tamer.getName().equalsIgnoreCase(damager.getName())){
+							return;
+						}
+					}
+					damager.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst dem Maultier von " + tamer.getName() + " keinen schaden hinzufügen!");
+					plugin.api.sendLog("[Epicraft - Pferd] " + damager.getName() + " versucht dem Maultier von " + tamer.getName() + " schaden zuzufügen");
+				}
+				else{
+					return;
+				}
+			}
+			else if(d instanceof Egg){
+				Egg egg = (Egg) d;
+				if(egg.getShooter() instanceof Player){
+					damager = (Player) egg.getShooter();
+					if(tamer != null){
+						if(tamer.getName().equalsIgnoreCase(damager.getName())){
+							return;
+						}
+					}
+					damager.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst dem Maultier von " + tamer.getName() + " keinen schaden hinzufügen!");
+					plugin.api.sendLog("[Epicraft - Pferd] " + damager.getName() + " versucht dem Maultier von " + tamer.getName() + " schaden zuzufügen");
+				}
+				else{
+					return;
+				}
+			}
+			
+			else if (d instanceof Snowball){ // macht keinen schaden, spieler simuliert schaden
+				Snowball snow = (Snowball) d;
+				if(snow.getShooter() instanceof Player){
+					damager = (Player) snow.getShooter();
+					if(tamer != null){
+						if(tamer.getName().equalsIgnoreCase(damager.getName())){
+							return;
+						}
+					}
+					damager.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst dem Maultier von " + tamer.getName() + " keinen schaden hinzufügen!");
+					plugin.api.sendLog("[Epicraft - Pferd] " + damager.getName() + " versucht dem Maultier von " + tamer.getName() + " schaden zuzufügen");
+				}
+				else{
+					return;
+				}
+			}
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerFishEvent(PlayerFishEvent event){
+		Player p = event.getPlayer();
+		Entity targetEntity = event.getCaught();
+		if(targetEntity instanceof Horse){
+			Horse horse = (Horse) targetEntity;
+			AnimalTamer tamer = horse.getOwner();
+			if(tamer != null){
+				if(!tamer.getName().equals(p.getName())){
 					event.setCancelled(true);
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst dem Maultier von " + tamer.getName() + " keinen schaden hinzufügen!");
+					plugin.api.sendLog("[Epicraft - Pferd] " + p.getName() + " versucht dem Maultier von " + tamer.getName() + " schaden zuzufügen");
+				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onSplashPotionEvent(PotionSplashEvent event){
+		if(event.getPotion().getShooter() instanceof Player){
+			Player damager = (Player) event.getPotion().getShooter();
+			for(LivingEntity victims : event.getAffectedEntities()){
+				if(victims instanceof Horse){
+					Horse horse = (Horse) victims;
+					AnimalTamer tamer = horse.getOwner();
+					if(tamer != null){
+						if(!tamer.getName().equals(damager.getName())){
+							event.setIntensity(victims, 0.0D);
+							damager.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst dem Maultier von " + tamer.getName() + " keinen schaden hinzufügen!");
+							plugin.api.sendLog("[Epicraft - Pferd] " + damager.getName() + " versucht dem Maultier von " + tamer.getName() + " schaden zuzufügen");
+						}
+					}
 				}
 			}
 		}
