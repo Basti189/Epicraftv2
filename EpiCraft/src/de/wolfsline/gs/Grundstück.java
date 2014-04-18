@@ -380,9 +380,6 @@ public class Grundstück implements CommandExecutor, Listener{
 		int tmpZ = z+100;
 		for( ; tmpZ >= 0 ; tmpZ--){
 			Block block = Bukkit.getServer().getWorld(WORLD).getBlockAt(x, tmpZ, y);
-			if(block.getType() != Material.AIR){
-				Bukkit.broadcastMessage(plugin.namespaceBeta + ChatColor.WHITE + "Type: " + block.getType().toString());
-			}
 			if(block.getType() != Material.AIR 
 					&& block.getType() != Material.RED_ROSE 
 					&& block.getType() != Material.YELLOW_FLOWER 

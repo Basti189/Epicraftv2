@@ -3,6 +3,7 @@ package de.wolfsline.teleport;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -134,15 +135,27 @@ public class World implements CommandExecutor, Listener{
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Die Welt \"" + targetWorld + "\" ist bereits geladen!");
 					return true;
 				}
+				WorldCreator worldCreator = new WorldCreator(targetWorld);
 				long seedNumber = 0L;
 				try{
 					seedNumber = Long.valueOf(seed);
+					worldCreator.seed(seedNumber);
 				} catch(NumberFormatException nfe){
-					p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte gib einen gültigen Seed ein [0-9]");
-					return true;
+					//p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte gib einen gültigen Seed ein [0-9]");
+					//return true;
 				}
-				WorldCreator worldCreator = new WorldCreator(targetWorld);
-				worldCreator.seed(seedNumber);
+				if(seed.equalsIgnoreCase("flat")){
+					worldCreator.type(WorldType.FLAT);
+				}
+				else if(seed.equalsIgnoreCase("amplified")){
+					worldCreator.type(WorldType.AMPLIFIED);
+				}
+				else if(seed.equalsIgnoreCase("large")){
+					worldCreator.type(WorldType.LARGE_BIOMES);
+				}
+				else if(seed.equalsIgnoreCase("normal")){
+					worldCreator.type(WorldType.NORMAL);
+				}
 				Bukkit.getServer().createWorld(worldCreator);
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Die Welt \"" + targetWorld + "\" wurde erstellt mit dem Seed " + seed);
 				return true;
