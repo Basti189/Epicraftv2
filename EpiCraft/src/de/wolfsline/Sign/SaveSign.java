@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -60,7 +61,7 @@ public class SaveSign implements CommandExecutor, Listener{
 			}
 			else if(args[0].equalsIgnoreCase("einfügen")){
 				map.put(p.getUniqueId().toString(), "einfügen");
-				p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte Schilder zum Einfügen anklicken");
+				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Bitte Schilder zum Einfügen anklicken");
 				return true;
 			}
 		}
@@ -75,8 +76,8 @@ public class SaveSign implements CommandExecutor, Listener{
 			return;
 		if ((event.getClickedBlock().getType() == Material.WALL_SIGN || event.getClickedBlock().getType() == Material.SIGN_POST) && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Sign sign = (Sign) event.getClickedBlock().getState();
-			if(map.containsKey(p.getUniqueId())){
-				String state = map.get(p.getUniqueId());
+			if(map.containsKey(p.getUniqueId().toString())){
+				String state = map.get(p.getUniqueId().toString());
 				if(state.equals("fertig")){
 					return;
 				}
@@ -87,6 +88,7 @@ public class SaveSign implements CommandExecutor, Listener{
 					map.put(p.getUniqueId() + "_4", sign.getLine(3));
 					map.put(p.getUniqueId().toString(), "fertig");
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Das Schild wurde kopiert");
+					event.setUseItemInHand(Result.DENY);
 				}
 				else if(state.equals("einfügen")){
 					if(map.containsKey(p.getUniqueId() + "_1")){
@@ -102,6 +104,7 @@ public class SaveSign implements CommandExecutor, Listener{
 						sign.setLine(3, ChatColor.translateAlternateColorCodes('$', map.get(p.getUniqueId() + "_4")));
 					}
 					sign.update();
+					event.setUseItemInHand(Result.DENY);
 				}
 			}
 		}
