@@ -51,12 +51,11 @@ public class CommandListener implements Listener{
 	public void PlayerCommandListener(PlayerCommandPreprocessEvent event){
 		event.setMessage(ChatColor.stripColor(event.getMessage()));
 		Player p = event.getPlayer();
-		p.sendMessage("Befehl: " + event.getMessage());
 		if(!p.hasPermission("epicraft.command.allow")){
 			event.setCancelled(true);
 			event.getPlayer().sendMessage(plugin.namespace + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!");
 		}
-		else if(p.hasPermission("epicraft.permission.spieler") || p.hasPermission("epicraft.permission.stammspieler")){
+		else if((p.hasPermission("epicraft.permission.spieler") || p.hasPermission("epicraft.permission.stammspieler")) && !p.isOp()){
 			String preCmd = event.getMessage().replaceFirst("/", "");
 			for(String cmd : commandsSpieler){
 				if(cmd.equalsIgnoreCase(preCmd)){
