@@ -12,16 +12,20 @@ public class CreatureSpawnListener implements Listener{
 	
 	private Epicraft plugin;
 	
-	private final String WORLD = "world";
-	
 	public CreatureSpawnListener(Epicraft plugin) {
 		this.plugin = plugin;
 	}
 
 	@EventHandler
 	public void onCreatureSpawnListener(CreatureSpawnEvent event){
-		if(event.getEntityType() == EntityType.BAT)//Fledermäuse
-			if(event.getLocation().getWorld().getName().toString().equalsIgnoreCase(WORLD))
-				event.setCancelled(true);
+		if(event.getEntityType() == EntityType.BAT){//Fledermäuse
+			if(event.getSpawnReason() == SpawnReason.SPAWNER_EGG){
+				return;
+			}
+			else if(event.getSpawnReason() == SpawnReason.DISPENSE_EGG){
+				return;
+			}
+			event.setCancelled(true);
+		}
 	}
 }
