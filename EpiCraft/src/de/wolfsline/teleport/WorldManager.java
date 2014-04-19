@@ -18,11 +18,11 @@ import org.bukkit.event.world.PortalCreateEvent;
 
 import de.wolfsline.Epicraft.Epicraft;
 
-public class World implements CommandExecutor, Listener{
+public class WorldManager implements CommandExecutor, Listener{
 	
 	private Epicraft plugin;
 	
-	public World(Epicraft plugin){
+	public WorldManager(Epicraft plugin){
 		this.plugin = plugin;
 	}
 
