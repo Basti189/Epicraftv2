@@ -42,7 +42,6 @@ import de.wolfsline.gs.Grundstück;
 import de.wolfsline.gs.SignName;
 import de.wolfsline.healthbar.DamageListener;
 import de.wolfsline.home.HomeCommand;
-import de.wolfsline.info.InfoCommand;
 import de.wolfsline.message.ChatListener;
 import de.wolfsline.message.WhisperExecuter;
 import de.wolfsline.microblock.Microblock;
@@ -208,9 +207,9 @@ public class Epicraft extends JavaPlugin{
 		FlyCommand fly = new FlyCommand(this);
 		this.getCommand("fly").setExecutor(fly);
 		
-		//Info
-		InfoCommand info = new InfoCommand(this);
-		this.getCommand("ts").setExecutor(info);
+		//Info <-- Wird überarbeitet
+		//InfoCommand info = new InfoCommand(this);
+		//this.getCommand("ts").setExecutor(info);
 		
 		//DEBUG - Wartungsmodus
 		Wartungsmodus debugCommand = new Wartungsmodus(this);
