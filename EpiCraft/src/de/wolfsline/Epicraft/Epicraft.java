@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import de.wolfsline.API.EventAPI;
+import de.wolfsline.Sign.SaveSign;
 import de.wolfsline.Ticketsystem.Ticketsystem;
 import de.wolfsline.UUID.MyUUID;
 import de.wolfsline.administration.ChestAccess;
@@ -132,6 +133,7 @@ public class Epicraft extends JavaPlugin{
 		DoorAccess doorAccess = new DoorAccess(this);
 		Microblock microblock = new Microblock(this);
 		More more = new More(this);
+		SaveSign savesign = new SaveSign(this);
 		
 		//TEST
 		Disco disco = new Disco(this);
@@ -181,6 +183,7 @@ public class Epicraft extends JavaPlugin{
         this.getCommand("microblock").setExecutor(microblock);
         this.getCommand("uuid").setExecutor(uuid);
         this.getCommand("more").setExecutor(more);
+        this.getCommand("savesign").setExecutor(savesign);
         
 		PluginManager pm = this.getServer().getPluginManager();
 		
@@ -222,6 +225,7 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(microblock, this);
 		pm.registerEvents(new DamageListener(this), this);
 		pm.registerEvents(uuid, this);
+		pm.registerEvents(savesign, this);
 		
 		pm.registerEvents(disco, this);
 		

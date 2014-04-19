@@ -270,6 +270,11 @@ commands:
     description: Zeigt dir deine UUID an
     usage: /uuid
 
+  savesign:
+    description: Speichert dein Schild
+    usage: /savesign <Zeile> <Text>
+    permission: epicraft.sign.save
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft
