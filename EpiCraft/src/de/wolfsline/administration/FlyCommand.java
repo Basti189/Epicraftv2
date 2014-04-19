@@ -35,6 +35,8 @@ public class FlyCommand implements CommandExecutor{
 			}
 			else{
 				p.setAllowFlight(true);
+				p.setFlying(true);
+				p.setFlySpeed(0.1F);
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Flymodus wurde aktiviert");
 				plugin.api.sendLog("[Epicraft - Flugmodus] " + p.getName() + " aktiviert Flugmodus");
 				return true;

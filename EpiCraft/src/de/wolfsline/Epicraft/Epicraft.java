@@ -17,7 +17,7 @@ import de.wolfsline.Sign.SaveSign;
 import de.wolfsline.Ticketsystem.Ticketsystem;
 import de.wolfsline.UUID.MyUUID;
 import de.wolfsline.administration.ChestAccess;
-import de.wolfsline.administration.DebugCommand;
+import de.wolfsline.administration.Wartungsmodus;
 import de.wolfsline.administration.DoorAccess;
 import de.wolfsline.administration.EnderChestCommand;
 import de.wolfsline.administration.FlyCommand;
@@ -228,7 +228,7 @@ public class Epicraft extends JavaPlugin{
 		this.getCommand("ts").setExecutor(info);
 		
 		//DEBUG - Wartungsmodus
-		DebugCommand debugCommand = new DebugCommand(this);
+		Wartungsmodus debugCommand = new Wartungsmodus(this);
 		this.getCommand("debug").setExecutor(debugCommand);
 		pm.registerEvents(debugCommand, this);
 		
