@@ -5,7 +5,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import de.wolfsline.Epicraft.Epicraft;
+
 public class DeathListener implements Listener{
+
+	private Epicraft plugin;
+	
+	public DeathListener(Epicraft epicraft) {
+		this.plugin = plugin;
+	}
 
 	@EventHandler
 	public void onDeathEvent(PlayerDeathEvent event){
