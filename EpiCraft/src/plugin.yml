@@ -121,13 +121,6 @@ commands:
     usage: /w <Spieler> <Nachticht>
     permissions: epicraft.chat.whisper
 
-  support:
-    description: Wechselt dein Inventar
-    aliases: [sp]
-    usage: /support, sp
-    permissions:
-     - epicraft.inv.switch
-
   pvp:
     description: PVP aktivieren, deaktivieren
     usage: /pvp
@@ -140,19 +133,14 @@ commands:
     permissions:
      - epicraft.fly
 
-  info:
-    description: Informationen zum Server
-    aliases: [ts3, teamspeak, ts]
-    usage: /info
-
   wartung:
     description: Wartungsmodus
     usage: /wartung <true>, <false>
 
   settings:
     description: Einstellungen
-    aliases: [set, einst, einstellungen]
-    usage: /settings
+    aliases: [einst, einstellungen]
+    usage: /einstellungen
 
   me:
     description: Wichtige Nachricht
