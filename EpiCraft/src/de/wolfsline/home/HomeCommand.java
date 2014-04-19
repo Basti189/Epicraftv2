@@ -109,7 +109,8 @@ public class HomeCommand implements CommandExecutor{
 				return true;
 			}
 		}
-		return false;
+		p.sendMessage(plugin.namespace + ChatColor.RED + "/home, listhome, delhome, rehome");
+		return true;
 	}
 	
 	private int countHomeLimit(Player p){
