@@ -26,7 +26,7 @@ public class InventarCommand implements CommandExecutor {
         Player p = (Player) cs;
         if(!p.hasPermission("epicraft.inv")){
             p.sendMessage(plugin.error);
-            plugin.api.sendLog("[Epicraft - Inventar] " + p.getName() + " versuchte auf das Inventar von " + args[0] + " zuzugreifen");
+            plugin.api.sendLog("[Epicraft - Inventar] " + p.getName() + " versucht auf den Befehl zuzugreifen");
             return true;
         }
         if(args.length < 1){
