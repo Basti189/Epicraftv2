@@ -35,37 +35,37 @@ public class SaveSign implements CommandExecutor, Listener{
 		Player p = (Player) cs;
 		if(!p.hasPermission("epicraft.sign.save")){
 			p.sendMessage(plugin.error);
+			plugin.api.sendLog("[Epicraft - Schild] " + p.getName() + " wollte auf den Befehl zuzugreifen");
 			return true;
 		}
 		if(args.length == 1){
-			if(args[0].equalsIgnoreCase("fertig")){
+			if(args[0].equalsIgnoreCase("kopieren")){
+				map.put(p.getUniqueId().toString(), "kopieren");
+				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Bitte das Schild zum Kopieren anklicken");
+				return true;
+			}
+			else if(args[0].equalsIgnoreCase("fertig")){
+				map.put(p.getUniqueId().toString(), "fertig");
+				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Es wird nun kein Schild mehr verändert");
+				return true;
+			}
+			else if(args[0].equalsIgnoreCase("löschen")){
+				map.remove(p.getUniqueId().toString());
 				map.remove(p.getUniqueId() + "_1");
 				map.remove(p.getUniqueId() + "_2");
 				map.remove(p.getUniqueId() + "_3");
 				map.remove(p.getUniqueId() + "_4");
-				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Schilder fertig bearbeitet");
+				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Die Kopie wurde gelöscht");
+				return true;
+			}
+			else if(args[0].equalsIgnoreCase("einfügen")){
+				map.put(p.getUniqueId().toString(), "einfügen");
+				p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte Schilder zum Einfügen anklicken");
 				return true;
 			}
 		}
-		else if(args.length > 1){
-			String signLine = args[0];
-			String msg = "";
-			if(!(signLine.equals("1") || signLine.equals("2") || signLine.equals("3") || signLine.equals("4"))){
-				p.sendMessage(plugin.namespace + ChatColor.RED + "Es sind maximal 4 Zeilen erlaubt!");
-				return true;
-			}
-			for(int i = 1 ; i < args.length ; i++){
-				msg += args[i] + " ";
-			}
-			if(msg.length() > 16){
-				p.sendMessage(plugin.namespace + ChatColor.RED + "Es sind maximal 16 Zeichen erlaubt!");
-				return true;
-			}
-			map.put(p.getUniqueId() + "_" + signLine, msg);
-			p.sendMessage(plugin.namespace + ChatColor.WHITE + "Schildzeile[" + signLine + "] wurde gespeichert");
-			return true;
-		}
-		return false;
+		p.sendMessage(plugin.namespace + ChatColor.RED + "/savesign <kopieren>, <einfügen>, <fertig>, <löschen>");
+		return true;
 	}
 	
 	@EventHandler
@@ -75,19 +75,35 @@ public class SaveSign implements CommandExecutor, Listener{
 			return;
 		if ((event.getClickedBlock().getType() == Material.WALL_SIGN || event.getClickedBlock().getType() == Material.SIGN_POST) && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Sign sign = (Sign) event.getClickedBlock().getState();
-			if(map.containsKey(p.getUniqueId() + "_1")){
-				sign.setLine(0, ChatColor.translateAlternateColorCodes('$', map.get(p.getUniqueId() + "_1")));
+			if(map.containsKey(p.getUniqueId())){
+				String state = map.get(p.getUniqueId());
+				if(state.equals("fertig")){
+					return;
+				}
+				else if(state.equals("kopieren")){
+					map.put(p.getUniqueId() + "_1", sign.getLine(0));
+					map.put(p.getUniqueId() + "_2", sign.getLine(1));
+					map.put(p.getUniqueId() + "_3", sign.getLine(2));
+					map.put(p.getUniqueId() + "_4", sign.getLine(3));
+					map.put(p.getUniqueId().toString(), "fertig");
+					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Das Schild wurde kopiert");
+				}
+				else if(state.equals("einfügen")){
+					if(map.containsKey(p.getUniqueId() + "_1")){
+						sign.setLine(0, ChatColor.translateAlternateColorCodes('$', map.get(p.getUniqueId() + "_1")));
+					}
+					if(map.containsKey(p.getUniqueId() + "_2")){
+						sign.setLine(1, ChatColor.translateAlternateColorCodes('$', map.get(p.getUniqueId() + "_2")));			
+					}
+					if(map.containsKey(p.getUniqueId() + "_3")){
+						sign.setLine(2, ChatColor.translateAlternateColorCodes('$', map.get(p.getUniqueId() + "_3")));;
+					}
+					if(map.containsKey(p.getUniqueId() + "_4")){
+						sign.setLine(3, ChatColor.translateAlternateColorCodes('$', map.get(p.getUniqueId() + "_4")));
+					}
+					sign.update();
+				}
 			}
-			if(map.containsKey(p.getUniqueId() + "_2")){
-				sign.setLine(1, ChatColor.translateAlternateColorCodes('$', map.get(p.getUniqueId() + "_2")));			
-			}
-			if(map.containsKey(p.getUniqueId() + "_3")){
-				sign.setLine(2, ChatColor.translateAlternateColorCodes('$', map.get(p.getUniqueId() + "_3")));;
-			}
-			if(map.containsKey(p.getUniqueId() + "_4")){
-				sign.setLine(3, ChatColor.translateAlternateColorCodes('$', map.get(p.getUniqueId() + "_4")));
-			}
-			sign.update();
 		}
 	}
 }
