@@ -7,8 +7,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
+import de.wolfsline.Epicraft.Epicraft;
+
 public class ColorSignListener implements Listener{
 	
+	private Epicraft plugin;
+	
+	public ColorSignListener(Epicraft plugin) {
+		this.plugin = plugin;
+	}
+
 	@EventHandler
 	public void onSignChange(SignChangeEvent event){
 		Player p = event.getPlayer();
