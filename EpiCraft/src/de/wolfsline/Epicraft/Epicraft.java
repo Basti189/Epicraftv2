@@ -212,9 +212,9 @@ public class Epicraft extends JavaPlugin{
 		//this.getCommand("ts").setExecutor(info);
 		
 		//DEBUG - Wartungsmodus
-		Wartungsmodus debugCommand = new Wartungsmodus(this);
-		this.getCommand("debug").setExecutor(debugCommand);
-		pm.registerEvents(debugCommand, this);
+		Wartungsmodus wartung = new Wartungsmodus(this);
+		this.getCommand("wartung").setExecutor(wartung);
+		pm.registerEvents(wartung, this);
 		
 		//Einstellungen
 		Settings settings = new Settings(this);
