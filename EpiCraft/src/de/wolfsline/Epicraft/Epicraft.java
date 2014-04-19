@@ -15,6 +15,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.wolfsline.API.EventAPI;
 import de.wolfsline.Sign.SaveSign;
 import de.wolfsline.Ticketsystem.Ticketsystem;
+import de.wolfsline.Ticketsystem.Ticketsystem_Schild;
 import de.wolfsline.UUID.MyUUID;
 import de.wolfsline.administration.ChestAccess;
 import de.wolfsline.administration.Wartungsmodus;
@@ -255,6 +256,9 @@ public class Epicraft extends JavaPlugin{
 		//Ticketsystem
 		Ticketsystem ticket = new Ticketsystem(this);
 		this.getCommand("ticket").setExecutor(ticket);
+		
+		Ticketsystem_Schild ticketSchild = new Ticketsystem_Schild(this);
+		this.getCommand("ticketschild").setExecutor(ticketSchild);
 		
 		//Weltsystem
 		WorldManager world = new WorldManager(this);

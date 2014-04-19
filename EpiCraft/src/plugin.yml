@@ -187,6 +187,11 @@ commands:
     usage: /ticket <Nachricht>
     permissions: epicraft.ticket
 
+  ticketschild
+    description: Hier kann das Team Probleme an den Spieler vermitteln
+    usage: /ticketschild <Nachricht>
+    permissions: epicraft.ticket.team
+
   welt:
     description: Welten wechseln
     usage: /welt
