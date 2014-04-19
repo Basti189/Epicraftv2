@@ -91,15 +91,6 @@ commands:
     permissions:
       - epicraft.enderchest
 
-  jail:
-    description: Gefängnissystem
-    aliases: [setjail, tpjail, unjail, setObsi]
-    usage: /jail <spieler>
-    permissions:
-      - epicraft.jail.use
-      - epicraft.jail.info
-      - epicraft.jail.create
-
   chat:
     descripton: Chatnachricht erzwingen
     usage: /chat <spieler>
