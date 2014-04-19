@@ -1,6 +1,5 @@
 package de.wolfsline.Epicraft;
 
-
 import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
@@ -23,6 +22,7 @@ import de.wolfsline.administration.DoorAccess;
 import de.wolfsline.administration.EnderChestCommand;
 import de.wolfsline.administration.FlyCommand;
 import de.wolfsline.administration.InvSwitcherCommand;
+import de.wolfsline.administration.InventarCommand;
 import de.wolfsline.administration.JailCommand;
 import de.wolfsline.administration.RestartCommand;
 import de.wolfsline.administration.SpawnCommand;
@@ -31,7 +31,6 @@ import de.wolfsline.administration.UnHideCommand;
 import de.wolfsline.administration.WhoIsCommand;
 import de.wolfsline.afk.AFK;
 import de.wolfsline.data.MySQL;
-import de.wolfsline.disco.Disco;
 import de.wolfsline.epimaster.EpiMaster;
 import de.wolfsline.forfun.ChatFakerCommand;
 import de.wolfsline.forfun.EggCatcher;
@@ -45,7 +44,6 @@ import de.wolfsline.gs.Grundstück;
 import de.wolfsline.gs.SignName;
 import de.wolfsline.healthbar.DamageListener;
 import de.wolfsline.home.HomeCommand;
-import de.wolfsline.info.TimeCommand;
 import de.wolfsline.info.InfoCommand;
 import de.wolfsline.message.ChatListener;
 import de.wolfsline.message.WhisperExecuter;
@@ -59,33 +57,34 @@ import de.wolfsline.permission.PermissionManager;
 import de.wolfsline.register.AuthCommand;
 import de.wolfsline.register.QuestSignCommand;
 import de.wolfsline.register.QuestSignListener;
+import de.wolfsline.restriction.BanCommand;
+import de.wolfsline.restriction.KickCommand;
 import de.wolfsline.restriction.RestrictionCommand;
-import de.wolfsline.reward.VoteListener;
 import de.wolfsline.security.ChestPassword;
 import de.wolfsline.security.CreatureSpawnListener;
 import de.wolfsline.security.HorseListener;
-import de.wolfsline.security.IronGolemDropControll;
 import de.wolfsline.security.MapSizeControll;
 import de.wolfsline.security.Region;
 import de.wolfsline.settings.Settings;
 import de.wolfsline.statistics.KillCounter;
 import de.wolfsline.teleport.SignLift;
 import de.wolfsline.teleport.TeleportBack;
-import de.wolfsline.teleport.World;
+import de.wolfsline.teleport.WorldManager;
 import de.wolfsline.worldgenerator.CleanRoomChunkGenerator;
 
 public class Epicraft extends JavaPlugin{
 	private int restartTask;
-	//public Economy economy = null;
+	
 	public final String namespace = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] ";
 	public final String error = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] " + ChatColor.RED + "Du hast keinen Zugriff auf diesen Befehl!";
 	public final String namespaceBeta = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster - Beta" + ChatColor.GOLD + "] ";
-	private InvSwitcherCommand invswitch;
 	
 	private MySQL sql;
 	public EventAPI api;
 	public PermissionManager pManager;
 	public MyUUID uuid;
+	
+	private InvSwitcherCommand invswitch;
 	
 	
 	@Override
@@ -100,135 +99,262 @@ public class Epicraft extends JavaPlugin{
 	public void onEnable(){
 		//Logger log = Bukkit.getServer().getLogger();
 		//log.addHandler(new EventAPI());
-		api = new EventAPI();
-		pManager = new PermissionManager(this);
-		this.sql = new MySQL();
-		uuid = new MyUUID(this);
-		//this.setupEconomy();
 		
-		QuestSignListener qsl = new QuestSignListener(this);
-		GunListener gun = new GunListener(this);
-		AuthCommand auth = new AuthCommand(this);
-		UnHideCommand unhide = new UnHideCommand(this);
-		Grundstück gs = new Grundstück(this);
-		PVP pvp = new PVP(this);
-		DebugCommand debugCommand = new DebugCommand(this);
-		JailCommand myJail = new JailCommand(this);
-		JoinQuitListener jqlistener = new JoinQuitListener(this);
-		ChestPassword chestPasswort = new ChestPassword(this);
-		invswitch = new InvSwitcherCommand(this);
-		HorseListener horse = new HorseListener(this);
-		Settings set = new Settings(this);
-		VoteListener voteListener = new VoteListener(this);
-		RestrictionCommand restriction = new RestrictionCommand(this);
-		RestartCommand restart = new RestartCommand(this);
-		SignName sign = new SignName(this);
-		ChatListener myChat = new ChatListener(this);
-		Ticketsystem ticket = new Ticketsystem(this);
-		World world = new World(this);
-		EggCatcher catcher = new EggCatcher(this);
-		AFK afk = new AFK(this);
-		TeleportBack back = new TeleportBack(this);
-		Region region = new Region(this);
-		DoorAccess doorAccess = new DoorAccess(this);
-		Microblock microblock = new Microblock(this);
-		More more = new More(this);
-		SaveSign savesign = new SaveSign(this);
-		
-		//TEST
-		Disco disco = new Disco(this);
-		this.getCommand("disco").setExecutor(disco);
-		
-		this.getCommand("spawn").setExecutor(new SpawnCommand(this));
-		this.getCommand("gs").setExecutor(gs);
-		this.getCommand("hide").setExecutor(unhide);
-		this.getCommand("restart").setExecutor(restart);
-		this.getCommand("sign").setExecutor(sign);
-		this.getCommand("fragebogen").setExecutor(new QuestSignCommand(this, qsl));
-		this.getCommand("channel").setExecutor(myChat);
-		this.getCommand("warn").setExecutor(restriction);
-		this.getCommand("kick").setExecutor(new de.wolfsline.restriction.KickCommand(this));
-		this.getCommand("ban").setExecutor(new de.wolfsline.restriction.BanCommand(this));
-		this.getCommand("home").setExecutor(new HomeCommand(this));
-        this.getCommand("invsee").setExecutor(new de.wolfsline.administration.InventarCommand(this));
-        this.getCommand("lightning").setExecutor(new LightningCommand());
-        this.getCommand("gun").setExecutor(gun);
-        this.getCommand("grenade").setExecutor(new TntCommand(this));
-        this.getCommand("ensee").setExecutor(new EnderChestCommand(this));
-        this.getCommand("jail").setExecutor(myJail);
-        this.getCommand("chat").setExecutor(new ChatFakerCommand(this));
-        this.getCommand("head").setExecutor(new HeadCommand(this));
-        this.getCommand("login").setExecutor(auth);
-        this.getCommand("w").setExecutor(new WhisperExecuter(this));
-        this.getCommand("support").setExecutor(invswitch);
-        this.getCommand("pvp").setExecutor(pvp);
-        this.getCommand("fly").setExecutor(new FlyCommand(this));
-        this.getCommand("ts").setExecutor(new InfoCommand(this));
-        this.getCommand("debug").setExecutor(debugCommand);
-        this.getCommand("me").setExecutor(new MECommand(this));
-        this.getCommand("tp").setExecutor(new TeleportCommand(this));
-        this.getCommand("settings").setExecutor(set);
-        this.getCommand("secure").setExecutor(chestPasswort);
-        this.getCommand("horse").setExecutor(horse);
-        this.getCommand("api").setExecutor(api);
-        this.getCommand("uhr").setExecutor(new TimeCommand(this));
-        this.getCommand("vote").setExecutor(voteListener);
-        this.getCommand("chest").setExecutor(new ChestAccess(this));
-        this.getCommand("whois").setExecutor(new WhoIsCommand(this));
-        this.getCommand("permission").setExecutor(pManager);
-        this.getCommand("ticket").setExecutor(ticket);
-        this.getCommand("welt").setExecutor(world);
-        this.getCommand("afk").setExecutor(afk);
-        this.getCommand("back").setExecutor(back);
-        this.getCommand("microblock").setExecutor(microblock);
-        this.getCommand("uuid").setExecutor(uuid);
-        this.getCommand("more").setExecutor(more);
-        this.getCommand("savesign").setExecutor(savesign);
-        
+		//PluginManager
 		PluginManager pm = this.getServer().getPluginManager();
 		
-		pm.registerEvents(jqlistener, this);
-		pm.registerEvents(sign, this);
-		pm.registerEvents(qsl, this);
-		pm.registerEvents(myChat, this);
-		pm.registerEvents(new ColorSignListener(), this);
-		pm.registerEvents(new de.wolfsline.reward.SignListener(this), this);
-		pm.registerEvents(gun, this);
-		pm.registerEvents(new CommandListener(this), this);
-		pm.registerEvents(auth, this);
-		pm.registerEvents(unhide, this);
-		pm.registerEvents(gs, this);
-		pm.registerEvents(invswitch, this);
-		pm.registerEvents(new KillCounter(this), this);
-		pm.registerEvents(pvp, this);
-		pm.registerEvents(myJail, this);
-		pm.registerEvents(new DeathListener(), this);
-		pm.registerEvents(debugCommand, this);
-		pm.registerEvents(chestPasswort, this);
-		pm.registerEvents(new MapSizeControll(this), this);
-		pm.registerEvents(new IronGolemDropControll(), this);
-		pm.registerEvents(horse, this);
-		pm.registerEvents(set, this);
-		pm.registerEvents(restriction, this);
+		//EventAPI
+		api = new EventAPI();
+		this.getCommand("api").setExecutor(api);
 		pm.registerEvents(api, this);
-		pm.registerEvents(new CreatureSpawnListener(), this);
-		pm.registerEvents(voteListener, this);
-		pm.registerEvents(new SignLift(this), this);
-		pm.registerEvents(new EpiMaster(this), this);
-		pm.registerEvents(restart, this);
-		pm.registerEvents(world, this);
-		pm.registerEvents(catcher, this);
-		pm.registerEvents(afk, this);
-		pm.registerEvents(back, this);
-		pm.registerEvents(region, this);
-		pm.registerEvents(doorAccess, this);
-		pm.registerEvents(microblock, this);
-		pm.registerEvents(new DamageListener(this), this);
+		
+		//PermissionManager
+		pManager = new PermissionManager(this);
+		this.getCommand("permission").setExecutor(pManager);
+		
+		//SQL-Datenbank
+		this.sql = new MySQL();
+		
+		//UUID
+		uuid = new MyUUID(this);
+		this.getCommand("uuid").setExecutor(uuid);
 		pm.registerEvents(uuid, this);
+		
+		//Spawn
+		SpawnCommand spawn = new SpawnCommand(this);
+		this.getCommand("spawn").setExecutor(spawn);
+		
+		//Grundstückssystem
+		Grundstück gs = new Grundstück(this);
+		this.getCommand("gs").setExecutor(gs);
+		pm.registerEvents(gs, this);
+		
+		//Neustart des Servers
+		RestartCommand restart = new RestartCommand(this);
+		this.getCommand("restart").setExecutor(restart);
+		pm.registerEvents(restart, this);
+		
+		//Beschriftung der Grundstücksgrenzenschilder
+		SignName sign = new SignName(this);
+		this.getCommand("sign").setExecutor(sign);
+		pm.registerEvents(sign, this);
+		
+		//Fragebogen
+		QuestSignListener qsl = new QuestSignListener(this);
+		this.getCommand("fragebogen").setExecutor(new QuestSignCommand(this, qsl));
+		pm.registerEvents(qsl, this);
+		
+		//Verwarnung
+		RestrictionCommand restriction = new RestrictionCommand(this);
+		this.getCommand("warn").setExecutor(restriction);
+		pm.registerEvents(restriction, this);
+		
+		//Kick
+		KickCommand kick = new KickCommand(this);
+		this.getCommand("kick").setExecutor(kick);
+		
+		//Ban
+		BanCommand ban = new BanCommand(this);
+		this.getCommand("ban").setExecutor(ban);
+		
+		//Home
+		HomeCommand home = new HomeCommand(this);
+		this.getCommand("home").setExecutor(home);
+		
+		//Hide / Unhide
+		UnHideCommand unhide = new UnHideCommand(this);
+		this.getCommand("hide").setExecutor(unhide);
+		pm.registerEvents(unhide, this);
+		
+		//Inventar gucken
+		InventarCommand inv = new InventarCommand(this);
+		this.getCommand("invsee").setExecutor(inv);
+		
+		//Blitze erzeugen
+		LightningCommand lightning = new LightningCommand(this);
+		this.getCommand("lightning").setExecutor(lightning);
+		
+		//Erzeugen von Kanonen
+		GunListener gun = new GunListener(this);
+		this.getCommand("gun").setExecutor(gun);
+		pm.registerEvents(gun, this);
+		
+		//TNT platzieren
+		TntCommand tnt = new TntCommand(this);
+		this.getCommand("grenade").setExecutor(tnt);
+		
+		//Blick in die Enderchest eines Spielers werfen
+		EnderChestCommand enderchest = new EnderChestCommand(this);
+		this.getCommand("ensee").setExecutor(enderchest);
+		
+		//Gefängnis
+		JailCommand myJail = new JailCommand(this);
+		this.getCommand("jail").setExecutor(myJail);
+		pm.registerEvents(myJail, this);
+		
+		//Spielernachricht erzeugen
+		ChatFakerCommand fakeChat = new ChatFakerCommand(this);
+		this.getCommand("chat").setExecutor(fakeChat);
+		
+		//Block auf den Kopf setzen
+		HeadCommand head = new HeadCommand(this);
+		this.getCommand("head").setExecutor(head);
+		
+		//Registrierung und Einloggen
+		AuthCommand auth = new AuthCommand(this);
+		this.getCommand("login").setExecutor(auth);
+		pm.registerEvents(auth, this);
+		
+		//Private Nachrichten
+		WhisperExecuter whisper = new WhisperExecuter(this);
+		this.getCommand("w").setExecutor(whisper);
+		
+		//Supportmodus
+		invswitch = new InvSwitcherCommand(this);
+		this.getCommand("support").setExecutor(invswitch);
+		pm.registerEvents(invswitch, this);
+		
+		//PVP
+		PVP pvp = new PVP(this);
+		this.getCommand("pvp").setExecutor(pvp);
+		pm.registerEvents(pvp, this);
+		
+		//Fly
+		FlyCommand fly = new FlyCommand(this);
+		this.getCommand("fly").setExecutor(fly);
+		
+		//Info
+		InfoCommand info = new InfoCommand(this);
+		this.getCommand("ts").setExecutor(info);
+		
+		//DEBUG - Wartungsmodus
+		DebugCommand debugCommand = new DebugCommand(this);
+		this.getCommand("debug").setExecutor(debugCommand);
+		pm.registerEvents(debugCommand, this);
+		
+		//Einstellungen
+		Settings settings = new Settings(this);
+		this.getCommand("settings").setExecutor(settings);
+		pm.registerEvents(settings, this);
+		
+		//Wichtig Befehl
+		MECommand me = new MECommand(this);
+		this.getCommand("me").setExecutor(me);
+		
+		//Teleport
+		TeleportCommand teleport = new TeleportCommand(this);
+		this.getCommand("tp").setExecutor(teleport);
+		
+		//Sichert Truhen und Öfen
+		ChestPassword chestPasswort = new ChestPassword(this);
+		this.getCommand("secure").setExecutor(chestPasswort);
+		pm.registerEvents(chestPasswort, this);
+		
+		//Sichert die Pferde eines Spielers
+		HorseListener horse = new HorseListener(this);
+		this.getCommand("horse").setExecutor(horse);
+		pm.registerEvents(horse, this);
+		
+		//Kisten aus der ferne Öffnen
+		ChestAccess chest = new ChestAccess(this);
+		this.getCommand("chest").setExecutor(chest);
+		
+		//Informationen zu einem Spieler
+		WhoIsCommand whois = new WhoIsCommand(this);
+		this.getCommand("whois").setExecutor(whois);
+		
+		//Channel
+		ChatListener myChat = new ChatListener(this);
+		this.getCommand("channel").setExecutor(myChat);
+		pm.registerEvents(myChat, this);
+		
+		//Ticketsystem
+		Ticketsystem ticket = new Ticketsystem(this);
+		this.getCommand("ticket").setExecutor(ticket);
+		
+		//Weltsystem
+		WorldManager world = new WorldManager(this);
+		this.getCommand("welt").setExecutor(world);
+		pm.registerEvents(world, this);
+		
+		//Afk
+		AFK afk = new AFK(this);
+		this.getCommand("afk").setExecutor(afk);
+		pm.registerEvents(afk, this);
+		
+		//Teleportiert dicvh zurück zum Todesort
+		TeleportBack back = new TeleportBack(this);
+		this.getCommand("back").setExecutor(back);
+		pm.registerEvents(back, this);
+		
+		//Microblocks
+		Microblock microblock = new Microblock(this);
+		this.getCommand("microblock").setExecutor(microblock);
+		pm.registerEvents(microblock, this);
+		
+		//More Stack das ausgewählte Item auf 64
+		More more = new More(this);
+		this.getCommand("more").setExecutor(more);
+		
+		//Kopiert ein Schild
+		SaveSign savesign = new SaveSign(this);
+		this.getCommand("savesign").setExecutor(savesign);
 		pm.registerEvents(savesign, this);
 		
-		pm.registerEvents(disco, this);
 		
+		//Login Listener
+		JoinQuitListener jqlistener = new JoinQuitListener(this);	
+		pm.registerEvents(jqlistener, this);
+		
+		//Färbt ein Schild
+		ColorSignListener colorSign = new ColorSignListener(this);
+		pm.registerEvents(colorSign, this);
+		
+		//Blockiert Befehle, wenn Spieler Berechtigung nicht hat
+		CommandListener cmd = new CommandListener(this);
+		pm.registerEvents(cmd, this);
+		
+		//Speichert die Kills in eine Datenbank
+		KillCounter killCounter = new KillCounter(this);
+		pm.registerEvents(killCounter, this);
+		
+		//Benachrictigt die Spieler bei eintreten des Todes
+		DeathListener death = new DeathListener(this);
+		pm.registerEvents(death, this);
+		
+		//Gibt dem Stammspieler ein SpawnEgg von einem gefangenen Tier
+		EggCatcher catcher = new EggCatcher(this);
+		pm.registerEvents(catcher, this);
+		
+		//Sichert die Welten vor Feuerausbreitung
+		Region region = new Region(this);
+		pm.registerEvents(region, this);
+		
+		//Öffnen von Eisentüren
+		DoorAccess doorAccess = new DoorAccess(this);
+		pm.registerEvents(doorAccess, this);
+		
+		//Kontrolliert die größe der Map
+		MapSizeControll mapSizeControll = new MapSizeControll(this);
+		pm.registerEvents(mapSizeControll, this);
+		
+		//Kontrolliert das Spawnen von Kreaturen
+		CreatureSpawnListener creatureSpawn = new CreatureSpawnListener(this);
+		pm.registerEvents(creatureSpawn, this);
+		
+		//Fahrstuhl über Schilder
+		SignLift lift = new SignLift(this);
+		pm.registerEvents(lift, this);
+		
+		//EpiMaster
+		EpiMaster epimaster = new EpiMaster(this);
+		pm.registerEvents(epimaster, this);
+		
+		//Lebensanzeige der Mobs
+		DamageListener healthbar = new DamageListener(this);
+		pm.registerEvents(healthbar, this);
+		
+		//Lädt die Spieler die während eines Reloads online sind auf der Datenbank
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
 			pManager.triggerEpicraftPlayerList(player, true);
 			myChat.mapChannel.put(player.getName(), 0);
@@ -236,9 +362,7 @@ public class Epicraft extends JavaPlugin{
 		System.out.println("[Epicraft] Epicraft wurde gestartet");
 	}
 	
-	public MySQL getMySQL(){
-		//this.sql.closeConnection();
-		//this.sql = new MySQL();
+	public MySQL getMySQL(){ //Löst nach ein paar Stunden fehler aus -> Lösung?
 		try {
 			if(sql.getConnection().isClosed()){
 				sql.openConnection();
@@ -250,20 +374,10 @@ public class Epicraft extends JavaPlugin{
 		return this.sql;
 	}
 	
-	/*private boolean setupEconomy(){
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            economy = economyProvider.getProvider();
-        }
-        return (economy != null);
-    }*/
-	
 	public WorldGuardPlugin getWorldGuard() {
 	    Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
-	 
-	    // WorldGuard may not be loaded
 	    if (wg == null || !(wg instanceof WorldGuardPlugin)) {
-	        return null; // Maybe you want throw an exception instead
+	        return null;
 	    }
 	    return (WorldGuardPlugin) wg;
 	}

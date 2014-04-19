@@ -128,13 +128,6 @@ commands:
     permissions:
      - epicraft.inv.switch
 
-  onlinetime:
-    description: Zeigt die Spielzeit an
-    aliases: [ot]
-    usage: /onlinetime
-    permissions:
-     - epicraft.time
-
   pvp:
     description: PVP aktivieren, deaktivieren
     usage: /pvp
@@ -189,22 +182,6 @@ commands:
     description: Zugriff auf die EventAPI von Epicraft
     usage: /api
 
-  epicraft:
-    description: zu DEBUGzwecken
-    usage: /epicraft
-
-  uhr:
-    description: Die Zeit
-    usage: /uhr
-
-  vote:
-    description: Vote fuer Epicraft
-    usage: /vote
-
-  block:
-    description: Werde zum Block
-    usage: /block
-
   chest:
     description: Zugriff auf Kisten in der Ferne
     usage: /chest
@@ -225,9 +202,6 @@ commands:
     aliases: [p, per, perm]
     usage: /permission [set] [Spieler] [Gruppe]
     permissions: epicraft.permission.use
-
-  disco:
-   description: Für den Discoboden
 
   ticket:
     description: Hier kannst du Probleme an das Team melden
