@@ -12,29 +12,30 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 
 import de.wolfsline.Epicraft.Epicraft;
 
-public class DebugCommand implements CommandExecutor, Listener{
+public class Wartungsmodus implements CommandExecutor, Listener{
 
 	private boolean isDebugService = false;
 	private Epicraft plugin;
 	
-	public DebugCommand(Epicraft plugin){
+	public Wartungsmodus(Epicraft plugin){
 		this.plugin = plugin;
 	}
 
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
-		if(!(cs.isOp() || cs.hasPermission("epicraft.wartung")))
+		if(!cs.hasPermission("epicraft.wartung")){
 			return true;
+		}
 		if(args.length == 1){
 			String state = args[0].toLowerCase();
 			if(state.equals("false")){
 				isDebugService = false;
-				cs.sendMessage(ChatColor.WHITE + "DebugService ist deaktiviert");
+				cs.sendMessage(plugin.namespace + ChatColor.WHITE + "Wartungsmodus ist deaktiviert");
 				plugin.api.sendLog("[Epicraft - Wartung] Server hat den Wartungsmodus beendet");
 			}
 			else if(state.equals("true")){
 				isDebugService = true;
-				cs.sendMessage(ChatColor.WHITE + "DebugService ist aktiviert");
+				cs.sendMessage(ChatColor.WHITE + "Wartungsmodus ist aktiviert");
 				plugin.api.sendLog("[Epicraft - Wartung] Server ist im Wartungsmodus");
 				
 			}
@@ -43,7 +44,7 @@ public class DebugCommand implements CommandExecutor, Listener{
 			}
 			return true;
 		}
-		cs.sendMessage("/debug <true>, <false>");
+		cs.sendMessage(plugin.namespace + ChatColor.RED + "/wartung <true>, <false>");
 		return true;
 	}
 	
