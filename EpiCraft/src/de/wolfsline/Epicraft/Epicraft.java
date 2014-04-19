@@ -21,9 +21,7 @@ import de.wolfsline.administration.Wartungsmodus;
 import de.wolfsline.administration.DoorAccess;
 import de.wolfsline.administration.EnderChestCommand;
 import de.wolfsline.administration.FlyCommand;
-import de.wolfsline.administration.InvSwitcherCommand;
 import de.wolfsline.administration.InventarCommand;
-import de.wolfsline.administration.JailCommand;
 import de.wolfsline.administration.RestartCommand;
 import de.wolfsline.administration.SpawnCommand;
 import de.wolfsline.administration.TeleportCommand;
@@ -84,13 +82,10 @@ public class Epicraft extends JavaPlugin{
 	public PermissionManager pManager;
 	public MyUUID uuid;
 	
-	private InvSwitcherCommand invswitch;
-	
 	
 	@Override
 	public void onDisable(){
 		Bukkit.getScheduler().cancelTask(restartTask);
-		invswitch.onServerShutdown();
 		sql.closeConnection();
 		System.out.println("[Epicraft] Epicraft wurde beendet");
 	}
@@ -187,11 +182,6 @@ public class Epicraft extends JavaPlugin{
 		EnderChestCommand enderchest = new EnderChestCommand(this);
 		this.getCommand("ensee").setExecutor(enderchest);
 		
-		//Gefängnis
-		JailCommand myJail = new JailCommand(this);
-		this.getCommand("jail").setExecutor(myJail);
-		pm.registerEvents(myJail, this);
-		
 		//Spielernachricht erzeugen
 		ChatFakerCommand fakeChat = new ChatFakerCommand(this);
 		this.getCommand("chat").setExecutor(fakeChat);
@@ -208,11 +198,6 @@ public class Epicraft extends JavaPlugin{
 		//Private Nachrichten
 		WhisperExecuter whisper = new WhisperExecuter(this);
 		this.getCommand("w").setExecutor(whisper);
-		
-		//Supportmodus
-		invswitch = new InvSwitcherCommand(this);
-		this.getCommand("support").setExecutor(invswitch);
-		pm.registerEvents(invswitch, this);
 		
 		//PVP
 		PVP pvp = new PVP(this);
