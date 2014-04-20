@@ -129,13 +129,14 @@ public class Ticketsystem_Schild implements CommandExecutor, Listener{
 			rs = st.executeQuery();
 			if(rs.next()){
 				String targetPlayer = plugin.uuid.getNameFromUUID(UUID.fromString(rs.getString(2)));
-				p.sendMessage(plugin.namespace + ChatColor.WHITE + "ID: " + ticketID);
-				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Nachricht: " + rs.getString(3).replace("%p", targetPlayer));
+				p.sendMessage(ChatColor.GOLD + "---------------[Nachricht " + ticketID + "]---------------");
+				p.sendMessage(ChatColor.GOLD + "Nachricht: " + ChatColor.WHITE + rs.getString(3).replace("%p", ChatColor.GRAY + targetPlayer + ChatColor.WHITE));
 				if(p.hasPermission("epicraft.ticket.team")){
 					String team = plugin.uuid.getNameFromUUID(UUID.fromString(rs.getString(4)));
-					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Team: " + team);
+					p.sendMessage(ChatColor.GOLD + "Team: " + ChatColor.WHITE + team);
 				}
-				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Erstellt: " + rs.getString(5) + " - " + rs.getString(6));
+				p.sendMessage(ChatColor.GOLD + "Erstellt: am " + ChatColor.WHITE + rs.getString(6) + ChatColor.GOLD + " um " + ChatColor.WHITE + rs.getString(5));
+				p.sendMessage(ChatColor.GOLD + "---------------[Nachricht " + ticketID + "]---------------");
 				sql.closeRessources(rs, st);
 				return;
 			}
