@@ -22,6 +22,8 @@ public class MyUUID implements CommandExecutor, Listener{
 	
 	private Epicraft plugin;
 	
+	public final String ERROR = ChatColor.GOLD + "[" + ChatColor.GRAY + "EpiMaster" + ChatColor.GOLD + "] " + ChatColor.RED + "Die UUID des Spielers konnte nicht ermittelt werden!";
+	
 	public MyUUID(Epicraft plugin){
 		this.plugin = plugin;
 		plugin.getMySQL().queryUpdate("CREATE TABLE IF NOT EXISTS UUID (IID INT AUTO_INCREMENT PRIMARY KEY, UUID VARCHAR(36), Benutzername VARCHAR(16))");
