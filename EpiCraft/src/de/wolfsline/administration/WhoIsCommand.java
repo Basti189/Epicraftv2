@@ -3,6 +3,7 @@ package de.wolfsline.administration;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,7 +39,7 @@ public class WhoIsCommand implements CommandExecutor{
 			return true;
 		}
 		if(args.length == 1){
-			p.sendMessage("Anfrage wird verarbeitet - Bitte warten...");
+			p.sendMessage(plugin.namespace + ChatColor.WHITE + "Anfrage wird verarbeitet - Bitte warten...");
 			final String who = args[0];
 			final Player whoP = p;
 			Player player = Bukkit.getServer().getPlayer(who);
@@ -57,21 +58,27 @@ public class WhoIsCommand implements CommandExecutor{
 								city = (String) jsonObject.get("city");
 							} catch (IOException | ParseException e) {
 							}
-							p.sendMessage(plugin.namespace + ChatColor.WHITE + "Informationen zum Spieler: " + player.getName());
-							p.sendMessage("Welt: " + player.getLocation().getWorld().getName());
-							p.sendMessage("Position: " + (int)p.getLocation().getX() + " " + (int)p.getLocation().getY() + " " + (int)p.getLocation().getZ());
-							SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyy HH:mm:ss");
-							SimpleDateFormat formater = new SimpleDateFormat("HH:mm:ss");
+							
 							long firstPlayed = player.getFirstPlayed();
 							long lastPlayed = player.getLastPlayed();
 							long timePlayed = player.getPlayerTime();
 							Date dateFirstPlayed = new Date(firstPlayed);
 							Date dateLastPlayed = new Date(lastPlayed);
 							Date dateTimePlayed = new Date(timePlayed);
-							p.sendMessage("Erster Login: " + formatter.format(dateFirstPlayed));
-							p.sendMessage("Letzer Login: " + formatter.format(dateLastPlayed));
-							//p.sendMessage("Akt. Spielzeit: " + formater.format(dateTimePlayed)); <-- Fixen!!
-							p.sendMessage("Standort: " + country);// + " - " + city);
+							
+							SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.GERMANY);
+							SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
+							
+							p.sendMessage(ChatColor.GOLD + "---------------[Information]---------------");
+							p.sendMessage(ChatColor.GOLD + "Spieler: " + ChatColor.WHITE + player.getName());
+							p.sendMessage(ChatColor.GOLD + "UUID: " + ChatColor.WHITE + player.getUniqueId());
+							p.sendMessage(ChatColor.GOLD + "Welt: " + ChatColor.WHITE + player.getLocation().getWorld().getName());
+							p.sendMessage(ChatColor.GOLD + "Position: " + ChatColor.WHITE + (int)p.getLocation().getX() + " " + (int)p.getLocation().getY() + " " + (int)p.getLocation().getZ());
+							p.sendMessage(ChatColor.GOLD + "Erster Login: am " + ChatColor.WHITE + dateFormat.format(dateFirstPlayed) + ChatColor.GOLD + " um " + ChatColor.WHITE + timeFormat.format(dateFirstPlayed));
+							p.sendMessage(ChatColor.GOLD + "Letzter Login: am " + ChatColor.WHITE + dateFormat.format(dateLastPlayed) + ChatColor.GOLD + " um " + ChatColor.WHITE + timeFormat.format(dateLastPlayed));
+							p.sendMessage(ChatColor.GOLD + "Spielzeit: " + ChatColor.WHITE + timePlayed); //<-- Muss umgerechnet werden
+							p.sendMessage(ChatColor.GOLD + "Standort: " + ChatColor.WHITE + country.replace("Germany", "Deutschland"));
+							p.sendMessage(ChatColor.GOLD + "---------------[Information]---------------");
 						}
 					}
 				}).start();
@@ -79,18 +86,23 @@ public class WhoIsCommand implements CommandExecutor{
 			else{
 				OfflinePlayer offPlayer = Bukkit.getServer().getOfflinePlayer(args[0]);
 				if(!offPlayer.hasPlayedBefore()){
-					p.sendMessage(ChatColor.RED + "Dieser Spieler ist auf dem Server nicht bekannt!");
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Dieser Spieler ist auf dem Server nicht bekannt!");
 					return true;
 				}
-				SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyy HH:mm:ss");
+				SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.GERMANY);
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
+				
 				long firstPlayed = offPlayer.getFirstPlayed();
 				long lastPlayed = offPlayer.getLastPlayed();
 				Date dateFirstPlayed = new Date(firstPlayed);
 				Date dateLastPlayed = new Date(lastPlayed);
-				p.sendMessage("Erster Login: " + formatter.format(dateFirstPlayed));
-				p.sendMessage("Letzer Login: " + formatter.format(dateLastPlayed));
-				p.sendMessage("Gebannt: " + (offPlayer.isBanned() ? "Ja" : "Nein"));
 				
+				p.sendMessage(ChatColor.GOLD + "---------------[Information]---------------");
+				p.sendMessage(ChatColor.GOLD + "Spieler: " + ChatColor.WHITE + offPlayer.getName());
+				p.sendMessage(ChatColor.GOLD + "Erster Login: am " + ChatColor.WHITE + dateFormat.format(dateFirstPlayed) + ChatColor.GOLD + " um " + ChatColor.WHITE + timeFormat.format(dateFirstPlayed));
+				p.sendMessage(ChatColor.GOLD + "Letzter Login: am " + ChatColor.WHITE + dateFormat.format(dateLastPlayed) + ChatColor.GOLD + " um " + ChatColor.WHITE + timeFormat.format(dateLastPlayed));
+				p.sendMessage(ChatColor.GOLD + "Gebannt: " + ChatColor.WHITE + (offPlayer.isBanned() ? "Ja" : "Nein"));
+				p.sendMessage(ChatColor.GOLD + "---------------[Information]---------------");	
 			}
 			return true;
 		}
