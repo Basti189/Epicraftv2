@@ -1,5 +1,7 @@
 package de.wolfsline.forfun;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -26,7 +28,12 @@ public class ChatFakerCommand implements CommandExecutor{
 		if(!p.hasPermission("epicraft.chat.fake"))
 			return true;
 		if(args.length >= 2){
-			Player pu = Bukkit.getPlayer(args[0]);
+			UUID targetUUID = plugin.uuid.getUUIDFromPlayer(args[0]);
+			if(targetUUID == null){
+				p.sendMessage(plugin.uuid.ERROR);
+				return true;
+			}
+			Player pu = Bukkit.getPlayer(targetUUID);
 			if(pu == null){
 				p.sendMessage(plugin.namespace + ChatColor.RED + "Spieler ist nicht online!");
 			}
