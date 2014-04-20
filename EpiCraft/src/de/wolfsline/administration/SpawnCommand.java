@@ -10,7 +10,10 @@ import org.bukkit.entity.Player;
 import de.wolfsline.Epicraft.Epicraft;
 
 public class SpawnCommand implements CommandExecutor{
+	
 	private Epicraft plugin;
+	
+	private final String WORLD = "world";
 	
 	public SpawnCommand(Epicraft plugin) {
 		this.plugin = plugin;
@@ -33,7 +36,7 @@ public class SpawnCommand implements CommandExecutor{
 				plugin.api.sendLog("[Epicraft - Spawn] " + p.getName() + " sitzt in einem " + p.getVehicle().getType().toString() + " und kann nicht teleportiert werden");
 				return true;
 			}
-			p.teleport(Bukkit.getServer().getWorld("world").getSpawnLocation());
+			p.teleport(Bukkit.getServer().getWorld(WORLD).getSpawnLocation());
 			p.sendMessage(plugin.namespace + ChatColor.WHITE + "Willkommen am Spawn!");
 			plugin.api.sendLog("[Epicraft - Spawn] " + p.getName() + " hat sich zum Spawn teleportiert");
 			return true;
