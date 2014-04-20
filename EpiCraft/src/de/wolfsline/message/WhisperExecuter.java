@@ -1,6 +1,7 @@
 package de.wolfsline.message;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,8 +16,8 @@ public class WhisperExecuter implements CommandExecutor {
 
 	private Epicraft plugin;
 	
-	private HashMap<String,String> answer = new HashMap<String,String>();
-	private HashMap<String,String> repeat = new HashMap<String,String>();
+	private HashMap<UUID,UUID> answer = new HashMap<UUID,UUID>();
+	private HashMap<UUID,UUID> repeat = new HashMap<UUID,UUID>();
 	
 	public WhisperExecuter(Epicraft plugin) {
 		this.plugin = plugin;
@@ -39,8 +40,8 @@ public class WhisperExecuter implements CommandExecutor {
 				p.sendMessage(plugin.namespace + ChatColor.RED + "Nachricht und fehlt!");
 				return true;
 			}
-			if(repeat.containsKey(p.getName())){
-				String name = repeat.get(p.getName());
+			if(repeat.containsKey(p.getUniqueId())){
+				UUID name = repeat.get(p.getUniqueId());
 				Player recv = Bukkit.getServer().getPlayer(name);
 				if(recv == null){
 					p.sendMessage(plugin.namespace + ChatColor.RED + name + " ist nicht online!");
@@ -65,8 +66,8 @@ public class WhisperExecuter implements CommandExecutor {
 				p.sendMessage(plugin.namespace + ChatColor.RED + "Nachricht und fehlt!");
 				return true;
 			}
-			if(answer.containsKey(p.getName())){
-				String name = answer.get(p.getName());
+			if(answer.containsKey(p.getUniqueId())){
+				UUID name = answer.get(p.getUniqueId());
 				Player recv = Bukkit.getServer().getPlayer(name);
 				if(recv == null){
 					p.sendMessage(plugin.namespace + ChatColor.RED + name + " ist nicht online!");
@@ -87,7 +88,12 @@ public class WhisperExecuter implements CommandExecutor {
 			}
 		}
 		if(args.length >= 2){ // w
-			Player recv = Bukkit.getPlayer(args[0]);
+			UUID targetUUID = plugin.uuid.getUUIDFromPlayer(args[0]);
+			if(targetUUID == null){
+				p.sendMessage(plugin.uuid.ERROR);
+				return true;
+			}
+			Player recv = Bukkit.getPlayer(targetUUID);
 			if(recv == null){
 				p.sendMessage(plugin.namespace + ChatColor.RED + "Spieler ist nicht online!");
 				return true;
@@ -99,8 +105,8 @@ public class WhisperExecuter implements CommandExecutor {
 			recv.sendMessage(ChatColor.GOLD + "Nachricht von " + p.getName() + ": " + ChatColor.WHITE + msg);
 			p.sendMessage(ChatColor.GOLD + "Nachricht an " + recv.getName() + ": " + ChatColor.WHITE + msg);
 			plugin.api.sendLog("[Epicraft - Flüstern] " + p.getName() + " flüstert " + recv.getName() + " eine Nachricht");
-			answer.put(recv.getName(), p.getName());
-			repeat.put(p.getName(), recv.getName());
+			answer.put(recv.getUniqueId(), p.getUniqueId());
+			repeat.put(p.getUniqueId(), recv.getUniqueId());
 			return true;
 		}
 		else{
