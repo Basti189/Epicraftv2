@@ -172,7 +172,7 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 			st = conn.prepareStatement("SELECT * FROM Verwarnung WHERE Benutzername='" + name + "'");
 			rs = st.executeQuery();
 			p.sendMessage(ChatColor.GOLD + "---------------[Benutzerverwaltung]---------------");
-			p.sendMessage(ChatColor.GOLD + "Benutzer: " +ChatColor.WHITE + name);
+			p.sendMessage(ChatColor.GOLD + "Spieler: " +ChatColor.WHITE + name);
 			while(rs.next()){
 				String typ = rs.getString(2);
 				if(typ.equalsIgnoreCase("warn")){
