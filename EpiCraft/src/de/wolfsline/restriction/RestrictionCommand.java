@@ -149,10 +149,10 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 			}
 			p.sendMessage(ChatColor.GOLD + "---------------[Benutzerverwaltung]---------------");
 			if(!p.getName().equals(name))
-				p.sendMessage(ChatColor.GOLD + "Benutzer: " + name);
-			p.sendMessage(ChatColor.GOLD + "Anzahl Verwarnungen: " + String.valueOf(warn));
-			p.sendMessage(ChatColor.GOLD + "Anzahl Kicks: " + String.valueOf(kick));
-			p.sendMessage(ChatColor.GOLD + "Anzahl Bans: " + String.valueOf(ban));
+				p.sendMessage(ChatColor.GOLD + "Benutzer: " + ChatColor.WHITE + name);
+			p.sendMessage(ChatColor.GOLD + "Verwarnungen: " + ChatColor.WHITE +  String.valueOf(warn));
+			p.sendMessage(ChatColor.GOLD + "Kicks: " + ChatColor.WHITE +  String.valueOf(kick));
+			p.sendMessage(ChatColor.GOLD + "Bans: " + ChatColor.WHITE +  String.valueOf(ban));
 			p.sendMessage(ChatColor.GOLD + "---------------[Benutzerverwaltung]---------------");
 		} 
 		catch (SQLException e) {
@@ -172,23 +172,23 @@ public class RestrictionCommand implements CommandExecutor, Listener{
 			st = conn.prepareStatement("SELECT * FROM Verwarnung WHERE Benutzername='" + name + "'");
 			rs = st.executeQuery();
 			p.sendMessage(ChatColor.GOLD + "---------------[Benutzerverwaltung]---------------");
-			p.sendMessage(ChatColor.GOLD + "Benutzer: " + name);
+			p.sendMessage(ChatColor.GOLD + "Benutzer: " +ChatColor.WHITE + name);
 			while(rs.next()){
 				String typ = rs.getString(2);
 				if(typ.equalsIgnoreCase("warn")){
 					p.sendMessage(ChatColor.GOLD + "Verwarnung: ");
-					p.sendMessage(ChatColor.GOLD + "- Grund: " + rs.getString(3));
-					p.sendMessage(ChatColor.GOLD + "- Datum: " + rs.getString(4) + " Uhr am " + rs.getString(5) + " von " + rs.getString(6));
+					p.sendMessage(ChatColor.GOLD + "- Grund: " + ChatColor.WHITE + rs.getString(3));
+					p.sendMessage(ChatColor.GOLD + "- Erstellt: am " + ChatColor.WHITE + rs.getString(5) + ChatColor.GOLD + " um " + ChatColor.WHITE + rs.getString(4) + ChatColor.GOLD + " von " + ChatColor.WHITE + rs.getString(6));
 				}
 				else if(typ.equalsIgnoreCase("kick")){
 					p.sendMessage(ChatColor.GOLD + "Gekickt: ");
-					p.sendMessage(ChatColor.GOLD + "- Grund: " + rs.getString(3));
-					p.sendMessage(ChatColor.GOLD + "- Datum: " + rs.getString(4) + " Uhr am " + rs.getString(5) + " von " + rs.getString(6));
+					p.sendMessage(ChatColor.GOLD + "- Grund: " + ChatColor.WHITE + rs.getString(3));
+					p.sendMessage(ChatColor.GOLD + "- Erstellt: am " + ChatColor.WHITE + rs.getString(5) + ChatColor.GOLD + " um " + ChatColor.WHITE + rs.getString(4) + ChatColor.GOLD + " von " + ChatColor.WHITE + rs.getString(6));
 				}
 				else if(typ.equalsIgnoreCase("ban")){
 					p.sendMessage(ChatColor.GOLD + "Gebannt: ");
-					p.sendMessage(ChatColor.GOLD + "- Grund: " + rs.getString(3));
-					p.sendMessage(ChatColor.GOLD + "- Datum: " + rs.getString(4) + " Uhr am " + rs.getString(5) + " von " + rs.getString(6));
+					p.sendMessage(ChatColor.GOLD + "- Grund: " + ChatColor.WHITE + rs.getString(3));
+					p.sendMessage(ChatColor.GOLD + "- Erstellt: am " + ChatColor.WHITE + rs.getString(5) + ChatColor.GOLD + " um " + ChatColor.WHITE + rs.getString(4) + ChatColor.GOLD + " von " + ChatColor.WHITE + rs.getString(6));
 				}
 				p.sendMessage("");
 			};
