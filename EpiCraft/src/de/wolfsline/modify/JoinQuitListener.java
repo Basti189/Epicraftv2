@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,7 +49,7 @@ public class JoinQuitListener implements Listener {
 		Player p = e.getPlayer();
 		if(list == null)
 			list = new ArrayList<String>();
-		if(!list.contains(p.getUniqueId())){
+		if(!list.contains(p.getUniqueId().toString())){
 			e.setJoinMessage(ChatColor.GOLD + "***  " + p.getName() + " hat den Server betreten  ***\nDies ist sein erster Besuch auf Epicraft");
 			e.getPlayer().sendMessage(plugin.namespace + ChatColor.WHITE + "Herzlich Willkommen auf Epicraft " + e.getPlayer().getName() + "!");
 			plugin.api.sendLog("[Epicraft - Login] " + p.getName() + " hat sich eingeloggt");

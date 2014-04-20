@@ -152,10 +152,10 @@ public class ChatListener implements Listener, CommandExecutor{
 		//Rufe Spieler auf dem Server ab
 		if(!mapChannel.containsKey(p.getUniqueId()))
 			mapChannel.put(p.getUniqueId(), 0);
-		int channel = mapChannel.get(p.getName());
+		int channel = mapChannel.get(p.getUniqueId());
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
 			//Einstellung des Spielers aufrufen
-			if(channel != mapChannel.get(player.getName()))
+			if(channel != mapChannel.get(player.getUniqueId()))
 				continue;
 			EpicraftPlayer epiPlayer = plugin.pManager.getEpicraftPlayer(player.getUniqueId());
 			
