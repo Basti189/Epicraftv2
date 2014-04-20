@@ -259,6 +259,7 @@ public class Epicraft extends JavaPlugin{
 		
 		Ticketsystem_Schild ticketSchild = new Ticketsystem_Schild(this);
 		this.getCommand("ticketschild").setExecutor(ticketSchild);
+		pm.registerEvents(ticketSchild, this);
 		
 		//Weltsystem
 		WorldManager world = new WorldManager(this);
