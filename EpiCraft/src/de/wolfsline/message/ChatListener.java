@@ -201,9 +201,6 @@ public class ChatListener implements Listener, CommandExecutor{
 		else if(p.hasPermission("epicraft.permission.moderator")){
 			return ChatColor.DARK_GREEN + p.getName();
 		}
-		else if(p.hasPermission("epicraft.permission.owner")){
-			return ChatColor.DARK_GRAY + p.getName();
-		}
 		else if(p.hasPermission("epicraft.permission.admin")){
 			return ChatColor.DARK_RED + p.getName();
 		}
