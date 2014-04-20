@@ -1,6 +1,7 @@
 package de.wolfsline.administration;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,7 +15,7 @@ import de.wolfsline.Epicraft.Epicraft;
 
 public class TeleportCommand implements CommandExecutor{
 
-	private HashMap<String, Location> map = new HashMap<String, Location>();
+	private HashMap<UUID, Location> map = new HashMap<UUID, Location>();
 	private Epicraft plugin;
 
 	public TeleportCommand(Epicraft plugin) {
@@ -36,20 +37,26 @@ public class TeleportCommand implements CommandExecutor{
 		if(label.equalsIgnoreCase("tp")){
 			if(args.length == 1){
 				if(args[0].equalsIgnoreCase("back")){
-					if(!map.containsKey(p.getName())){
+					if(!map.containsKey(p.getUniqueId())){
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Keine gespeicherte Location gefunden!");
 						return true;
 					}
-					p.teleport(map.get(p.getName()));
+					p.teleport(map.get(p.getUniqueId()));
+					map.remove(p.getUniqueId());
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest zurück teleportiert");
 					return true;
 				}
-				Player destinationPlayer = Bukkit.getServer().getPlayer(args[0]);
+				UUID destinationUUID = plugin.uuid.getUUIDFromPlayer(args[0]);
+				if(destinationUUID == null){
+					p.sendMessage(plugin.uuid.ERROR);
+					return true;
+				}
+				Player destinationPlayer = Bukkit.getServer().getPlayer(destinationUUID);
 				if(destinationPlayer == null){
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Der Spieler ist nicht online!");
 					return true;
 				}
-				map.put(p.getName(), p.getLocation());
+				map.put(p.getUniqueId(), p.getLocation());
 				p.setAllowFlight(true);
 				p.teleport(destinationPlayer.getLocation());
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest zu " + destinationPlayer.getName() + " teleportiert.");
@@ -58,8 +65,15 @@ public class TeleportCommand implements CommandExecutor{
 				return true;
 			}
 			else if(args.length == 2){
-				Player getPlayer = Bukkit.getServer().getPlayer(args[0]);
-				Player toPlayer = Bukkit.getServer().getPlayer(args[1]);
+				UUID getUUID = plugin.uuid.getUUIDFromPlayer(args[0]);
+				UUID toUUID = plugin.uuid.getUUIDFromPlayer(args[1]);
+				if(getUUID == null || toUUID == null){
+					p.sendMessage(plugin.uuid.ERROR);
+					return true;
+				}
+				Player getPlayer = Bukkit.getServer().getPlayer(getUUID);
+				Player toPlayer = Bukkit.getServer().getPlayer(toUUID);
+				
 				if(getPlayer == null || toPlayer == null){
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Der Spieler ist nicht online!");
 					return true;
@@ -75,7 +89,7 @@ public class TeleportCommand implements CommandExecutor{
 					float y = Float.valueOf(args[1]);
 					float z = Float.valueOf(args[2]);
 					Location myLocation = new Location(p.getWorld(), x, y, z);
-					map.put(p.getName(), p.getLocation());
+					map.put(p.getUniqueId(), p.getLocation());
 					p.teleport(myLocation);
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest teleportiert.");
 					plugin.api.sendLog("[Epicraft - Teleport] " + p.getName() + " wurde zu X: " + String.valueOf(x) + " Y:" + String.valueOf(y) + " Z:" + String.valueOf(z) + " teleportiert.");
