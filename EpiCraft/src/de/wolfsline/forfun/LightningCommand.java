@@ -1,5 +1,7 @@
 package de.wolfsline.forfun;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -25,7 +27,12 @@ public class LightningCommand implements CommandExecutor{
 			return true;
 		}
 		if(args.length == 1){
-			Player p = Bukkit.getPlayer(args[0]);
+			UUID targetUUID = plugin.uuid.getUUIDFromPlayer(args[0]);
+			if(targetUUID == null){
+				cs.sendMessage(plugin.uuid.ERROR);
+				return true;
+			}
+			Player p = Bukkit.getPlayer(targetUUID);
 			if(p == null){
 				cs.sendMessage(ChatColor.RED + "Spieler nicht vorhanden");
 				return true;
