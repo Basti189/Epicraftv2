@@ -1,6 +1,7 @@
 package de.wolfsline.teleport;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -16,7 +17,7 @@ import de.wolfsline.Epicraft.Epicraft;
 
 public class TeleportBack implements CommandExecutor, Listener{
 	
-	private HashMap<String, Location> deathLocation = new HashMap<String, Location>();
+	private HashMap<UUID, Location> deathLocation = new HashMap<UUID, Location>();
 	
 	private Epicraft plugin;
 	
@@ -40,11 +41,11 @@ public class TeleportBack implements CommandExecutor, Listener{
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst nicht teleportiert werden");
 			return true;
 		}
-		if(deathLocation.containsKey(p.getName())){
-			p.teleport(deathLocation.get(p.getName()));
+		if(deathLocation.containsKey(p.getUniqueId())){
+			p.teleport(deathLocation.get(p.getUniqueId()));
 			p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest an deinen letzen Todespunkt teleportiert");
 			plugin.api.sendLog("[Epicraft - Back] " + p.getName() + " wurde an den letzten Todespunkt teleportiert");
-			deathLocation.remove(p.getName());
+			deathLocation.remove(p.getUniqueId());
 			return true;
 		}
 		else{
@@ -58,7 +59,7 @@ public class TeleportBack implements CommandExecutor, Listener{
 		if(event.getEntity() instanceof Player){
 			Player p = event.getEntity();
 			Location loc = new Location(p.getLocation().getWorld(), p.getLocation().getX(), (p.getLocation().getY() + 2.0D), p.getLocation().getZ());
-			deathLocation.put(p.getName(), loc);
+			deathLocation.put(p.getUniqueId(), loc);
 		}
 	}
 
