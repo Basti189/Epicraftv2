@@ -1,6 +1,6 @@
 package de.wolfsline.administration;
 
-import de.wolfsline.Epicraft.Epicraft;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -8,6 +8,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import de.wolfsline.Epicraft.Epicraft;
 
 
 public class InventarCommand implements CommandExecutor {
@@ -33,7 +35,12 @@ public class InventarCommand implements CommandExecutor {
             p.sendMessage(plugin.namespace + ChatColor.RED + "Zu wenig Argumente!");
             return true;
         }
-        Player pu = Bukkit.getPlayer(args[0]);
+        UUID targetUUID = plugin.uuid.getUUIDFromPlayer(args[0]);
+        if(targetUUID == null){
+        	p.sendMessage(plugin.uuid.ERROR);
+        	return true;
+        }
+        Player pu = Bukkit.getPlayer(targetUUID);
         if(pu == null){
             p.sendMessage(plugin.namespace + ChatColor.RED + "Spieler existiert nicht, oder ist nicht online!");
             return true;
