@@ -346,7 +346,7 @@ public class Epicraft extends JavaPlugin{
 		//Lädt die Spieler die während eines Reloads online sind auf der Datenbank
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
 			pManager.triggerEpicraftPlayerList(player, true);
-			myChat.mapChannel.put(player.getName(), 0);
+			myChat.mapChannel.put(player.getUniqueId(), 0);
 		}
 		System.out.println("[Epicraft] Epicraft wurde gestartet");
 	}

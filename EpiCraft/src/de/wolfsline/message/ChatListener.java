@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,7 +27,7 @@ public class ChatListener implements Listener, CommandExecutor{
 	private Epicraft plugin;
 	
 	//0 = ÷ffentlicher Channel //1 = ÷ffentlicher Channel //2 = Supportchannel1 //3 = Supportchannel2
-	public HashMap<String, Integer> mapChannel = new HashMap<String, Integer>();
+	public HashMap<UUID, Integer> mapChannel = new HashMap<UUID, Integer>();
 	
 	public ChatListener(Epicraft plugin) {
 		this.plugin = plugin;
@@ -53,32 +54,37 @@ public class ChatListener implements Listener, CommandExecutor{
 		}
 		else if(args.length == 1){
 			if(args[0].equalsIgnoreCase("1")){
-				mapChannel.put(p.getName(), 0);
+				mapChannel.put(p.getUniqueId(), 0);
 				p.sendMessage(plugin.namespace + "Du bist nun im Channel \"1\"");
 				return true;
 			}
 			else if(args[0].equalsIgnoreCase("2")){
-				mapChannel.put(p.getName(), 1);
+				mapChannel.put(p.getUniqueId(), 1);
 				p.sendMessage(plugin.namespace + "Du bist nun im Channel \"2\"");
 				return true;
 			}
 			else if(args[0].equalsIgnoreCase("support1")){
-				mapChannel.put(p.getName(), 2);
+				mapChannel.put(p.getUniqueId(), 2);
 				p.sendMessage(plugin.namespace + "Du bist nun im Channel \"Support1\"");
 				return true;
 			}
 			else if(args[0].equalsIgnoreCase("support2")){
-				mapChannel.put(p.getName(), 3);
+				mapChannel.put(p.getUniqueId(), 3);
 				p.sendMessage(plugin.namespace + "Du bist nun im Channel \"Support2\"");
 				return true;
 			}
 			else {
 				//Annehmen, das ein Spieler gesucht wird
-				if(!mapChannel.containsKey(args[0])){
+				UUID targetUUID = plugin.uuid.getUUIDFromPlayer(args[0]);
+				if(targetUUID == null){
+					p.sendMessage(plugin.uuid.ERROR);
+					return true;
+				}
+				if(!mapChannel.containsKey(targetUUID)){
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Der Spieler " + args[0] + " konnte in keinem Channel gefunden werden");
 					return true;
 				}
-				int channel = mapChannel.get(args[0]);
+				int channel = mapChannel.get(targetUUID);
 				switch(channel){
 				case 0:
 					p.sendMessage(plugin.namespace + args[0] + " ist im Channel \"1\"");
@@ -104,13 +110,13 @@ public class ChatListener implements Listener, CommandExecutor{
 	@EventHandler
 	public void onJoinEvent(PlayerJoinEvent event){
 		Player p = event.getPlayer();
-		mapChannel.put(p.getName(), 0); //Standartm‰ﬂig in den ÷ffentlichen Channel 0
+		mapChannel.put(p.getUniqueId(), 0); //Standartm‰ﬂig in den ÷ffentlichen Channel 0
 	}
 	
 	@EventHandler
 	public void OnQuitEvent(PlayerQuitEvent event){
 		Player p = event.getPlayer();
-		mapChannel.remove(p.getName());
+		mapChannel.remove(p.getUniqueId());
 	}
 	
 	// **** Chat **** //
@@ -144,8 +150,8 @@ public class ChatListener implements Listener, CommandExecutor{
 		String timeStamp = sdf.format(new Date());
 		
 		//Rufe Spieler auf dem Server ab
-		if(!mapChannel.containsKey(p.getName()))
-			mapChannel.put(p.getName(), 0);
+		if(!mapChannel.containsKey(p.getUniqueId()))
+			mapChannel.put(p.getUniqueId(), 0);
 		int channel = mapChannel.get(p.getName());
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
 			//Einstellung des Spielers aufrufen
