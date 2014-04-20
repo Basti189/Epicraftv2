@@ -147,6 +147,22 @@ public class Ticketsystem_Schild implements CommandExecutor, Listener{
 		}
 	}
 	
+	private int getNumberFromLine(String line){
+		if(line.startsWith("[") && line.endsWith("]")){
+			line = line.replace("[", "");
+			line = line.replace("]", "");
+			int ticketID = 0;
+			try{
+				ticketID = Integer.valueOf(line);
+			}
+			catch(NumberFormatException nfe){
+				
+			}
+			return ticketID;
+		}
+		return 0;
+	}
+	
 	@EventHandler
 	public void onInteractEvent(PlayerInteractEvent event){
 		Player p = event.getPlayer();
@@ -156,8 +172,8 @@ public class Ticketsystem_Schild implements CommandExecutor, Listener{
 			Sign sign = (Sign) event.getClickedBlock().getState();
 			if(map.containsKey(p.getUniqueId())){
 				String ticketID = map.get(p.getUniqueId());
-				sign.setLine(0, ChatColor.RED + "[Ticket]");
-				sign.setLine(1, ChatColor.BLUE + ticketID);
+				sign.setLine(0, ChatColor.RED + "[" + ticketID + "]");
+				sign.setLine(1, "-----------------");
 				sign.setLine(2, ChatColor.WHITE + "Rechtsklick");
 				sign.setLine(3, "-----------------");
 				sign.update();
@@ -166,9 +182,9 @@ public class Ticketsystem_Schild implements CommandExecutor, Listener{
 			}
 			else{
 				String line0 = ChatColor.stripColor(sign.getLine(0));
-				if(line0.equalsIgnoreCase("[Ticket]")){
-					String ticketID = ChatColor.stripColor(sign.getLine(1));
-					showPlayerSignMessage(p, ticketID);
+				int ticketID = getNumberFromLine(line0);
+				if(ticketID != 0){
+					showPlayerSignMessage(p, String.valueOf(ticketID));
 				}
 			}
 		}
@@ -180,7 +196,8 @@ public class Ticketsystem_Schild implements CommandExecutor, Listener{
 		if (event.getBlock().getType() == Material.WALL_SIGN || event.getBlock().getType() == Material.SIGN_POST) {
 			Sign sign = (Sign) event.getBlock().getState();
 			String line0 = ChatColor.stripColor(sign.getLine(0));
-			if(line0.equalsIgnoreCase("[Ticket]")){
+			int ticketID = getNumberFromLine(line0);
+			if(ticketID != 0){
 				if(!p.hasPermission("epicraft.ticket.team")){
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst das Schild nicht entfernen!\n" +
 							"Bitte wende dich an einen Teamler");
@@ -194,7 +211,8 @@ public class Ticketsystem_Schild implements CommandExecutor, Listener{
 	public void onSignChange(SignChangeEvent event){
 		Player p = event.getPlayer();
 		String line0 = ChatColor.stripColor(event.getLine(0));
-		if(line0.equalsIgnoreCase("[Ticket]")){
+		int ticketID = getNumberFromLine(line0);
+		if(ticketID != 0){
 			p.kickPlayer(ChatColor.RED + "Nein!");
 			event.getBlock().breakNaturally();
 		}

@@ -76,7 +76,7 @@ public class WhoIsCommand implements CommandExecutor{
 							p.sendMessage(ChatColor.GOLD + "Position: " + ChatColor.WHITE + (int)p.getLocation().getX() + " " + (int)p.getLocation().getY() + " " + (int)p.getLocation().getZ());
 							p.sendMessage(ChatColor.GOLD + "Erster Login: am " + ChatColor.WHITE + dateFormat.format(dateFirstPlayed) + ChatColor.GOLD + " um " + ChatColor.WHITE + timeFormat.format(dateFirstPlayed));
 							p.sendMessage(ChatColor.GOLD + "Letzter Login: am " + ChatColor.WHITE + dateFormat.format(dateLastPlayed) + ChatColor.GOLD + " um " + ChatColor.WHITE + timeFormat.format(dateLastPlayed));
-							p.sendMessage(ChatColor.GOLD + "Spielzeit: " + ChatColor.WHITE + timePlayed); //<-- Muss umgerechnet werden
+							p.sendMessage(ChatColor.GOLD + "Spielzeit: " + ChatColor.WHITE + (timePlayed / 1000 / 60) + ChatColor.GOLD + " Min"); //<-- Muss umgerechnet werden
 							p.sendMessage(ChatColor.GOLD + "Standort: " + ChatColor.WHITE + country.replace("Germany", "Deutschland"));
 							p.sendMessage(ChatColor.GOLD + "---------------[Information]---------------");
 						}
