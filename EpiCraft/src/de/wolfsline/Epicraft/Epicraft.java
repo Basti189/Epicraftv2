@@ -29,6 +29,7 @@ import de.wolfsline.administration.TeleportCommand;
 import de.wolfsline.administration.UnHideCommand;
 import de.wolfsline.administration.WhoIsCommand;
 import de.wolfsline.afk.AFK;
+import de.wolfsline.blocksecure.BlockSecure;
 import de.wolfsline.data.MySQL;
 import de.wolfsline.epimaster.EpiMaster;
 import de.wolfsline.forfun.ChatFakerCommand;
@@ -231,9 +232,12 @@ public class Epicraft extends JavaPlugin{
 		this.getCommand("tp").setExecutor(teleport);
 		
 		//Sichert Truhen und Öfen
-		ChestPassword chestPasswort = new ChestPassword(this);
+		/*ChestPassword chestPasswort = new ChestPassword(this);
 		this.getCommand("secure").setExecutor(chestPasswort);
-		pm.registerEvents(chestPasswort, this);
+		pm.registerEvents(chestPasswort, this);*/
+		BlockSecure blockSecure = new BlockSecure(this);
+		this.getCommand("secure").setExecutor(blockSecure);
+		pm.registerEvents(blockSecure, this);
 		
 		//Sichert die Pferde eines Spielers
 		HorseListener horse = new HorseListener(this);
@@ -355,6 +359,7 @@ public class Epicraft extends JavaPlugin{
 		if(!sql.hasConnection()){ //Wenn keine Verbindung
 			this.sql.closeConnection();
 			this.sql = new MySQL();
+			this.api.sendLog("[Epicraft - SQL] Die Verbindung wird neu aufgebaut");
 		}
 		return this.sql;
 	}
