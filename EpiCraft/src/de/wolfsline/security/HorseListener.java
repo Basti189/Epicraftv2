@@ -54,7 +54,7 @@ public class HorseListener implements CommandExecutor, Listener{
 		if(args.length == 1){
 			UUID targetUUID = plugin.uuid.getUUIDFromPlayer(args[0]);
 			if(targetUUID == null){
-				p.sendMessage(plugin.namespace + ChatColor.RED + "Die UUID des Spielers konnte nicht ermittelt werden!");
+				p.sendMessage(plugin.uuid.ERROR);
 				return true;
 			}
 			Player newOwner = Bukkit.getServer().getPlayer(targetUUID);
@@ -122,22 +122,25 @@ public class HorseListener implements CommandExecutor, Listener{
 	
 	@EventHandler
 	public void onHangingBreakEvent(HangingBreakByEntityEvent event){
-		//if(event.getRemover() instanceof Player){
+		if(event.getRemover() instanceof Player){
 			//Player p = (Player) event.getRemover();
 			if(event.getEntity() instanceof LeashHitch){
-				//LeashHitch leash = (LeashHitch) event.getEntity();
 				event.setCancelled(true);
-				/*if(leash.getVehicle() instanceof Horse){
+				/*LeashHitch leash = (LeashHitch) event.getEntity();
+				if(leash.getVehicle() instanceof Horse){
 					Bukkit.getServer().broadcastMessage("Horse");
 					Horse horse = (Horse) event.getEntity();
-					if(!horse.getOwner().getName().equalsIgnoreCase(p.getName())){
+					AnimalTamer tamer = horse.getOwner();
+					if(tamer == null){
+						return;
+					}
+					if(!tamer.getUniqueId().equals(p.getUniqueId())){
 						event.setCancelled(true);
-						p.sendMessage(plugin.namespace + ChatColor.RED + "Zugriff auf das Maultier von " + horse.getOwner().getName() + " verweigert!");
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Zugriff auf das Maultier von " + tamer.getName() + " verweigert!");
 					}
 				}*/
-				
 			}
-		//}
+		}
 	}
 	
 	@EventHandler
@@ -170,12 +173,13 @@ public class HorseListener implements CommandExecutor, Listener{
 			Entity d = event.getDamager();
 			Player damager = null;
 			AnimalTamer tamer = horse.getOwner();
+			if(tamer == null){
+				return;
+			}
 			if(event.getDamager() instanceof Player){
 				damager = (Player) event.getDamager();
-				if(tamer != null){
-					if(tamer.getUniqueId().equals(damager.getUniqueId())){
-						return;
-					}
+				if(tamer.getUniqueId().equals(damager.getUniqueId())){
+					return;
 				}
 				damager.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst dem Maultier von " + tamer.getName() + " keinen schaden hinzufügen!");
 				plugin.api.sendLog("[Epicraft - Pferd] " + damager.getName() + " versucht dem Maultier von " + tamer.getName() + " schaden zuzufügen");
