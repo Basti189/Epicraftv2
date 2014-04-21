@@ -59,7 +59,6 @@ import de.wolfsline.register.QuestSignListener;
 import de.wolfsline.restriction.BanCommand;
 import de.wolfsline.restriction.KickCommand;
 import de.wolfsline.restriction.RestrictionCommand;
-import de.wolfsline.security.ChestPassword;
 import de.wolfsline.security.CreatureSpawnListener;
 import de.wolfsline.security.HorseListener;
 import de.wolfsline.security.MapSizeControll;
