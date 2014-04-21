@@ -45,6 +45,7 @@ public class CommandListener implements Listener{
 		commandsSpieler.add("channel");
 		commandsSpieler.add("ticket");
 		commandsSpieler.add("afk");
+		commandsSpieler.add("secure");
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
