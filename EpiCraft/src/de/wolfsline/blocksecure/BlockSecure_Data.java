@@ -12,6 +12,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import de.wolfsline.Epicraft.Epicraft;
 import de.wolfsline.data.MySQL;
@@ -115,7 +118,6 @@ public class BlockSecure_Data {
 			location.setZ(location.getZ() - 1.0D);
 			newBlock = location.getBlock();
 			if(newBlock.getType() == Material.CHEST){
-				Bukkit.getServer().broadcastMessage("Z - 1");
 				return newBlock;
 			}
 			location.setZ(location.getZ() + 1.0D);
@@ -171,6 +173,14 @@ public class BlockSecure_Data {
 			sql.closeRessources(rs, st);
 		}
 		return isSave;
+	}
+	
+	public boolean canPlayerProtectBlock(Player p, Block block){
+		WorldGuardPlugin wgPlugin = this.plugin.getWorldGuard();
+		if(wgPlugin == null){
+			return false;
+		}
+		return wgPlugin.canBuild(p, block);
 	}
 	
 	private String getInhaber(boolean isOwner){

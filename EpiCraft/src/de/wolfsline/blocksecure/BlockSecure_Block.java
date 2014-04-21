@@ -5,9 +5,6 @@ import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
-
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import de.wolfsline.Epicraft.Epicraft;
 
@@ -43,14 +40,6 @@ public class BlockSecure_Block {
 	
 	public World getWorld(){
 		return this.location.getWorld();
-	}
-	
-	public boolean canPlayerProtectBlock(Player p){
-		WorldGuardPlugin wgPlugin = this.plugin.getWorldGuard();
-		if(wgPlugin == null){
-			return false;
-		}
-		return wgPlugin.canBuild(p, this.location.getBlock());
 	}
 
 	public boolean isHopperAllow() {

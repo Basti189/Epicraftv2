@@ -20,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPistonEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -94,6 +95,12 @@ public class BlockSecure implements CommandExecutor, Listener {
 					BlockSecure_Block secureBlock = data.getBlockSecure(block);
 					if(action.equals("add")){
 						if(secureBlock == null){
+							if(!data.canPlayerProtectBlock(p, block)){
+								p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst auf diesem Grundstück keine Blöcke sichern!");
+								event.setCancelled(true);
+								map.remove(p.getUniqueId());
+								return;
+							}
 							data.secureBlock(p.getUniqueId(), block, true);
 							p.sendMessage(plugin.namespace + ChatColor.WHITE + "D" + materialToSting(blockType) + " wurde gesichert");
 							event.setCancelled(true);
@@ -101,7 +108,9 @@ public class BlockSecure implements CommandExecutor, Listener {
 							return;
 						}
 						p.sendMessage(plugin.namespace + ChatColor.RED + "D" + materialToSting(blockType) + " ist bereits gesichert!");
-						
+						event.setCancelled(true);
+						map.remove(p.getUniqueId());
+						return;
 					}
 					else if(action.equals("remove")){
 						if(secureBlock == null){
@@ -241,7 +250,7 @@ public class BlockSecure implements CommandExecutor, Listener {
 					return;
 				}
 				event.setCancelled(true);
-				p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst auf die " + materialToSting(blockType) + " nicht abbauen!");
+				p.sendMessage(plugin.namespace + ChatColor.RED + "D" + materialToSting(blockType) + " kann nicht von dir abgebaut werden!");
 			}
 		}
 	}
@@ -256,8 +265,10 @@ public class BlockSecure implements CommandExecutor, Listener {
 			Block block = event.getBlock();
 			Block nextBlock = data.isDoubleChest(block);
 			if(nextBlock != null){
-				p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst die " + materialToSting(blockType) + " nicht neben die gesicherte " + materialToSting(nextBlock.getType()) + " setzen!");
-				event.setCancelled(true);
+				if(data.getBlockSecure(nextBlock) != null){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "D" + materialToSting(blockType) + " kann nicht neben einen gesicherten Block gesetzt werden!");
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
@@ -297,7 +308,7 @@ public class BlockSecure implements CommandExecutor, Listener {
             }
 		}
 	}
-	
+
 	@EventHandler
 	public void onPlayerQuitEvent(PlayerQuitEvent event){
 		Player p = event.getPlayer();
@@ -320,6 +331,9 @@ public class BlockSecure implements CommandExecutor, Listener {
 		}
 		else if(mat == Material.FURNACE){
 			return "er Ofen";
+		}
+		else if(mat == Material.TRAP_DOOR){
+			return "ie Falltüre";
 		}
 		else{
 			return mat.toString();
