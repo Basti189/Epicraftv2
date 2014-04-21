@@ -352,13 +352,9 @@ public class Epicraft extends JavaPlugin{
 	}
 	
 	public MySQL getMySQL(){ //Löst nach ein paar Stunden fehler aus -> Lösung?
-		try {
-			if(sql.getConnection().isClosed()){
-				sql.openConnection();
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if(!sql.hasConnection()){ //Wenn keine Verbindung
+			this.sql.closeConnection();
+			this.sql = new MySQL();
 		}
 		return this.sql;
 	}

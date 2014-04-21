@@ -69,12 +69,14 @@ public class MySQL {
 	
 	public boolean hasConnection(){
 		try {
-			return this.conn != null || this.conn.isValid(1);
+			if(this.conn != null){
+				return this.conn.isValid(1);
+			}
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			return false;
 		}
+		return false;
 	}
 	
 	public void queryUpdate(String query){
