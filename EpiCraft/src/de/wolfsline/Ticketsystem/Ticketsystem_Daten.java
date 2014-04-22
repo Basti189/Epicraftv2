@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -19,6 +20,8 @@ import de.wolfsline.data.MySQL;
 public class Ticketsystem_Daten {
 
 	private Epicraft plugin;
+	
+	private HashMap<UUID, Location> map = new HashMap<UUID, Location>();
 	
 	public Ticketsystem_Daten(Epicraft plugin){
 		this.plugin = plugin;
@@ -75,12 +78,13 @@ public class Ticketsystem_Daten {
 				p.sendMessage("Ticket: " + rs.getString(3));
 				p.sendMessage("Erstellt: am " + rs.getString(11) + " um " + rs.getString(10));
 				p.sendMessage(ChatColor.GOLD + "---------------[Dein Ticket]---------------");
+				map.put(p.getUniqueId(), p.getLocation());
 				Location loc = new Location(Bukkit.getServer().getWorld(rs.getString(7)), rs.getDouble(4), rs.getDouble(5), rs.getDouble(6));
 				p.setAllowFlight(true);
 				p.setFlying(true);
 				p.setFlySpeed(0.1F);
 				p.teleport(loc);
-				Player player = Bukkit.getServer().getPlayer(rs.getString(2));
+				Player player = Bukkit.getServer().getPlayer(UUID.fromString(rs.getString(2)));
 				if(player != null)
 					player.sendMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " bearbeitet dein Ticket[" + ID + "] gerade.");
 			}
@@ -139,7 +143,7 @@ public class Ticketsystem_Daten {
 					String query = "UPDATE Tickets SET Team='" + p.getUniqueId() + "', Status='bearbeitet' WHERE ID='" + ID + "'";
 					plugin.getMySQL().queryUpdate(query);
 					plugin.api.sendLog("[Epicraft - Ticketsystem] " + p.getName() + " hat Ticket[" + ID + "] fertig bearbeitet");
-					Player player = Bukkit.getServer().getPlayer(plugin.uuid.getNameFromUUID(uuid));
+					Player player = Bukkit.getServer().getPlayer(uuid);
 					if(player != null){
 						player.sendMessage(plugin.namespace + ChatColor.WHITE + "Dein Ticket[" + ID + "] wurde bearbeitet");
 					}
@@ -227,6 +231,7 @@ public class Ticketsystem_Daten {
 				p.sendMessage("Team: " + plugin.uuid.getNameFromUUID(UUID.fromString(rs.getString(9))));
 				p.sendMessage(ChatColor.GOLD + "---------------[Ticket " + ID + "]---------------");
 				if(withTeleport){
+					map.put(p.getUniqueId(), p.getLocation());
 					Location loc = new Location(Bukkit.getServer().getWorld(rs.getString(7)), rs.getDouble(4), rs.getDouble(5), rs.getDouble(6));
 					p.setAllowFlight(true);
 					p.setFlying(true);
@@ -245,5 +250,14 @@ public class Ticketsystem_Daten {
 		finally{
 			sql.closeRessources(rs, st);
 		}
+	}
+	
+	public Location getLastLocationFromPlayer(UUID uuid){
+		if(map.containsKey(uuid)){
+			Location loc = map.get(uuid);
+			map.remove(uuid);
+			return loc;
+		}
+		return null;
 	}
 }

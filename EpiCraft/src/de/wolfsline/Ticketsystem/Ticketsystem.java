@@ -1,6 +1,7 @@
 package de.wolfsline.Ticketsystem;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -88,6 +89,20 @@ public class Ticketsystem implements CommandExecutor{
 						return true;
 					}
 					data.showTicketWithNumber(p, ID, true);
+					return true;
+				}
+				else if(args[0].equalsIgnoreCase("back")){
+					if(p.isInsideVehicle()){
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst nicht teleportiert werden!");
+						return true;
+					}
+					Location lastLocation = data.getLastLocationFromPlayer(p.getUniqueId());
+					if(lastLocation == null){
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Es wurde keine gespeicherte Location gefunden!");
+						return true;
+					}
+					p.teleport(lastLocation);
+					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest zurück teleportiert");
 					return true;
 				}
 			}
