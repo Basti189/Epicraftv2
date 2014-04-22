@@ -216,7 +216,7 @@ public class BlockSecure implements CommandExecutor, Listener {
 		if(!(event.getClickedBlock() instanceof Block))
 			return;
 		Material blockType = event.getClickedBlock().getType();
-		if ((blockType == Material.WOOD_DOOR || blockType == Material.IRON_DOOR_BLOCK || blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST || blockType == Material.FURNACE) && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+		if ((blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST/*blockType == Material.WOOD_DOOR || blockType == Material.IRON_DOOR_BLOCK || blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST || blockType == Material.FURNACE*/) && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Block block = event.getClickedBlock();
 			BlockSecure_Block secureBlock = data.getBlockSecure(block);
 			if(secureBlock != null){
@@ -240,7 +240,7 @@ public class BlockSecure implements CommandExecutor, Listener {
 		if(!(event.getBlock() instanceof Block))
 			return;
 		Material blockType = event.getBlock().getType();
-		if (blockType == Material.WOOD_DOOR || blockType == Material.IRON_DOOR_BLOCK || blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST || blockType == Material.FURNACE) {
+		if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST/*blockType == Material.WOOD_DOOR || blockType == Material.IRON_DOOR_BLOCK || blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST || blockType == Material.FURNACE*/) {
 			Block block = event.getBlock();
 			BlockSecure_Block secureBlock = data.getBlockSecure(block);
 			if(secureBlock != null){
