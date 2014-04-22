@@ -92,6 +92,12 @@ public class Ticketsystem implements CommandExecutor{
 					return true;
 				}
 				else if(args[0].equalsIgnoreCase("back")){
+					int ID = data.isTeamOnTicket(p);
+					if(ID > 0){
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Du bearbeitest gerade das Ticket[" + ID + "]!");
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte gebe das Ticket frei oder schlieﬂe die Bearbeitung ab, um teleportiert zu werden");
+						return true;
+					}
 					if(p.isInsideVehicle()){
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst nicht teleportiert werden!");
 						return true;
