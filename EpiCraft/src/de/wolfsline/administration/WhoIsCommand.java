@@ -115,6 +115,7 @@ public class WhoIsCommand implements CommandExecutor{
 				
 				p.sendMessage(ChatColor.GOLD + "---------------[Information]---------------");
 				p.sendMessage(ChatColor.GOLD + "Spieler: " + ChatColor.WHITE + offPlayer.getName());
+				p.sendMessage(ChatColor.GOLD + "UUID: " + ChatColor.WHITE + offlineUUID);
 				p.sendMessage(ChatColor.GOLD + "Erster Login: am " + ChatColor.WHITE + dateFormat.format(dateFirstPlayed) + ChatColor.GOLD + " um " + ChatColor.WHITE + timeFormat.format(dateFirstPlayed));
 				p.sendMessage(ChatColor.GOLD + "Letzter Login: am " + ChatColor.WHITE + dateFormat.format(dateLastPlayed) + ChatColor.GOLD + " um " + ChatColor.WHITE + timeFormat.format(dateLastPlayed));
 				p.sendMessage(ChatColor.GOLD + "Gebannt: " + ChatColor.WHITE + (offPlayer.isBanned() ? "Ja" : "Nein"));
