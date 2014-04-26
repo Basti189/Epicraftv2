@@ -43,8 +43,29 @@ public class Ticketsystem implements CommandExecutor{
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Du bearbeitest gerade das Ticket[" + ID + "]!");
 						return true;
 					}
+					if(args.length == 2){
+						try{
+							ID = Integer.valueOf(args[1]);
+						}
+						catch (NumberFormatException nfe){
+							p.sendMessage(plugin.namespace + ChatColor.RED + args[1] + " ist keine Zahl!");
+							return true;
+						}
+						catch (IndexOutOfBoundsException ioobe){
+							p.sendMessage(plugin.namespace + ChatColor.RED + "Keine Zahl eingegeben!");
+							p.sendMessage(plugin.namespace + ChatColor.RED + "/ticket next <ZAHL>");
+							return true;
+						}
+						data.TicketForTeamWithID(p, ID);
+						return true;
+					}
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Nächstes offene Ticket wird gesucht...");
 					data.TicketForTeam(p);
+					return true;
+				}
+				else if(args[0].equalsIgnoreCase("list")){
+					data.showTicketsWithStateOpenForTeam(p);
+					return true;
 				}
 				else if(args[0].equalsIgnoreCase("release")){
 					if(data.setTicketState(p, args[0])){

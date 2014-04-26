@@ -77,13 +77,17 @@ public class Ticketsystem_Daten {
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Vorgang wurde abgebrochen. Bitte Administrator kontaktieren!");
 					return;
 				}
+				if(p.isInsideVehicle()){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst zu keinem Ticket teleportiert werden!");
+					return;
+				}
 				ID = rs.getInt(1);
 				p.sendMessage(ChatColor.GOLD + "---------------[Dein Ticket]---------------");
-				p.sendMessage("ID: " + ID);
+				p.sendMessage(ChatColor.GOLD + "ID: " + ChatColor.WHITE + ID);
 				UUID uuid = UUID.fromString(rs.getString(2));
-				p.sendMessage("Von: " + plugin.uuid.getNameFromUUID(uuid));
-				p.sendMessage("Ticket: " + rs.getString(3));
-				p.sendMessage("Erstellt: am " + rs.getString(11) + " um " + rs.getString(10));
+				p.sendMessage(ChatColor.GOLD + "Von: " + ChatColor.WHITE + plugin.uuid.getNameFromUUID(uuid));
+				p.sendMessage(ChatColor.GOLD + "Ticket: " + ChatColor.WHITE + rs.getString(3));
+				p.sendMessage(ChatColor.GOLD + "Erstellt: am " + ChatColor.WHITE + rs.getString(11) + ChatColor.GOLD + " um " + ChatColor.WHITE + rs.getString(10));
 				p.sendMessage(ChatColor.GOLD + "---------------[Dein Ticket]---------------");
 				map.put(p.getUniqueId(), p.getLocation());
 				Location loc = new Location(Bukkit.getServer().getWorld(rs.getString(7)), rs.getDouble(4), rs.getDouble(5), rs.getDouble(6));
@@ -99,6 +103,60 @@ public class Ticketsystem_Daten {
 			String query = "UPDATE Tickets SET Team='" + p.getUniqueId() + "', Status='wird bearbeitet' WHERE ID='" + ID + "'";
 			plugin.getMySQL().queryUpdate(query);
 			plugin.api.sendLog("[Epicraft - Ticketsystem] " + p.getName() + " bearbeitet nun Ticket[" + ID + "]");
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void TicketForTeamWithID(Player p, int ID){
+		if(countTicketsWithState("offen") == 0){
+			p.sendMessage(plugin.namespace + ChatColor.RED + "Es gibt keine Tickets zu bearbeiten");
+			return;
+		}
+		
+		MySQL sql = this.plugin.getMySQL();
+		Connection conn = sql.getConnection();
+		ResultSet rs = null;
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM Tickets WHERE Status='offen' AND ID='" + ID + "'");
+			rs = st.executeQuery();
+			if(rs.next()){
+				World world = Bukkit.getServer().getWorld(rs.getString(7));
+				if(world == null){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Die Welt\"" + rs.getString(7) + "\" wurde nicht geladen!");
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Vorgang wurde abgebrochen. Bitte Administrator kontaktieren!");
+					return;
+				}
+				if(p.isInsideVehicle()){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Du kannst zu keinem Ticket teleportiert werden!");
+					return;
+				}
+				p.sendMessage(ChatColor.GOLD + "---------------[Dein Ticket]---------------");
+				p.sendMessage(ChatColor.GOLD + "ID: " + ChatColor.WHITE + ID);
+				UUID uuid = UUID.fromString(rs.getString(2));
+				p.sendMessage(ChatColor.GOLD + "Von: " + ChatColor.WHITE + plugin.uuid.getNameFromUUID(uuid));
+				p.sendMessage(ChatColor.GOLD + "Ticket: " + ChatColor.WHITE + rs.getString(3));
+				p.sendMessage(ChatColor.GOLD + "Erstellt: am " + ChatColor.WHITE + rs.getString(11) + ChatColor.GOLD + " um " + ChatColor.WHITE + rs.getString(10));
+				p.sendMessage(ChatColor.GOLD + "---------------[Dein Ticket]---------------");
+				map.put(p.getUniqueId(), p.getLocation());
+				Location loc = new Location(Bukkit.getServer().getWorld(rs.getString(7)), rs.getDouble(4), rs.getDouble(5), rs.getDouble(6));
+				p.setAllowFlight(true);
+				p.setFlying(true);
+				p.setFlySpeed(0.1F);
+				p.teleport(loc);
+				Player player = Bukkit.getServer().getPlayer(UUID.fromString(rs.getString(2)));
+				if(player != null)
+					player.sendMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " bearbeitet dein Ticket[" + ID + "] gerade.");
+				sql.closeRessources(rs, st);
+				String query = "UPDATE Tickets SET Team='" + p.getUniqueId() + "', Status='wird bearbeitet' WHERE ID='" + ID + "'";
+				plugin.getMySQL().queryUpdate(query);
+				plugin.api.sendLog("[Epicraft - Ticketsystem] " + p.getName() + " bearbeitet nun Ticket[" + ID + "]");
+			}
+			else{
+				p.sendMessage(plugin.namespace + ChatColor.RED + "Das Ticket[" + ID + "] exsistiert nicht oder wurde schon bearbeitet!");
+			}
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -198,18 +256,41 @@ public class Ticketsystem_Daten {
 		ResultSet rs = null;
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM Tickets WHERE UUID='" + p.getUniqueId() + "'");
+			st = conn.prepareStatement("SELECT * FROM Tickets WHERE UUID='" + p.getUniqueId() + "' AND (Status='offen' OR Status='wird bearbeitet')");
 			rs = st.executeQuery();
 			p.sendMessage(ChatColor.GOLD + "---------------[Deine Tickets]---------------");
 			while(rs.next()){
-				if(rs.getString(8).equals("bearbeitet"))
-					continue;
-				p.sendMessage(ChatColor.GOLD + "[" + rs.getInt(1) + "]" + ChatColor.WHITE + " - " + rs.getString(8) + " -> " + rs.getString(3));
+				p.sendMessage(ChatColor.GOLD + "[" + ChatColor.WHITE + rs.getInt(1) + ChatColor.GOLD + "]" + " - " + ChatColor.WHITE + rs.getString(8) + ChatColor.GOLD + " -> " + ChatColor.WHITE + rs.getString(3));
 				if(rs.getString(8).equalsIgnoreCase("wird bearbeitet")){
 					p.sendMessage(ChatColor.WHITE + "Wird von " + plugin.uuid.getNameFromUUID(UUID.fromString(rs.getString(9))) + " bearbeitet");
 				}
 			}
 			p.sendMessage(ChatColor.GOLD + "---------------[Deine Tickets]---------------");
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			sql.closeRessources(rs, st);
+		}
+	}
+	
+	public void showTicketsWithStateOpenForTeam(Player p){
+		MySQL sql = this.plugin.getMySQL();
+		Connection conn = sql.getConnection();
+		ResultSet rs = null;
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM Tickets WHERE Status='offen'");
+			rs = st.executeQuery();
+			p.sendMessage(ChatColor.GOLD + "---------------[Offene Tickets]---------------");
+			while(rs.next()){
+				p.sendMessage(ChatColor.GOLD + "[" + ChatColor.WHITE + rs.getInt(1) + ChatColor.GOLD + "]" + " - " + plugin.uuid.getNameFromUUID(UUID.fromString(rs.getString(2))) + ChatColor.GOLD + " -> " + ChatColor.WHITE + rs.getString(3));
+				if(rs.getString(8).equalsIgnoreCase("wird bearbeitet")){
+					p.sendMessage(ChatColor.WHITE + "Wird von " + plugin.uuid.getNameFromUUID(UUID.fromString(rs.getString(9))) + " bearbeitet");
+				}
+			}
+			p.sendMessage(ChatColor.GOLD + "---------------[OffeneTickets]---------------");
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();
