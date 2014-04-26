@@ -32,23 +32,21 @@ public class Ticketsystem implements CommandExecutor{
 			return true;
 		}
 		if(args.length == 0){//Zeige Tickets an, welche noch offen sind
-			if(p.hasPermission("epicraft.ticket.team")){
-				int ID = data.isTeamOnTicket(p);
-				if(ID > 0){
-					p.sendMessage(plugin.namespace + ChatColor.RED + "Du bearbeitest gerade das Ticket[" + ID + "]!");
-					return true;
-				}
-				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Nächstes offene Ticket wird gesucht...");
-				data.TicketForTeam(p);
-			}
-			else{
-				data.showTicketsWithStateOpen(p);
-			}
+			data.showTicketsWithStateOpen(p);
 			return true;
 		}
 		else if(args.length >= 1){
 			if(p.hasPermission("epicraft.ticket.team")){
-				if(args[0].equalsIgnoreCase("release")){
+				if(args[0].equalsIgnoreCase("next")){
+					int ID = data.isTeamOnTicket(p);
+					if(ID > 0){
+						p.sendMessage(plugin.namespace + ChatColor.RED + "Du bearbeitest gerade das Ticket[" + ID + "]!");
+						return true;
+					}
+					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Nächstes offene Ticket wird gesucht...");
+					data.TicketForTeam(p);
+				}
+				else if(args[0].equalsIgnoreCase("release")){
 					if(data.setTicketState(p, args[0])){
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + "Das Ticket wurde als \"offen\" markiert");
 					}	
