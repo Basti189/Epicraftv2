@@ -2,6 +2,9 @@ package de.wolfsline.teleport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.block.Sign;
@@ -13,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 
@@ -214,11 +218,58 @@ public class WorldManager implements CommandExecutor, Listener{
 		}
 	}
 	
-	/*@EventHandler Wird nicht verwendet, da die Portale deaktiviert sind
+	@EventHandler
 	public void onEntityPortalEnterEvent(EntityPortalEnterEvent event){
 		if(event.getEntity() instanceof Player){
+			Player p = (Player) event.getEntity();
+			Location loc = p.getEyeLocation();
+			Sign sign = getsignNearPlayer(loc);
+			if(sign == null)
+				return;
+			String line[] = sign.getLines();
+			for(int i = 0 ; i < 4 ; i++ ){
+				line[i] = ChatColor.stripColor(line[i]);
+			}
+			if(line[0].equals("[Welt]")){
+				World world = Bukkit.getServer().getWorld(line[2]);
+				if(world != null){
+					p.teleport(world.getSpawnLocation());
+				}
+			}
 		}
-	}*/
+	}
+	
+	public Sign getsignNearPlayer(Location loc){
+		Location tmp = loc.clone();
+		for(double i = 0.0 ; i <= 5.0 ; i++){
+			tmp.setX(loc.getX() + i);
+			if(tmp.getBlock().getType() == Material.WALL_SIGN || tmp.getBlock().getType() == Material.SIGN_POST){
+				return (Sign) tmp.getBlock().getState();
+			}
+		}
+		tmp = loc.clone();
+		for(double i = 0.0 ; i <= 5.0 ; i++){
+			tmp.setX(loc.getX() - i);
+			if(tmp.getBlock().getType() == Material.WALL_SIGN || tmp.getBlock().getType() == Material.SIGN_POST){
+				return (Sign) tmp.getBlock().getState();
+			}
+		}
+		tmp = loc.clone();
+		for(double i = 0.0 ; i <= 5.0 ; i++){
+			tmp.setZ(loc.getZ() + i);
+			if(tmp.getBlock().getType() == Material.WALL_SIGN || tmp.getBlock().getType() == Material.SIGN_POST){
+				return (Sign) tmp.getBlock().getState();
+			}
+		}
+		tmp = loc.clone();
+		for(double i = 0.0 ; i <= 5.0 ; i++){
+			tmp.setZ(loc.getZ() - i);
+			if(tmp.getBlock().getType() == Material.WALL_SIGN || tmp.getBlock().getType() == Material.SIGN_POST){
+				return (Sign) tmp.getBlock().getState();
+			}
+		}
+		return null;
+	}
 	
 	@EventHandler
 	public void onPortalCreateEvent(PortalCreateEvent event){
