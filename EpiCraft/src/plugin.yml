@@ -233,6 +233,11 @@ commands:
     usage: /savesign <Zeile> <Text>
     permission: epicraft.sign.save
 
+  system:
+    description: Setzt die Schilder
+    usage: /system
+    permissions: epicraft.sign.system
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft

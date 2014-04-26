@@ -64,6 +64,7 @@ import de.wolfsline.security.MapSizeControll;
 import de.wolfsline.security.Region;
 import de.wolfsline.settings.Settings;
 import de.wolfsline.sign.SaveSign;
+import de.wolfsline.sign.Systemsign;
 import de.wolfsline.statistics.KillCounter;
 import de.wolfsline.teleport.SignLift;
 import de.wolfsline.teleport.TeleportBack;
@@ -345,6 +346,11 @@ public class Epicraft extends JavaPlugin{
 		//Lebensanzeige der Mobs
 		DamageListener healthbar = new DamageListener(this);
 		pm.registerEvents(healthbar, this);
+		
+		//Systemschilder
+		Systemsign sysSign = new Systemsign(this);
+		this.getCommand("system").setExecutor(sysSign);
+		pm.registerEvents(sysSign, this);
 		
 		//Lädt die Spieler die während eines Reloads online sind auf der Datenbank
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
