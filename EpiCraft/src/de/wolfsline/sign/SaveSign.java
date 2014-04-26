@@ -1,4 +1,4 @@
-package de.wolfsline.Sign;
+package de.wolfsline.sign;
 
 import java.util.HashMap;
 

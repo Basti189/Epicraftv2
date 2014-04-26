@@ -13,7 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import de.wolfsline.API.EventAPI;
-import de.wolfsline.Sign.SaveSign;
 import de.wolfsline.Ticketsystem.Ticketsystem;
 import de.wolfsline.Ticketsystem.Ticketsystem_Schild;
 import de.wolfsline.UUID.MyUUID;
@@ -64,6 +63,7 @@ import de.wolfsline.security.HorseListener;
 import de.wolfsline.security.MapSizeControll;
 import de.wolfsline.security.Region;
 import de.wolfsline.settings.Settings;
+import de.wolfsline.sign.SaveSign;
 import de.wolfsline.statistics.KillCounter;
 import de.wolfsline.teleport.SignLift;
 import de.wolfsline.teleport.TeleportBack;
