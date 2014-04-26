@@ -166,7 +166,12 @@ public class Systemsign implements CommandExecutor, Listener {
 				return;
 			if ((event.getClickedBlock().getType() == Material.WALL_SIGN || event.getClickedBlock().getType() == Material.SIGN_POST) && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 				Location loc = event.getClickedBlock().getLocation();
-				//Sign sign = (Sign) event.getClickedBlock().getState();
+				Sign sign = (Sign) loc.getBlock().getState();
+				sign.setLine(0, ChatColor.DARK_RED + "█████████");
+				sign.setLine(1, ChatColor.WHITE + "Warte auf");
+				sign.setLine(2, ChatColor.WHITE + "neustart");
+				sign.setLine(3, ChatColor.DARK_RED + "█████████");
+				sign.update();
 				cfg.set("Location." + map.get(p.getUniqueId()) + ".x", loc.getBlockX());
 				cfg.set("Location." + map.get(p.getUniqueId()) + ".y", loc.getBlockY());
 				cfg.set("Location." + map.get(p.getUniqueId()) + ".z", loc.getBlockZ());
