@@ -12,6 +12,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import de.wolfsline.Epicraft.Epicraft;
@@ -70,6 +71,12 @@ public class Ticketsystem_Daten {
 			rs = st.executeQuery();
 			int ID = 0;
 			if(rs.next()){
+				World world = Bukkit.getServer().getWorld(rs.getString(7));
+				if(world == null){
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Die Welt\"" + rs.getString(7) + "\" wurde nicht geladen!");
+					p.sendMessage(plugin.namespace + ChatColor.RED + "Vorgang wurde abgebrochen. Bitte Administrator kontaktieren!");
+					return;
+				}
 				ID = rs.getInt(1);
 				p.sendMessage(ChatColor.GOLD + "---------------[Dein Ticket]---------------");
 				p.sendMessage("ID: " + ID);

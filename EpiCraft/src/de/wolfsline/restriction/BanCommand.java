@@ -72,7 +72,7 @@ public class BanCommand implements CommandExecutor{
 						cs.sendMessage(plugin.namespace + ChatColor.WHITE + offlinePlayer.getName() + " ist bereits gebannt!");
 						return true;
 					}
-					banList.addBan(offlinePlayer.getName(), reason, null, null);
+					banList.addBan(offlinePlayer.getName(), reason, null, null); //<-- FIX
 					writeToDatabase(p, offlineUUID, reason);
 					plugin.api.sendLog("[Epicraft - Ban] " + p.getName() + " hat den Spieler(Offline)" + offlinePlayer.getName() + " vom Server gebannt");
 					return true;
