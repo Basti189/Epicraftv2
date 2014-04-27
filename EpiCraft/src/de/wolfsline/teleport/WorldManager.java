@@ -1,5 +1,7 @@
 package de.wolfsline.teleport;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -21,6 +23,7 @@ import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.world.PortalCreateEvent;
+import org.bukkit.event.world.PortalCreateEvent.CreateReason;
 import org.bukkit.inventory.ItemStack;
 
 import de.wolfsline.Epicraft.Epicraft;
@@ -111,8 +114,13 @@ public class WorldManager implements CommandExecutor, Listener{
 				}
 				String targetWorld = args[2];
 				String targetPlayer = args[1];
-				org.bukkit.World world = Bukkit.getServer().getWorld(targetWorld);
-				Player player = Bukkit.getServer().getPlayer(targetPlayer);
+				World world = Bukkit.getServer().getWorld(targetWorld);
+				UUID targetUUID = plugin.uuid.getUUIDFromPlayer(targetPlayer);
+				if(targetUUID == null){
+					p.sendMessage(plugin.uuid.ERROR);
+					return true;
+				}
+				Player player = Bukkit.getServer().getPlayer(targetUUID);
 				if(player == null){
 					p.sendMessage(plugin.namespace + ChatColor.RED + "Der Spieler ist nicht online!");
 					return true;
@@ -191,8 +199,8 @@ public class WorldManager implements CommandExecutor, Listener{
 					if(!p.hasPermission("epicraft.world.sign")){
 						return;
 					}
-					String targetWorld = line[1];
-					org.bukkit.World world = Bukkit.getServer().getWorld(targetWorld);
+					String targetWorld = line[2];
+					org.bukkit.World world = Bukkit.getServer().getWorld(getNameOfShortName(targetWorld));
 					if(world == null){
 						p.sendMessage(plugin.namespace + ChatColor.RED + "Die Welt \"" + targetWorld + "\" exsistiert nicht!");
 						return;
@@ -230,28 +238,32 @@ public class WorldManager implements CommandExecutor, Listener{
 	
 	@EventHandler
 	public void onPlayerPortalEvent(PlayerPortalEvent event){
+		event.setCancelled(true);
 		Player p = event.getPlayer();
-		Location loc = p.getEyeLocation();
-		Sign sign = getsignNearPlayer(loc);
-		if(sign == null)
+		Location portalLocation = findPortalOnEyeLocation(p.getEyeLocation());
+		if(portalLocation == null){
 			return;
+		}
+		Sign sign = getsignNearPlayer(portalLocation);
+		if(sign == null){
+			return;
+		}
 		String line[] = sign.getLines();
 		for(int i = 0 ; i < 4 ; i++ ){
 			line[i] = ChatColor.stripColor(line[i]);
 		}
 		if(line[0].equals("[Welt]")){
-			World world = Bukkit.getServer().getWorld(line[2]);
+			World world = Bukkit.getServer().getWorld(getNameOfShortName(line[2]));
 			if(world != null){
 				p.teleport(world.getSpawnLocation());
 			}
 		}
-		event.setCancelled(true);
 	}
 	
 	public Sign getsignNearPlayer(Location loc){
 		Location tmp = loc.clone();
 		for(double i = 0.0 ; i <= 5.0 ; i++){
-			tmp.setX(loc.getX() + i);
+			tmp.setX(loc.getX() + i);;
 			if(tmp.getBlock().getType() == Material.WALL_SIGN || tmp.getBlock().getType() == Material.SIGN_POST){
 				return (Sign) tmp.getBlock().getState();
 			}
@@ -280,8 +292,45 @@ public class WorldManager implements CommandExecutor, Listener{
 		return null;
 	}
 	
+	public Location findPortalOnEyeLocation(Location loc){
+		Location tmp = loc.clone();
+		if(tmp.getBlock().getType() == Material.PORTAL){
+			return tmp;
+		}
+		
+		tmp = loc.clone();
+		tmp.setX(loc.getX() + 1);
+		if(tmp.getBlock().getType() == Material.PORTAL){
+			return tmp;
+		}
+		
+		tmp = loc.clone();
+		tmp.setX(loc.getX() - 1);
+		if(tmp.getBlock().getType() == Material.PORTAL){
+			return tmp;
+		}
+		
+		tmp = loc.clone();
+		tmp.setX(loc.getZ() - 1);
+		if(tmp.getBlock().getType() == Material.PORTAL){
+			return tmp;
+		}
+		
+		tmp = loc.clone();
+		tmp.setX(loc.getZ() + 1);
+		if(tmp.getBlock().getType() == Material.PORTAL){
+			return tmp;
+		}
+		return tmp;
+	}
+	
 	@EventHandler
 	public void onPortalCreateEvent(PortalCreateEvent event){
+		Bukkit.broadcastMessage("Create");
+		if(event.getReason() != CreateReason.FIRE){
+			event.setCancelled(true);
+			return;
+		}
 		if(playerPortal == null){
 			event.setCancelled(true);
 			return;
@@ -314,6 +363,16 @@ public class WorldManager implements CommandExecutor, Listener{
 		if(worldName.equalsIgnoreCase("world"))
 			return "auf der Hauptwelt";
 		return worldName;
+	}
+	
+	private String getNameOfShortName(String name){
+		if(name.equalsIgnoreCase("nether")){
+			return "Survival_nether";
+		}
+		else if(name.equalsIgnoreCase("the end")){
+			return "Survival_the_end";
+		}
+		return name;
 	}
 
 }
