@@ -21,6 +21,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import de.wolfsline.Epicraft.Epicraft;
 import de.wolfsline.data.MySQL;
@@ -63,6 +65,12 @@ public class AuthCommand implements CommandExecutor, Listener{
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Erfolgreich eingeloggt!");
 					plugin.api.sendLog("[Epicraft - Passwort] " + p.getName() + " hat sich erfolgreich angemeldet");
 					map.remove(p.getUniqueId());
+					/*for(PotionEffect effect : p.getActivePotionEffects()){
+						if(effect.getType() == PotionEffectType.BLINDNESS){
+							p.removePotionEffect(effect.getType());
+							break;
+						}
+					}*/
 					return true;
 				}
 				else{
@@ -288,6 +296,7 @@ public class AuthCommand implements CommandExecutor, Listener{
 			p.sendMessage(plugin.namespace + ChatColor.WHITE + "Erfolgreich eingeloggt!");
 			return;
 		}
+		//p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 9999999, 2));
 		p.sendMessage(plugin.namespace + ChatColor.RED + "Bitte einloggen oder registrieren!");
 		map.put(p.getUniqueId(), false);
 	}
