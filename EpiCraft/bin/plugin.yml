@@ -3,7 +3,7 @@ version: 1.7.9
 author: Sebastian Wolf
 description: Plugin fuer EpiCraft
 main: de.wolfsline.Epicraft.Epicraft
-softdepend: [WorldGuard]
+depend: [WorldGuard,ProtocolLib]
 load: startup
 database: true
 

@@ -46,7 +46,7 @@ public class Systemsign implements CommandExecutor, Listener {
 	public Systemsign(Epicraft plugin){
 		this.plugin = plugin;
 		world = Bukkit.getServer().getWorld(WORLD);
-		loc = new Location[6];
+		loc = new Location[8];
 		init();
 		initSign();
 		
@@ -95,6 +95,22 @@ public class Systemsign implements CommandExecutor, Listener {
 		cfg.addDefault(pos + "z", 0);
 		
 		loc[5] = new Location(world, cfg.getInt(pos + "x"), cfg.getInt(pos + "y"), cfg.getInt(pos + "z"));
+		
+		pos = "Location.end.";
+		cfg.addDefault(pos + "x", 0);
+		cfg.addDefault(pos + "y", 0);
+		cfg.addDefault(pos + "z", 0);
+		
+		loc[6] = new Location(world, cfg.getInt(pos + "x"), cfg.getInt(pos + "y"), cfg.getInt(pos + "z"));
+		
+		pos = "Location.blink.";
+		cfg.addDefault(pos + "x", 0);
+		cfg.addDefault(pos + "y", 0);
+		cfg.addDefault(pos + "z", 0);
+		
+		loc[7] = new Location(world, cfg.getInt(pos + "x"), cfg.getInt(pos + "y"), cfg.getInt(pos + "z"));
+		
+		
 		cfg.options().copyDefaults(true);
 		try {
 			cfg.save(file);
@@ -108,7 +124,7 @@ public class Systemsign implements CommandExecutor, Listener {
 		if(world == null){
 			return;
 		}
-		for(int i = 0 ; i <= 5 ; i++){
+		for(int i = 0 ; i <= 7 ; i++){
 			if(loc[i].getBlock().getType() == Material.WALL_SIGN || loc[i].getBlock().getType() == Material.SIGN_POST){
 				Sign sign = (Sign) loc[i].getBlock().getState();
 				sign.setLine(0, ChatColor.DARK_RED + "█████████");
@@ -149,6 +165,12 @@ public class Systemsign implements CommandExecutor, Listener {
 			}
 			else if(args[0].equalsIgnoreCase("nether")){
 				map.put(p.getUniqueId(), "nether");
+			}
+			else if(args[0].equalsIgnoreCase("end")){
+				map.put(p.getUniqueId(), "end");
+			}
+			else if(args[0].equalsIgnoreCase("blink")){
+				map.put(p.getUniqueId(), "blink");
 			}
 			if(map.containsKey(p.getUniqueId())){
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Bitte das Schild anklicken!");
@@ -195,7 +217,7 @@ public class Systemsign implements CommandExecutor, Listener {
 			if(world == null){
 				return;
 			}
-			int hauptwelt = 0, farmwelt = 0, nether = 0;
+			int hauptwelt = 0, farmwelt = 0, nether = 0, end = 0;
 			for(Player player : Bukkit.getServer().getOnlinePlayers()){
 				if(player.getLocation().getWorld().getName().equalsIgnoreCase("Survival")){
 					hauptwelt++;
@@ -205,6 +227,9 @@ public class Systemsign implements CommandExecutor, Listener {
 				}
 				else if(player.getLocation().getWorld().getName().equalsIgnoreCase("Survival_nether")){
 					nether++;
+				}
+				else if(player.getLocation().getWorld().getName().equalsIgnoreCase("Survival_the_end")){
+					end++;
 				}
 			}
 			if(loc[0].getBlock().getType() == Material.WALL_SIGN || loc[0].getBlock().getType() == Material.SIGN_POST){
@@ -265,6 +290,19 @@ public class Systemsign implements CommandExecutor, Listener {
 				sign.setLine(2, ChatColor.WHITE + String.valueOf(nether) + " Spieler");
 				sign.setLine(3, "");
 				sign.update();
+			}
+			if(loc[6].getBlock().getType() == Material.WALL_SIGN || loc[6].getBlock().getType() == Material.SIGN_POST){
+				Sign sign = (Sign) loc[6].getBlock().getState();
+				sign.setLine(0, ChatColor.GOLD + "The End");
+				sign.setLine(1, "");
+				sign.setLine(2, ChatColor.WHITE + String.valueOf(end) + " Spieler");
+				sign.setLine(3, "");
+				sign.update();
+			}
+			if(loc[7].getBlock().getType() == Material.WALL_SIGN || loc[7].getBlock().getType() == Material.SIGN_POST){
+				//Sign sign = (Sign) loc[7].getBlock().getState();
+				
+				//sign.update();
 			}
 			
 		}
