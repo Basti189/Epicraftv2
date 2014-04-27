@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,15 +17,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.entity.EntityPortalEnterEvent;
+import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.world.PortalCreateEvent;
+import org.bukkit.inventory.ItemStack;
 
 import de.wolfsline.Epicraft.Epicraft;
 
 public class WorldManager implements CommandExecutor, Listener{
 	
 	private Epicraft plugin;
+	
+	private Player playerPortal;
 	
 	public WorldManager(Epicraft plugin){
 		this.plugin = plugin;
@@ -219,24 +224,28 @@ public class WorldManager implements CommandExecutor, Listener{
 	}
 	
 	@EventHandler
-	public void onEntityPortalEnterEvent(EntityPortalEnterEvent event){
-		if(event.getEntity() instanceof Player){
-			Player p = (Player) event.getEntity();
-			Location loc = p.getEyeLocation();
-			Sign sign = getsignNearPlayer(loc);
-			if(sign == null)
-				return;
-			String line[] = sign.getLines();
-			for(int i = 0 ; i < 4 ; i++ ){
-				line[i] = ChatColor.stripColor(line[i]);
-			}
-			if(line[0].equals("[Welt]")){
-				World world = Bukkit.getServer().getWorld(line[2]);
-				if(world != null){
-					p.teleport(world.getSpawnLocation());
-				}
+	public void onEntityPortalEvent(EntityPortalEvent event){
+		event.setCancelled(true);
+	}
+	
+	@EventHandler
+	public void onPlayerPortalEvent(PlayerPortalEvent event){
+		Player p = event.getPlayer();
+		Location loc = p.getEyeLocation();
+		Sign sign = getsignNearPlayer(loc);
+		if(sign == null)
+			return;
+		String line[] = sign.getLines();
+		for(int i = 0 ; i < 4 ; i++ ){
+			line[i] = ChatColor.stripColor(line[i]);
+		}
+		if(line[0].equals("[Welt]")){
+			World world = Bukkit.getServer().getWorld(line[2]);
+			if(world != null){
+				p.teleport(world.getSpawnLocation());
 			}
 		}
+		event.setCancelled(true);
 	}
 	
 	public Sign getsignNearPlayer(Location loc){
@@ -273,7 +282,29 @@ public class WorldManager implements CommandExecutor, Listener{
 	
 	@EventHandler
 	public void onPortalCreateEvent(PortalCreateEvent event){
+		if(playerPortal == null){
+			event.setCancelled(true);
+			return;
+		}
+		if(playerPortal.hasPermission("epicraft.portal.create")){
+			playerPortal = null;
+			return;
+		}
 		event.setCancelled(true);
+	}
+	
+	@EventHandler
+	public void onPlayerInteractEventForDetectPortalCreateEvent(PlayerInteractEvent event){
+		Player p = event.getPlayer();
+		if(!(event.getClickedBlock() instanceof Block)){
+			return;
+		}
+		if(event.getClickedBlock().getType() == Material.OBSIDIAN && event.getAction() == Action.RIGHT_CLICK_BLOCK){
+			ItemStack item = p.getInventory().getItemInHand();
+			if(item.getType() == Material.FLINT_AND_STEEL){
+				playerPortal = p;
+			}
+		}
 	}
 	
 	//Eigene Methoden

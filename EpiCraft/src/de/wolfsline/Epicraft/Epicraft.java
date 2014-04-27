@@ -50,6 +50,7 @@ import de.wolfsline.microblock.Microblock;
 import de.wolfsline.modify.ColorSignListener;
 import de.wolfsline.modify.CommandListener;
 import de.wolfsline.modify.DeathListener;
+import de.wolfsline.modify.EventBlocker;
 import de.wolfsline.modify.JoinQuitListener;
 import de.wolfsline.modify.MECommand;
 import de.wolfsline.permission.PermissionManager;
@@ -356,6 +357,11 @@ public class Epicraft extends JavaPlugin{
 		//Effecte
 		FunEffects effecte = new FunEffects(this);
 		this.getCommand("effect").setExecutor(effecte);
+		
+		//EventBlocker
+		EventBlocker eBlocker = new EventBlocker(this);
+		this.getCommand("event").setExecutor(eBlocker);
+		pm.registerEvents(eBlocker, this);
 		
 		//Lädt die Spieler die während eines Reloads online sind auf der Datenbank
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){

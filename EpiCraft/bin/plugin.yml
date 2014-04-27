@@ -251,6 +251,11 @@ commands:
       - epicraft.effect.blind.other
       - epicraft.effect.clear.other
 
+  event:
+    description: Blockiert Bukkitevents
+    usage: /event <Eventname>
+    permission: epicraft.eventblocker
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft
