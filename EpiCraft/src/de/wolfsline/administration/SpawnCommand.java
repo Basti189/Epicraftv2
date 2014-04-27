@@ -13,7 +13,7 @@ public class SpawnCommand implements CommandExecutor{
 	
 	private Epicraft plugin;
 	
-	private final String WORLD = "world";
+	private final String WORLD = "Survival";
 	
 	public SpawnCommand(Epicraft plugin) {
 		this.plugin = plugin;

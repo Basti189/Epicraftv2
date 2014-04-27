@@ -19,7 +19,7 @@ import de.wolfsline.data.MySQL;
 public class HomeCommand implements CommandExecutor{
 	
 	private Epicraft plugin;
-	private final String WORLD = "world";
+	private final String WORLD = "Survival";
 	public HomeCommand(Epicraft plugin) {
 		this.plugin = plugin;
 		

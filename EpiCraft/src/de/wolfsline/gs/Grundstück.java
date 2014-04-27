@@ -41,7 +41,7 @@ import de.wolfsline.Epicraft.Epicraft;
 public class Grundstück implements CommandExecutor, Listener{
 	
 	private Epicraft plugin;
-	private final String WORLD = "world";
+	private final String WORLD = "Survival";
 	
 	private Data data;
 	private HashMap<UUID, String> map = new HashMap<UUID, String>();
