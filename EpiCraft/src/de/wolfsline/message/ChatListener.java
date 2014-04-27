@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import de.wolfsline.Epicraft.Epicraft;
+import de.wolfsline.healthbar.Utils;
 import de.wolfsline.helpClasses.EpicraftPlayer;
 
 public class ChatListener implements Listener, CommandExecutor{
@@ -125,11 +126,13 @@ public class ChatListener implements Listener, CommandExecutor{
 	public void onChatEvent(AsyncPlayerChatEvent e){
 		Player p = e.getPlayer();
 		String msg = e.getMessage();
+
 		//Event abbrechen
 		e.setCancelled(true);
 		
 		if(p.hasPermission("epicraft.chat.color")){
 			msg = ChatColor.translateAlternateColorCodes('$', msg);
+			msg = msg.replace("<3", "\u2764"); //Herzen
 		}
 		
 		EpicraftPlayer epiSender = plugin.pManager.getEpicraftPlayer(p.getUniqueId());
