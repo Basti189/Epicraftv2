@@ -33,6 +33,7 @@ import de.wolfsline.data.MySQL;
 import de.wolfsline.epimaster.EpiMaster;
 import de.wolfsline.forfun.ChatFakerCommand;
 import de.wolfsline.forfun.EggCatcher;
+import de.wolfsline.forfun.FunEffects;
 import de.wolfsline.forfun.GunListener;
 import de.wolfsline.forfun.HeadCommand;
 import de.wolfsline.forfun.LightningCommand;
@@ -351,6 +352,10 @@ public class Epicraft extends JavaPlugin{
 		Systemsign sysSign = new Systemsign(this);
 		this.getCommand("system").setExecutor(sysSign);
 		pm.registerEvents(sysSign, this);
+		
+		//Effecte
+		FunEffects effecte = new FunEffects(this);
+		this.getCommand("effect").setExecutor(effecte);
 		
 		//Lädt die Spieler die während eines Reloads online sind auf der Datenbank
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){

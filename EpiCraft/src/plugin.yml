@@ -238,6 +238,19 @@ commands:
     usage: /system
     permissions: epicraft.sign.system
 
+  effect:
+    description: Etwas Spass muss sein
+    usage: /effect <Effect>
+    permissions:
+      - epicraft.effect.drunk
+      - epicraft.effect.jump
+      - epicraft.effect.blind
+      - epicraft.effect.clear
+      - epicraft.effect.drunk.other
+      - epicraft.effect.jump.other
+      - epicraft.effect.blind.other
+      - epicraft.effect.clear.other
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft
