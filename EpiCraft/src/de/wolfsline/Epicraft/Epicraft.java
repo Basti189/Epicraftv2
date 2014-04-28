@@ -8,10 +8,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import ProtocolLib.BlockPacketAdapter;
-import ProtocolLib.SignPacketAdapter;
-import ProtocolLib.SkullPacketAdapter;
-import ProtocolLib.SoundPacketAdapter;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -19,6 +15,12 @@ import com.comphenix.protocol.ProtocolManager;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import de.wolfsline.API.EventAPI;
+import de.wolfsline.ProtocolLib.*;
+import de.wolfsline.ProtocolLib.BlockChanger.BlockPacketAdapter;
+import de.wolfsline.ProtocolLib.BlockChanger.Calculations;
+import de.wolfsline.ProtocolLib.BlockChanger.ConversionCache;
+import de.wolfsline.ProtocolLib.BlockChanger.EventScheduler;
+import de.wolfsline.ProtocolLib.BlockChanger.PatcherAPI;
 import de.wolfsline.Ticketsystem.Ticketsystem;
 import de.wolfsline.Ticketsystem.Ticketsystem_Schild;
 import de.wolfsline.UUID.MyUUID;
@@ -92,6 +94,8 @@ public class Epicraft extends JavaPlugin{
 	public MyUUID uuid;
 	public ProtocolManager protocolManager;
 	
+	static ConversionCache cache;
+	
 	
 	@Override
 	public void onDisable(){
@@ -126,8 +130,11 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(uuid, this);
 		
 		//ProtocolManager
+		cache = new ConversionCache(new PatcherAPI());
 		this.protocolManager = ProtocolLibrary.getProtocolManager();
+		Calculations calc = new Calculations(cache, new EventScheduler(pm));
 		
+		//
 		SkullPacketAdapter skullPacketAdapter = new SkullPacketAdapter(this, PacketType.Play.Server.TILE_ENTITY_DATA);
 		protocolManager.addPacketListener(skullPacketAdapter);
 		
@@ -138,7 +145,13 @@ public class Epicraft extends JavaPlugin{
 		protocolManager.addPacketListener(soundPacketAdapter);
 		
 		BlockPacketAdapter blockPacketAdapter = new BlockPacketAdapter(this, PacketType.Play.Server.BLOCK_CHANGE);
-		protocolManager.addPacketListener(blockPacketAdapter);		
+		protocolManager.addPacketListener(blockPacketAdapter);
+		
+		MapChunkPacketAdapter mapChunkPacketAdapter = new MapChunkPacketAdapter(this, PacketType.Play.Server.MAP_CHUNK, calc);
+		protocolManager.addPacketListener(mapChunkPacketAdapter);
+		
+		MapChunkBulkPacketAdapter mapChunkBulkPacketAdapter = new MapChunkBulkPacketAdapter(this, PacketType.Play.Server.MAP_CHUNK_BULK, calc);
+		protocolManager.addPacketListener(mapChunkBulkPacketAdapter);
 		
 		//Spawn
 		SpawnCommand spawn = new SpawnCommand(this);

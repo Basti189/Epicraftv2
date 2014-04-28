@@ -1,4 +1,4 @@
-package ProtocolLib;
+package de.wolfsline.ProtocolLib;
 
 import org.bukkit.Material;
 import org.bukkit.SkullType;

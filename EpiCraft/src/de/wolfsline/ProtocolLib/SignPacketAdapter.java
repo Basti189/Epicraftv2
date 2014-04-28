@@ -1,5 +1,6 @@
-package ProtocolLib;
+package de.wolfsline.ProtocolLib;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;
@@ -21,7 +22,12 @@ public class SignPacketAdapter extends PacketAdapter{
 		Player p = event.getPlayer();
 		String[] array = packet.getStringArrays().getValues().get(0);
 		for(int i = 0 ; i < 4 ; i++){
-			array[i] = array[i].replace("[PLAYER]", p.getName());
+			String tmp = array[i];
+			if(p.getName().length() > 15){
+				tmp = ChatColor.stripColor(array[i]);
+			}
+			tmp = tmp.replace("[PLAYER]", p.getName());
+			array[i] = ChatColor.translateAlternateColorCodes('$', tmp);
 		}
 		packet.getStringArrays().write(0, array);
 	}

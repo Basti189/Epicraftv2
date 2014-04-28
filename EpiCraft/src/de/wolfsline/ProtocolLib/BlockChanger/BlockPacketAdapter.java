@@ -1,5 +1,6 @@
-package ProtocolLib;
+package de.wolfsline.ProtocolLib.BlockChanger;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;
@@ -18,12 +19,12 @@ public class BlockPacketAdapter extends PacketAdapter{
 	
 	@Override
 	public void onPacketSending(PacketEvent event){
-		PacketContainer packet = event.getPacket();
+		/*PacketContainer packet = event.getPacket();
 		Player p = event.getPlayer();
 		//p.sendMessage("Sende Block");
 		StructureModifier<Integer> coords = packet.getIntegers();
 		int x = coords.read(0), y = coords.read(1), z = coords.read(2);
-		/*if(!p.getName().equals("Basti189"))
+		if(!p.getName().equals("movelist"))
 			return;
 		if(packet.getBlocks().read(0).getId() != 0){
 			packet.getBlocks().write(0, Material.GLASS);
