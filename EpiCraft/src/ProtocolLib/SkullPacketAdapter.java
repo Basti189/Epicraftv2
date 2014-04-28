@@ -1,6 +1,7 @@
 package ProtocolLib;
 
 import org.bukkit.Material;
+import org.bukkit.SkullType;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
@@ -30,14 +31,18 @@ public class SkullPacketAdapter extends PacketAdapter {
 		try{
 			if(block.getType() == Material.SKULL){
 				Skull skull = (Skull) block.getState();
-				String owner = skull.getOwner();
-				if(owner == null)
-					return;
-				if(owner.equals("spieler")){
-					NbtBase<?> packetNbtModifier = packet.getNbtModifier().read(0);
-					((NbtCompound)packetNbtModifier).put("Owner", ((NbtCompound)packetNbtModifier).getCompound("Owner").put("Name", p.getName()));
-					((NbtCompound)packetNbtModifier).put("Owner", ((NbtCompound)packetNbtModifier).getCompound("Owner").put("Id", p.getUniqueId().toString()));
-					packet.getNbtModifier().write(0, packetNbtModifier);
+				if(skull.getSkullType() == SkullType.PLAYER){
+					String owner = skull.getOwner();
+					if(owner == null){
+						System.out.println("Owner null");
+						return;
+					}
+					if(owner.equals("EpiMaster")){
+						NbtBase<?> packetNbtModifier = packet.getNbtModifier().read(0);
+						((NbtCompound)packetNbtModifier).put("Owner", ((NbtCompound)packetNbtModifier).getCompound("Owner").put("Name", p.getName()));
+						((NbtCompound)packetNbtModifier).put("Owner", ((NbtCompound)packetNbtModifier).getCompound("Owner").put("Id", p.getUniqueId().toString()));
+						packet.getNbtModifier().write(0, packetNbtModifier);
+					}
 				}
 			}
 		}
