@@ -1,6 +1,5 @@
 package ProtocolLib;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
@@ -16,12 +15,9 @@ import com.comphenix.protocol.wrappers.nbt.NbtCompound;
 import de.wolfsline.Epicraft.Epicraft;
 
 public class SkullPacketAdapter extends PacketAdapter {
-	
-	private Epicraft plugin;
 
 	public SkullPacketAdapter(Epicraft plugin, PacketType tileEntityData) {
 		super(plugin, tileEntityData);
-		this.plugin = plugin;
 	}
 	
 	@Override
@@ -31,7 +27,6 @@ public class SkullPacketAdapter extends PacketAdapter {
 		StructureModifier<Integer> coords = packet.getIntegers();
 		int x = coords.read(0), y = coords.read(1), z = coords.read(2);
 		Block block = p.getWorld().getBlockAt(x, y, z);
-		p.sendMessage(block.getType().toString());
 		try{
 			if(block.getType() == Material.SKULL){
 				Skull skull = (Skull) block.getState();

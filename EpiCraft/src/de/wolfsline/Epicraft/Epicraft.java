@@ -8,15 +8,14 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import ProtocolLib.BlockPacketAdapter;
 import ProtocolLib.SignPacketAdapter;
 import ProtocolLib.SkullPacketAdapter;
+import ProtocolLib.SoundPacketAdapter;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.Packets;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.ConnectionSide;
-import com.comphenix.protocol.events.ListenerPriority;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import de.wolfsline.API.EventAPI;
@@ -128,10 +127,18 @@ public class Epicraft extends JavaPlugin{
 		
 		//ProtocolManager
 		this.protocolManager = ProtocolLibrary.getProtocolManager();
+		
 		SkullPacketAdapter skullPacketAdapter = new SkullPacketAdapter(this, PacketType.Play.Server.TILE_ENTITY_DATA);
 		protocolManager.addPacketListener(skullPacketAdapter);
+		
 		SignPacketAdapter signPacketAdapter = new SignPacketAdapter(this, PacketType.Play.Server.UPDATE_SIGN);
 		protocolManager.addPacketListener(signPacketAdapter);
+		
+		SoundPacketAdapter soundPacketAdapter = new SoundPacketAdapter(this, PacketType.Play.Server.NAMED_SOUND_EFFECT);
+		protocolManager.addPacketListener(soundPacketAdapter);
+		
+		BlockPacketAdapter blockPacketAdapter = new BlockPacketAdapter(this, PacketType.Play.Server.BLOCK_CHANGE);
+		protocolManager.addPacketListener(blockPacketAdapter);		
 		
 		//Spawn
 		SpawnCommand spawn = new SpawnCommand(this);
