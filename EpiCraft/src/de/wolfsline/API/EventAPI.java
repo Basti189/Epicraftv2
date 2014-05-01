@@ -144,7 +144,7 @@ public class EventAPI extends Handler implements Listener, CommandExecutor{
 	
 	/* ---------------- HandleMessages ------------------- */
 	
-	public void sendLog(String result){
+	public synchronized void sendLog(String result){
 		Bukkit.getServer().getLogger().info(result);
 		this.message = result;
 		for(Player p : Bukkit.getServer().getOnlinePlayers()){
