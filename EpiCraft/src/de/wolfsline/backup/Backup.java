@@ -31,7 +31,6 @@ public class Backup implements CommandExecutor, Listener {
     private Double startHour;
 
     private boolean broadcast = true;
-    private boolean backupEmpty = false;
 
     private String dateFormat = "yyyy-MM-dd-HH-mm-ss";
     private String backupFile = "plugins/Epicraft/backups/";
@@ -44,7 +43,7 @@ public class Backup implements CommandExecutor, Listener {
 	public Backup(Epicraft plugin) {
 		this.plugin = plugin;
 		this.dateFormat = "dd-MM-yyyy HH-mm";
-		this.interval = 0.15D;
+		this.interval = 1.0D;
 		this.backupWorlds.add("Survival");
 		
 		List<String> intervalsStr = new ArrayList<String>();
