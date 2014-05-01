@@ -256,6 +256,11 @@ commands:
     usage: /event <Eventname>
     permission: epicraft.eventblocker
 
+  backup:
+    description: Sichert die Welten
+    usage: /backup
+    permissions: epicraft.backup
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft
@@ -318,3 +323,14 @@ permissions:
       epicraft.micro.block: true
       epicraft.micro.skull: true
       epicraft.more: true
+      epicraft.sign.save: true
+      epicraft.sign.system: true
+      epicraft.effect.drunk: true
+      epicraft.effect.jump: true
+      epicraft.effect.blind: true
+      epicraft.effect.clear: true
+      epicraft.effect.drunk.other: true
+      epicraft.effect.jump.other: true
+      epicraft.effect.blind.other: true
+      epicraft.effect.clear.other: true
+      epicraft.backup: true

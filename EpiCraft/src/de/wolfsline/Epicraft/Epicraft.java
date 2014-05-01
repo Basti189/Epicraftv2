@@ -1,5 +1,7 @@
 package de.wolfsline.Epicraft;
 
+import java.util.prefs.BackingStoreException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -36,6 +38,7 @@ import de.wolfsline.administration.TeleportCommand;
 import de.wolfsline.administration.UnHideCommand;
 import de.wolfsline.administration.WhoIsCommand;
 import de.wolfsline.afk.AFK;
+import de.wolfsline.backup.Backup;
 import de.wolfsline.blocksecure.BlockSecure;
 import de.wolfsline.data.MySQL;
 import de.wolfsline.epimaster.EpiMaster;
@@ -93,6 +96,7 @@ public class Epicraft extends JavaPlugin{
 	public PermissionManager pManager;
 	public MyUUID uuid;
 	public ProtocolManager protocolManager;
+	public Backup backup;
 	
 	static ConversionCache cache;
 	
@@ -152,6 +156,11 @@ public class Epicraft extends JavaPlugin{
 		
 		MapChunkBulkPacketAdapter mapChunkBulkPacketAdapter = new MapChunkBulkPacketAdapter(this, PacketType.Play.Server.MAP_CHUNK_BULK, calc);
 		protocolManager.addPacketListener(mapChunkBulkPacketAdapter);
+		
+		//Backup
+		this.backup = new Backup(this);
+		this.getCommand("backup").setExecutor(backup);
+		pm.registerEvents(backup, this);
 		
 		//Spawn
 		SpawnCommand spawn = new SpawnCommand(this);
@@ -426,5 +435,10 @@ public class Epicraft extends JavaPlugin{
 	@Override
 	public ChunkGenerator getDefaultWorldGenerator(String worldName, String id){
 		return new CleanRoomChunkGenerator(id);
+	}
+
+	public void doBackup() {
+		
+		
 	}
 }
