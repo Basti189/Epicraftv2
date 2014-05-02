@@ -1,7 +1,5 @@
 package de.wolfsline.Epicraft;
 
-import java.util.prefs.BackingStoreException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,7 +15,9 @@ import com.comphenix.protocol.ProtocolManager;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import de.wolfsline.API.EventAPI;
+import de.wolfsline.Banksystem.Bank;
 import de.wolfsline.ProtocolLib.*;
+import de.wolfsline.ProtocolLib.BlockChanger.BlockCommand;
 import de.wolfsline.ProtocolLib.BlockChanger.BlockPacketAdapter;
 import de.wolfsline.ProtocolLib.BlockChanger.Calculations;
 import de.wolfsline.ProtocolLib.BlockChanger.ConversionCache;
@@ -98,8 +98,6 @@ public class Epicraft extends JavaPlugin{
 	public ProtocolManager protocolManager;
 	public Backup backup;
 	
-	static ConversionCache cache;
-	
 	
 	@Override
 	public void onDisable(){
@@ -134,7 +132,7 @@ public class Epicraft extends JavaPlugin{
 		pm.registerEvents(uuid, this);
 		
 		//ProtocolManager
-		cache = new ConversionCache(new PatcherAPI());
+		ConversionCache cache = new ConversionCache(new PatcherAPI());
 		this.protocolManager = ProtocolLibrary.getProtocolManager();
 		Calculations calc = new Calculations(cache, new EventScheduler(pm));
 		
@@ -406,6 +404,15 @@ public class Epicraft extends JavaPlugin{
 		EventBlocker eBlocker = new EventBlocker(this);
 		this.getCommand("event").setExecutor(eBlocker);
 		pm.registerEvents(eBlocker, this);
+		
+		//Banksystem
+		Bank bank = new Bank(this);
+		this.getCommand("bank").setExecutor(bank);
+		pm.registerEvents(bank, this);
+		
+		//Block
+		BlockCommand block = new BlockCommand(this, calc);
+		this.getCommand("block").setExecutor(block);
 		
 		//Lädt die Spieler die während eines Reloads online sind auf der Datenbank
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
