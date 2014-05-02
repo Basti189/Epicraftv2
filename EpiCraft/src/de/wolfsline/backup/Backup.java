@@ -40,7 +40,7 @@ public class Backup implements CommandExecutor, Listener {
     private IBackupFileManager backupFileManager;
     private DeleteSchedule deleteSchedule;
 	
-	public Backup(Epicraft plugin) {
+	public Backup(final Epicraft plugin) {
 		this.plugin = plugin;
 		this.dateFormat = "dd-MM-yyyy HH-mm";
 		this.interval = 1.0D;
@@ -69,7 +69,7 @@ public class Backup implements CommandExecutor, Listener {
 						}).start();
                         
                     } else {
-                        //Ausgabe wenn niemand online war
+                        plugin.api.sendLog("[Epicraft - Backup] Abgebrochen -> Keiner Online");
                     }
                 }
             }, delay, ticks);
