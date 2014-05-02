@@ -311,12 +311,17 @@ public class Ticketsystem_Daten {
 			
 			if(rs.next()){
 				p.sendMessage(ChatColor.GOLD + "---------------[Ticket " + ID + "]---------------");
-				p.sendMessage("ID: " + ID);
-				p.sendMessage("Von: " + plugin.uuid.getNameFromUUID(UUID.fromString(rs.getString(2))));
-				p.sendMessage("Ticket: " + rs.getString(3));
-				p.sendMessage("Erstellt: am " + rs.getString(11) + " um " + rs.getString(10));
-				p.sendMessage("Status: " + rs.getString(8));
-				p.sendMessage("Team: " + plugin.uuid.getNameFromUUID(UUID.fromString(rs.getString(9))));
+				p.sendMessage(ChatColor.GOLD + "ID: " + ChatColor.WHITE + ID);
+				p.sendMessage(ChatColor.GOLD + "Von: " + ChatColor.WHITE +  plugin.uuid.getNameFromUUID(UUID.fromString(rs.getString(2))));
+				p.sendMessage(ChatColor.GOLD + "Ticket: " + ChatColor.WHITE +  rs.getString(3));
+				p.sendMessage(ChatColor.GOLD + "Erstellt: am " + ChatColor.WHITE +  rs.getString(11) + ChatColor.GOLD +  " um " + ChatColor.WHITE +  rs.getString(10));
+				p.sendMessage(ChatColor.GOLD + "Status: " + ChatColor.WHITE + rs.getString(8));
+				if(rs.getString(9).equals("")){
+					p.sendMessage(ChatColor.GOLD + "Team: " + ChatColor.WHITE + "-");
+				}
+				else{
+					p.sendMessage(ChatColor.GOLD + "Team: " + ChatColor.WHITE + plugin.uuid.getNameFromUUID(UUID.fromString(rs.getString(9))));
+				}
 				p.sendMessage(ChatColor.GOLD + "---------------[Ticket " + ID + "]---------------");
 				if(withTeleport){
 					map.put(p.getUniqueId(), p.getLocation());
