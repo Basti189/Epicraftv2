@@ -1,6 +1,7 @@
 package de.wolfsline.ProtocolLib.BlockChanger;
 
-import java.util.Random;
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.bukkit.World;
@@ -13,6 +14,8 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.reflect.accessors.Accessors;
 import com.comphenix.protocol.reflect.accessors.FieldAccessor;
 import com.google.common.base.Stopwatch;
+
+import de.wolfsline.helpClasses.changeID;
 
 public class Calculations {
 	// Used to pass around detailed information about chunks
@@ -40,6 +43,8 @@ public class Calculations {
 	// Used to get a chunk's specific lookup table
 	private EventScheduler scheduler;
 	private ConversionCache cache;
+	
+	public HashMap<UUID, changeID> map = new HashMap<UUID, changeID>();
 	
 	public Calculations(ConversionCache cache, EventScheduler scheduler) {
 		this.cache = cache;
@@ -242,23 +247,10 @@ public class Calculations {
                         for (int x = 0; x < 16; x++)  {
                         	
                         	int blockID = info.data[blockIndex] & 0xFF;
-                        	//System.out.println("BLOCK ID: " + blockID);
-                        	/*if(blockID == 1){
-                        		blockID = 0;
+                        	if(map.containsKey(info.player.getUniqueId())){
+                        		changeID cID = map.get(info.player.getUniqueId());
+                        		blockID = cID.getChangeID(blockID);
                         	}
-                        	else if(blockID == 2){
-                        		blockID = 0;
-                        	}
-                        	else if(blockID == 3){
-                        		blockID = 0;
-                        	}*/
-                        	/*if(blockID != 0){
-                        		//blockID = (int) (Math.random() * ( 160 - 1));
-                        		//blockID = 19;
-                        	}*/
-                        	/*if(blockID == 0){
-                        		blockID = 8;
-                        	}*/
                             // Transform block
                             info.data[blockIndex] = (byte) view.getBlockLookup(blockID);
                         	
