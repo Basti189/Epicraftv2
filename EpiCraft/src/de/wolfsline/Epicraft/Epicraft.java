@@ -15,6 +15,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import de.wolfsline.API.EventAPI;
+import de.wolfsline.API.apiServer;
 import de.wolfsline.Banksystem.Bank;
 import de.wolfsline.ProtocolLib.*;
 import de.wolfsline.ProtocolLib.BlockChanger.BlockCommand;
@@ -118,6 +119,8 @@ public class Epicraft extends JavaPlugin{
 		api = new EventAPI();
 		this.getCommand("api").setExecutor(api);
 		pm.registerEvents(api, this);
+		//apiServer apiServ = new apiServer(this, api);
+		//apiServ.start();
 		
 		//PermissionManager
 		pManager = new PermissionManager(this);
