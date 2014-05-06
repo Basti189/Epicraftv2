@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -85,6 +86,7 @@ public class apiClientHandler extends Thread{
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 		while(threadRun){
@@ -118,7 +120,11 @@ public class apiClientHandler extends Thread{
 		PreparedStatement st = null;
 		boolean login = false;
 		try {
-			st = conn.prepareStatement("SELECT password FROM auth WHERE username='" + this.username + "'");
+			UUID targetUUID = plugin.uuid.getUUIDFromPlayer(username);
+			if(targetUUID == null){
+				return false;
+			}
+			st = conn.prepareStatement("SELECT Passwort FROM Auth WHERE UUID='" + targetUUID + "'");
 			rs = st.executeQuery();
 			rs.next();
 			if(rs.getString(1).equals(password))
@@ -127,6 +133,7 @@ public class apiClientHandler extends Thread{
 			return login;
 		} 
 		catch (SQLException e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

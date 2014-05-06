@@ -21,12 +21,13 @@ public class apiServer extends Thread{
 	public void run(){
 		ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket(2894);
+            serverSocket = new ServerSocket(8962);
         } 
         catch (IOException e) {
-            System.err.println("Port blockiert?: 2894");
+            System.err.println("Port blockiert?: 8962");
+            e.printStackTrace();
         }
-        System.out.println("[EpiCraft - ApiServer] Server gestartet an: " + serverSocket.getInetAddress().toString() + ":2894");
+        System.out.println("[EpiCraft - ApiServer] Server gestartet an: " + serverSocket.getInetAddress().toString() + ":8962");
 
         while(threadRun){
             Socket clientSocket = null;
@@ -36,6 +37,7 @@ public class apiServer extends Thread{
 			} 
 			catch (IOException e) {
 				System.out.println("[EpiCraft - ApiServer] Ein unbekannter Fehler ist mit einem Client aufgetreten");
+				e.printStackTrace();
 			}
 			finally{
 				apiClientHandler apiClient = new apiClientHandler(clientSocket, plugin, api);
@@ -46,6 +48,7 @@ public class apiServer extends Thread{
 			serverSocket.close();
 		}
         catch (IOException e) {
+			e.printStackTrace();
 			e.printStackTrace();
 		}       
     }
