@@ -329,6 +329,7 @@ permissions:
       epicraft.blocksecure.team: true
       epicraft.horse.team: true
       epicraft.fragebogen: true
+      epicraft.fragebogen.team: true
       epicraft.gs.team: true
       epicraft.wartung: true
       epicraft.door.access: true
