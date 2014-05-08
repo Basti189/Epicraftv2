@@ -36,6 +36,7 @@ public class WorldManager implements CommandExecutor, Listener{
 	
 	public WorldManager(Epicraft plugin){
 		this.plugin = plugin;
+		this.onStartUp();
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class WorldManager implements CommandExecutor, Listener{
 			if(args[0].equalsIgnoreCase("tp")){
 				if(!p.hasPermission("epicraft.world.change")){//Wenn permission nicht
 					p.sendMessage(plugin.error);
-					plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat versucht auf den TP-Befehl zuzugreifen!");
+					plugin.api.sendLog("[Epicraft - WeltManager] " + p.getName() + " hat versucht auf den TP-Befehl zuzugreifen!");
 					return true;
 				}
 				String targetWorld = args[1];
@@ -69,13 +70,13 @@ public class WorldManager implements CommandExecutor, Listener{
 				}
 				p.teleport(world.getSpawnLocation());
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest auf die Welt \"" + targetWorld + "\" teleportiert!");
-				plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat sich auf die Welt " + targetWorld + " teleportiert");
+				plugin.api.sendLog("[Epicraft - WeltManager] " + p.getName() + " hat sich auf die Welt " + targetWorld + " teleportiert");
 				return true;
 			}
 			else if(args[0].equalsIgnoreCase("load")){
 				if(!p.hasPermission("epicraft.world.load")){//Wenn permission nicht
 					p.sendMessage(plugin.error);
-					plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat versucht auf den Load-Befehl zuzugreifen!");
+					plugin.api.sendLog("[Epicraft - WeltManager] " + p.getName() + " hat versucht auf den Load-Befehl zuzugreifen!");
 					return true;
 				}
 				String targetWorld = args[1];
@@ -91,7 +92,7 @@ public class WorldManager implements CommandExecutor, Listener{
 			else if(args[0].equalsIgnoreCase("unload")){
 				if(!p.hasPermission("epicraft.world.unload")){//Wenn permission nicht
 					p.sendMessage(plugin.error);
-					plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat versucht auf den Unload-Befehl zuzugreifen!");
+					plugin.api.sendLog("[Epicraft - WeltManager] " + p.getName() + " hat versucht auf den Unload-Befehl zuzugreifen!");
 					return true;
 				}
 				String targetWorld = args[1];
@@ -109,7 +110,7 @@ public class WorldManager implements CommandExecutor, Listener{
 			if(args[0].equalsIgnoreCase("tp")){
 				if(!p.hasPermission("epicraft.world.change.other")){//Wenn permission nicht
 					p.sendMessage(plugin.error);
-					plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat versucht auf den TP-Befehl zuzugreifen!");
+					plugin.api.sendLog("[Epicraft - WeltManager] " + p.getName() + " hat versucht auf den TP-Befehl zuzugreifen!");
 					return true;
 				}
 				String targetWorld = args[2];
@@ -136,13 +137,13 @@ public class WorldManager implements CommandExecutor, Listener{
 				p.teleport(world.getSpawnLocation());
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + targetPlayer + " wurde auf die Welt \"" + targetWorld + "\" teleportiert!");
 				player.sendMessage(plugin.namespace + ChatColor.WHITE + "Du wurdest auf die Welt \"" + targetWorld + "\" teleportiert!");
-				plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat den Spieler " + targetPlayer + " auf die Welt " + targetWorld + " teleportiert");
+				plugin.api.sendLog("[Epicraft - WeltManager] " + p.getName() + " hat den Spieler " + targetPlayer + " auf die Welt " + targetWorld + " teleportiert");
 				return true;
 			}
 			else if(args[0].equalsIgnoreCase("load")){
 				if(!p.hasPermission("epicraft.world.load")){//Wenn permission nicht
 					p.sendMessage(plugin.error);
-					plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat versucht auf den Load-Befehl zuzugreifen!");
+					plugin.api.sendLog("[Epicraft - WeltManager] " + p.getName() + " hat versucht auf den Load-Befehl zuzugreifen!");
 					return true;
 				}
 				String targetWorld = args[1];
@@ -226,7 +227,7 @@ public class WorldManager implements CommandExecutor, Listener{
 				return;
 			}
 			p.sendMessage(plugin.namespace + ChatColor.RED + "Du hast keine Berechtigung ein Weltenschild zu erstellen");
-			plugin.api.sendLog("[Epicraft - Welt] " + p.getName() + " hat versucht ein Weltenschild zu erstellen");
+			plugin.api.sendLog("[Epicraft - WeltManager] " + p.getName() + " hat versucht ein Weltenschild zu erstellen");
 			event.getBlock().breakNaturally();
 		}
 	}
@@ -373,6 +374,39 @@ public class WorldManager implements CommandExecutor, Listener{
 			return "Survival_the_end";
 		}
 		return name;
+	}
+	
+	private void onStartUp(){	
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				//Team
+				World w = Bukkit.getServer().getWorld("Team");
+				if(w == null){
+					plugin.api.sendLog("[Epicraft - WeltManager] Team wird geladen");
+					WorldCreator worldCreator = new WorldCreator("Team");
+					Bukkit.getServer().createWorld(worldCreator);
+					plugin.api.sendLog("[Epicraft - WeltManager] Team wurde geladen");
+				}
+				else{
+					plugin.api.sendLog("[Epicraft - WeltManager] Team ist bereits geladen");
+				}
+				/*
+				//Farmwelt
+				w = Bukkit.getServer().getWorld("Farmwelt");
+				if(w == null){
+					plugin.api.sendLog("[Epicraft - WeltManager] Farmwelt wird geladen");
+					WorldCreator worldCreator = new WorldCreator("Team");
+					Bukkit.getServer().createWorld(worldCreator);
+					plugin.api.sendLog("[Epicraft - WeltManager] Farmwelt wurde geladen");
+				}
+				else{
+					plugin.api.sendLog("[Epicraft - WeltManager] Farmwelt ist bereits geladen");
+				}*/
+			}
+		}, 10*20L);
+		
 	}
 
 }
