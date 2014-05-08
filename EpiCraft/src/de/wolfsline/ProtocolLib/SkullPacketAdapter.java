@@ -34,7 +34,7 @@ public class SkullPacketAdapter extends PacketAdapter {
 				if(skull.getSkullType() == SkullType.PLAYER){
 					String owner = skull.getOwner();
 					if(owner == null){
-						System.out.println("Owner null");
+						//System.out.println("Owner null");
 						return;
 					}
 					if(owner.equals("EpiMaster")){
