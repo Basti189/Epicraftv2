@@ -12,6 +12,7 @@ public class LogBlock {
 	public LogBlock(Epicraft plugin){
 		this.plugin = plugin;
 		for(World w : Bukkit.getServer().getWorlds()){
+			plugin.api.sendLog("[Epicraft - LogBlock] Datenbank für " + w.getName() + " wird initalisiert");
 			plugin.getMySQL().queryUpdate("CREATE IF NOT EXISTS " + w.getName() + "(" +
 					"UUID VARCHAR(36)," +
 					" Datum VARCHAR(10)," +

@@ -17,6 +17,9 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.wolfsline.API.EventAPI;
 import de.wolfsline.API.apiServer;
 import de.wolfsline.Banksystem.Bank;
+import de.wolfsline.LogBlock.BlockBreakListener;
+import de.wolfsline.LogBlock.BlockPlaceListener;
+import de.wolfsline.LogBlock.LogBlock;
 import de.wolfsline.ProtocolLib.*;
 import de.wolfsline.ProtocolLib.BlockChanger.BlockCommand;
 import de.wolfsline.ProtocolLib.BlockChanger.BlockPacketAdapter;
@@ -416,6 +419,12 @@ public class Epicraft extends JavaPlugin{
 		//Block
 		BlockCommand block = new BlockCommand(this, calc);
 		this.getCommand("block").setExecutor(block);
+		
+		//LogBlock
+		LogBlock logblock = new LogBlock(this);
+		//this.getCommand("lb").setExecutor(logblock);
+		pm.registerEvents(new BlockBreakListener(this), this);
+		pm.registerEvents(new BlockPlaceListener(this), this);
 		
 		//Lädt die Spieler die während eines Reloads online sind auf der Datenbank
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
