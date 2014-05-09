@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -17,19 +18,27 @@ import de.wolfsline.Epicraft.Epicraft;
 public class BlockPlaceListener implements Listener{
 
 	private Epicraft plugin;
+	private LogBlock lb;
 	
-	public BlockPlaceListener(Epicraft plugin){
+	private final Material toolBLock = Material.BEDROCK;
+	
+	public BlockPlaceListener(Epicraft plugin, LogBlock lb){
 		this.plugin = plugin;
+		this.lb = lb;
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockPlaceEvent(BlockPlaceEvent event){
 		Player p = event.getPlayer();
 		Block block = event.getBlock();
+		if(block.getType() == toolBLock){
+			if(p.hasPermission("epicraft.logblock.view")){
+				event.setCancelled(true);
+				lb.showLocForTool(p, block.getLocation());
+				return;
+			}
+		}
 		Location loc = block.getLocation();
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.GERMANY);
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
-		Date date = new Date();
 		
 		Material material = block.getType();
 		byte data = block.getData();
@@ -40,8 +49,7 @@ public class BlockPlaceListener implements Listener{
 		
 		String query = "INSERT INTO " + loc.getWorld().getName() + " (" +
 				"UUID," +
-				" Datum," +
-				" Uhrzeit," +
+				" Zeitstempel," +
 				" `alter Block`," +
 				" `neuer Block`," +
 				" Datenwert," +
@@ -50,14 +58,13 @@ public class BlockPlaceListener implements Listener{
 				" Z)" +
 				" VALUES (" +
 				"'" + p.getUniqueId() + "'," +
-				"'" + dateFormat.format(date) + "'," +
-				"'" + timeFormat.format(date) + "'," +
-				"'" + 0 + "'," +
+				"'" + System.currentTimeMillis() + "'," +
+				"'" + "AIR" + "'," +
 				"'" + material.toString() + "'," +
 				"'" + String.valueOf(data) + "'," +
 				"'" + x + "'," +
 				"'" + y + "'," +
-				"'" + z + "',)";
+				"'" + z + "')";
 		
 		this.plugin.getMySQL().queryUpdate(query);
 	}

@@ -20,6 +20,8 @@ import de.wolfsline.Banksystem.Bank;
 import de.wolfsline.LogBlock.BlockBreakListener;
 import de.wolfsline.LogBlock.BlockPlaceListener;
 import de.wolfsline.LogBlock.LogBlock;
+import de.wolfsline.LogBlock.LogBlockCommand;
+import de.wolfsline.LogBlock.PlayerInteractListener;
 import de.wolfsline.ProtocolLib.*;
 import de.wolfsline.ProtocolLib.BlockChanger.BlockCommand;
 import de.wolfsline.ProtocolLib.BlockChanger.BlockPacketAdapter;
@@ -160,6 +162,9 @@ public class Epicraft extends JavaPlugin{
 		
 		MapChunkBulkPacketAdapter mapChunkBulkPacketAdapter = new MapChunkBulkPacketAdapter(this, PacketType.Play.Server.MAP_CHUNK_BULK, calc);
 		protocolManager.addPacketListener(mapChunkBulkPacketAdapter);
+		
+		BlockChangePacketAdapter blockChangePacketAdapter = new BlockChangePacketAdapter(this, PacketType.Play.Server.BLOCK_CHANGE, calc);
+		protocolManager.addPacketListener(blockChangePacketAdapter);
 		
 		//Backup
 		this.backup = new Backup(this);
@@ -422,9 +427,10 @@ public class Epicraft extends JavaPlugin{
 		
 		//LogBlock
 		LogBlock logblock = new LogBlock(this);
-		//this.getCommand("lb").setExecutor(logblock);
+		this.getCommand("lb").setExecutor(new LogBlockCommand(this, logblock));
 		pm.registerEvents(new BlockBreakListener(this), this);
-		pm.registerEvents(new BlockPlaceListener(this), this);
+		pm.registerEvents(new BlockPlaceListener(this, logblock), this);
+		pm.registerEvents(new PlayerInteractListener(this, logblock), this);
 		
 		//Lädt die Spieler die während eines Reloads online sind auf der Datenbank
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
@@ -454,10 +460,5 @@ public class Epicraft extends JavaPlugin{
 	@Override
 	public ChunkGenerator getDefaultWorldGenerator(String worldName, String id){
 		return new CleanRoomChunkGenerator(id);
-	}
-
-	public void doBackup() {
-		
-		
 	}
 }

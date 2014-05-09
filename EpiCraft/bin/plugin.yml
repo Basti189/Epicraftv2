@@ -273,6 +273,13 @@ commands:
     usage: /block <Spieler> <srcID> [destID]
     permission: epicraft.protocol.blockchange
 
+  lb:
+    description: Logt Spielereignisse
+    usage: /lb
+    permissions:
+      - epicraft.logblock.view
+      - epicraft.logblock.undo
+
 permissions:
   epicraft.*:
     description: Alle Rechte fuer Epicraft

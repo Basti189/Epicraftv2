@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
@@ -22,14 +23,11 @@ public class BlockBreakListener implements Listener{
 		this.plugin = plugin;
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerBreakBlock(BlockBreakEvent event){
 		Player p = event.getPlayer();
 		Block block = event.getBlock();
 		Location loc = block.getLocation();
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.GERMANY);
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
-		Date date = new Date();
 		
 		Material material = block.getType();
 		byte data = block.getData();
@@ -40,8 +38,7 @@ public class BlockBreakListener implements Listener{
 		
 		String query = "INSERT INTO " + loc.getWorld().getName() + " (" +
 				"UUID," +
-				" Datum," +
-				" Uhrzeit," +
+				" Zeitstempel," +
 				" `alter Block`," +
 				" `neuer Block`," +
 				" Datenwert," +
@@ -50,16 +47,14 @@ public class BlockBreakListener implements Listener{
 				" Z)" +
 				" VALUES (" +
 				"'" + p.getUniqueId() + "'," +
-				"'" + dateFormat.format(date) + "'," +
-				"'" + timeFormat.format(date) + "'," +
+				"'" + System.currentTimeMillis() + "'," +
 				"'" + material.toString() + "'," +
-				"'" + 0 + "'," +
+				"'" + "AIR" + "'," +
 				"'" + String.valueOf(data) + "'," +
 				"'" + x + "'," +
 				"'" + y + "'," +
-				"'" + z + "',)";
+				"'" + z + "')";
 		
 		this.plugin.getMySQL().queryUpdate(query);
-		
 	}
 }
