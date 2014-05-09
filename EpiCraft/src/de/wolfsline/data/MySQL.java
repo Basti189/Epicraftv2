@@ -45,7 +45,7 @@ public class MySQL {
 
 	}
 	
-	public Connection openConnection(){
+	public synchronized Connection openConnection(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.user, this.password);
@@ -61,13 +61,13 @@ public class MySQL {
 		return null;
 	}
 	
-	public Connection getConnection(){
+	public synchronized Connection getConnection(){
 		if(!this.hasConnection())
 			this.openConnection();
 		return conn;
 	}
 	
-	public boolean hasConnection(){
+	public synchronized boolean hasConnection(){
 		try {
 			if(this.conn != null){
 				return this.conn.isValid(1);
@@ -79,7 +79,7 @@ public class MySQL {
 		return false;
 	}
 	
-	public void queryUpdate(String query){
+	public synchronized void queryUpdate(String query){
 		Connection conn = this.conn;
 		PreparedStatement st = null;
 		try {
@@ -95,7 +95,7 @@ public class MySQL {
 		}
 	}
 	
-	public void closeRessources(ResultSet rs, PreparedStatement st){
+	public synchronized void closeRessources(ResultSet rs, PreparedStatement st){
 		if(rs != null){
 			try {
 				rs.close();
@@ -114,7 +114,7 @@ public class MySQL {
 		}
 	}
 	
-	public void closeConnection(){
+	public synchronized void closeConnection(){
 		try {
 			this.conn.close();
 		}
