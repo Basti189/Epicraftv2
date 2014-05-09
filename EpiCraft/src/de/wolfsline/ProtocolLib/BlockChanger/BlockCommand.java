@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -54,6 +56,8 @@ public class BlockCommand implements CommandExecutor{
 					calc.map.put(targetUUID, new changeID(srcID_INT, destID_INT));
 				}
 				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Dem Spieler wird nun die BlockID " + srcID + " durch " + destID + " ersetzt!");
+				updateChunk(targetUUID);
+				
 				return true;
 			}
 			catch(NumberFormatException nfe){
@@ -81,6 +85,7 @@ public class BlockCommand implements CommandExecutor{
 					return true;
 				}
 				p.sendMessage(plugin.namespace + ChatColor.RED + "Dem Spieler werden keine BlockID's verändert");
+				updateChunk(targetUUID);
 				return true;
 				
 			}
@@ -89,6 +94,7 @@ public class BlockCommand implements CommandExecutor{
 					calc.map.get(targetUUID).clear();
 					calc.map.remove(targetUUID);
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Alle Änderungen gelöscht");
+					updateChunk(targetUUID);
 					return true;
 				}
 				p.sendMessage(plugin.namespace + ChatColor.RED + playername + " werden keine BlockID's verändert");
@@ -102,9 +108,11 @@ public class BlockCommand implements CommandExecutor{
 						calc.map.get(targetUUID).clear();
 						calc.map.remove(targetUUID);
 						p.sendMessage(plugin.namespace + ChatColor.WHITE + playername + " werden keine BlockID's mehr geändert");
+						updateChunk(targetUUID);
 						return true;
 					}
 					p.sendMessage(plugin.namespace + ChatColor.WHITE + "Die BlockID " + srcID + " wird nun nicht mehr verändert!");
+					updateChunk(targetUUID);
 					return true;
 				}
 				p.sendMessage(plugin.namespace + ChatColor.RED + playername + " werden keine BlockID's verändert");
@@ -119,4 +127,10 @@ public class BlockCommand implements CommandExecutor{
 		return true;
 	}
 
+	private void updateChunk(UUID targetUUID){ //Funktioniert nicht
+		Player targetPlayer = Bukkit.getServer().getPlayer(targetUUID);
+		Chunk chunk = targetPlayer.getLocation().getChunk();
+		targetPlayer.getWorld().refreshChunk(chunk.getX(), chunk.getZ());
+	}
+	
 }

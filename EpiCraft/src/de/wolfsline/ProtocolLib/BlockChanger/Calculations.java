@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.reflect.accessors.Accessors;
 import com.comphenix.protocol.reflect.accessors.FieldAccessor;
+import com.comphenix.protocol.utility.MinecraftReflection;
 import com.google.common.base.Stopwatch;
 
 import de.wolfsline.helpClasses.changeID;
@@ -214,6 +216,44 @@ public class Calculations {
         	
             translate(lookup, info);
         }
+    }
+    
+    public void translateBlockChange(PacketContainer packet, Player player) throws FieldAccessException {
+    	StructureModifier<Integer> ints = packet.getSpecificModifier(int.class);
+    	int x = ints.read(0);
+    	int y = ints.read(1);
+    	int z = ints.read(2);
+    	int blockID = 0;
+    	int data = 0; 
+    	
+    	if (MinecraftReflection.isUsingNetty()) {
+    		blockID = packet.getBlocks().read(0).getId();
+    		data = ints.read(3);
+    	} else {
+    		blockID = ints.read(3);
+    		data = ints.read(4);
+    	}
+    	
+    	if(map.containsKey(player.getUniqueId())){
+    		changeID cID = map.get(player.getUniqueId());
+    		blockID = cID.getChangeID(blockID);
+    	}
+    	
+    	// Get the correct table
+    	ConversionLookup lookup = cache.loadCacheOrDefault(player, x >> 4, y >> 4, z >> 4);
+    	
+    	// Convert using the tables
+    	int newBlockID = lookup.getBlockLookup(blockID);	
+    	int newData = lookup.getDataLookup(blockID, data);
+
+    	// Write the changes
+    	if (MinecraftReflection.isUsingNetty()) {
+    		packet.getBlocks().write(0, Material.getMaterial(newBlockID));
+    		ints.write(3, newData);
+    	} else {
+    		ints.write(3, newBlockID);
+    		ints.write(4, newData);
+    	}
     }
     
     private void translate(SegmentLookup lookup, ChunkInfo info) {
