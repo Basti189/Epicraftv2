@@ -55,7 +55,7 @@ public class MyUUID implements CommandExecutor, Listener{
 		}
 	}
 	
-	public boolean hasPlayerEntry(UUID uuid){
+	public synchronized boolean hasPlayerEntry(UUID uuid){
 		MySQL sql = this.plugin.getMySQL();
 		Connection conn = sql.getConnection();
 		ResultSet rs = null;
@@ -77,7 +77,7 @@ public class MyUUID implements CommandExecutor, Listener{
 		return false;
 	}
 	
-	public int getIIDFromUUID(UUID uuid){
+	public synchronized int getIIDFromUUID(UUID uuid){
 		MySQL sql = this.plugin.getMySQL();
 		Connection conn = sql.getConnection();
 		ResultSet rs = null;
@@ -100,7 +100,7 @@ public class MyUUID implements CommandExecutor, Listener{
 		return -1;
 	}
 	
-	public UUID getUUIDFromPlayer(String name){
+	public synchronized UUID getUUIDFromPlayer(String name){
 		MySQL sql = this.plugin.getMySQL();
 		Connection conn = sql.getConnection();
 		ResultSet rs = null;
@@ -123,7 +123,7 @@ public class MyUUID implements CommandExecutor, Listener{
 		return null;
 	}
 	
-	public String getNameFromUUID(UUID uuid){
+	public synchronized String getNameFromUUID(UUID uuid){
 		MySQL sql = this.plugin.getMySQL();
 		Connection conn = sql.getConnection();
 		ResultSet rs = null;
