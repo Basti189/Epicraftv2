@@ -96,6 +96,7 @@ public class LogBlockCommand implements CommandExecutor{
 				return true;
 			}
 		}
-		return false;
+		p.sendMessage(plugin.namespace + ChatColor.RED + "/lb [option] <parameter>");
+		return true;
 	}
 }
