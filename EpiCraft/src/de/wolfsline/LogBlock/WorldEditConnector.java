@@ -12,13 +12,10 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import de.wolfsline.Epicraft.Epicraft;
 
 public class WorldEditConnector {
-
-	private Epicraft plugin;
 	
 	private WorldEditPlugin wePlugin;
 	
 	public WorldEditConnector(Epicraft plugin){
-		this.plugin = plugin;
 		try{
 			this.wePlugin = plugin.getWorldGuard().getWorldEdit();
 		} catch(Exception e){
@@ -71,6 +68,17 @@ public class WorldEditConnector {
 		}
 		return false;
 		
+	}
+	
+	public boolean hasPlayerSelected(Player p){
+		Selection sel = wePlugin.getSelection(p);
+		if(sel == null){
+			return false;
+		}
+		else if(sel.getMaximumPoint() == null || sel.getMaximumPoint() == null){
+			return false;
+		}
+		return true;
 	}
 	
 	private boolean isVarBetweenVars(int arg1, int arg2, int arg3){

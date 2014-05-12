@@ -440,7 +440,7 @@ public class Epicraft extends JavaPlugin{
 		System.out.println("[Epicraft] Epicraft wurde gestartet");
 	}
 	
-	public MySQL getMySQL(){ //Löst nach ein paar Stunden fehler aus -> Lösung?
+	public synchronized MySQL getMySQL(){ //Löst nach ein paar Stunden fehler aus -> Lösung?
 		if(!sql.hasConnection()){ //Wenn keine Verbindung
 			this.sql.closeConnection();
 			this.sql = new MySQL();
@@ -449,7 +449,7 @@ public class Epicraft extends JavaPlugin{
 		return this.sql;
 	}
 	
-	public WorldGuardPlugin getWorldGuard() {
+	public synchronized WorldGuardPlugin getWorldGuard() {
 	    Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
 	    if (wg == null || !(wg instanceof WorldGuardPlugin)) {
 	        return null;

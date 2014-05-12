@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -42,6 +43,19 @@ public class LogBlock {
 					" Y MEDIUMINT," +
 					" Z MEDIUMINT)");
 		}
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, 0);
+		cal.add(Calendar.HOUR, 0);
+		cal.add(Calendar.DAY_OF_MONTH, +1);
+		cal.add(Calendar.SECOND, 0);
+		long diffTime = cal.getTimeInMillis() - System.currentTimeMillis();
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				clearOldEntrys();
+			}
+		}, diffTime, 86400000L);
 	}
 	
 	public void showLocForTool(Player p, Location loc){
@@ -120,6 +134,17 @@ public class LogBlock {
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public synchronized void clearOldEntrys(){
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -2);
+		Date date = cal.getTime();
+		long dayBefor = date.getTime();
+		for(World w : Bukkit.getServer().getWorlds()){
+			plugin.api.sendLog("[Epicraft - LogBlock] Lösche alte Einträge der Welt " + w.getName());
+			plugin.getMySQL().queryUpdate("DELETE FROM " + w.getName() + " WHERE Zeitstempel<='" + dayBefor + "'");
 		}
 	}
 	

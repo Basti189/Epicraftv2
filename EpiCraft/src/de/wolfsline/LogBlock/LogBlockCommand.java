@@ -37,6 +37,40 @@ public class LogBlockCommand implements CommandExecutor{
 			points[0].getBlock().setType(Material.OBSIDIAN);
 			points[1].getBlock().setType(Material.OBSIDIAN);
 		}
+		else if(args.length == 1){
+			if(args[0].equalsIgnoreCase("show")){
+				lb.getSelectionHandler().ShowChangesInSelection(p);
+				return true;
+			}
+			else if(args[0].equalsIgnoreCase("clear")){
+				lb.clearOldEntrys();
+				p.sendMessage(plugin.namespace + ChatColor.WHITE + "Einträge, älter als 2 Tage, wurden gelöscht");
+				return true;
+			}
+		}
+		else if(args.length == 2){
+			if(args[0].equalsIgnoreCase("rollback")){
+				String playerName = args[1];
+				UUID targetUUID = plugin.uuid.getUUIDFromPlayer(playerName);
+				if(targetUUID == null){
+					p.sendMessage(plugin.uuid.ERROR);
+					return true;
+				}
+				lb.getSelectionHandler().RestoreSelectionFromPlayer(p, targetUUID);
+				return true;
+			}
+			else if(args[0].equalsIgnoreCase("show")){
+				String playerName = args[1];
+				UUID targetUUID = plugin.uuid.getUUIDFromPlayer(playerName);
+				if(targetUUID == null){
+					p.sendMessage(plugin.uuid.ERROR);
+					return true;
+				}
+				lb.getSelectionHandler().ShowChangesInSelectionFromPlayer(p, targetUUID);
+				return true;
+			}
+				
+		}
 		else if(args.length == 4){
 			if(args[0].equalsIgnoreCase("rollback")){
 				String playerName = args[1];
@@ -59,10 +93,9 @@ public class LogBlockCommand implements CommandExecutor{
 					return true;
 				}
 				lb.getSelectionHandler().RestoreSelectionFromPlayerWithTimestamp(p, targetUUID, targetDate);
+				return true;
 			}
-			
 		}
 		return false;
 	}
-
 }
