@@ -273,12 +273,12 @@ commands:
     usage: /block <Spieler> <srcID> [destID]
     permission: epicraft.protocol.blockchange
 
-  lb:
-    description: Logt Spielereignisse
-    usage: /lb
-    permissions:
-      - epicraft.logblock.view
-      - epicraft.logblock.undo
+  #lb:
+  #  description: Logt Spielereignisse
+  #  usage: /lb
+  #  permissions:
+  #    - epicraft.logblock.view
+  #    - epicraft.logblock.undo
 
 permissions:
   epicraft.*:
@@ -356,3 +356,4 @@ permissions:
       epicraft.backup: true
       epicraft.bank: true
       epicraft.bank.team: true
+      epicraft.teleport.enderpearl: true

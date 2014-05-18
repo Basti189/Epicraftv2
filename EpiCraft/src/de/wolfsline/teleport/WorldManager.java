@@ -241,6 +241,9 @@ public class WorldManager implements CommandExecutor, Listener{
 	public void onPlayerPortalEvent(PlayerPortalEvent event){
 		event.setCancelled(true);
 		Player p = event.getPlayer();
+		if(p.hasPermission("epicraft.permission.gast")){
+			return;
+		}
 		Location portalLocation = findPortalOnEyeLocation(p.getEyeLocation());
 		if(portalLocation == null){
 			return;

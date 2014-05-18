@@ -3,6 +3,7 @@ package de.wolfsline.modify;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,7 +33,6 @@ public class CommandListener implements Listener{
 		commandsSpieler.add("login");
 		commandsSpieler.add("email");
 		commandsSpieler.add("register");
-		commandsSpieler.add("l");
 		commandsSpieler.add("cp");
 		commandsSpieler.add("changepw");
 		commandsSpieler.add("w");
@@ -59,7 +59,7 @@ public class CommandListener implements Listener{
 		else if((p.hasPermission("epicraft.permission.spieler") || p.hasPermission("epicraft.permission.stammspieler")) && !p.isOp()){
 			String preCmd = event.getMessage().replaceFirst("/", "");
 			for(String cmd : commandsSpieler){
-				if(cmd.equalsIgnoreCase(preCmd)){
+				if(preCmd.startsWith(cmd)){
 					return;
 				}
 			}

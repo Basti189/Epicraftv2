@@ -22,7 +22,7 @@ public class Data {
 	
 	private Epicraft plugin;
 	
-	private final String WORLD = "world"; //Legt die Welt der Grundstücke fest
+	private final String WORLD = "Survival"; //Legt die Welt der Grundstücke fest
 	
 	public Data(Epicraft plugin) {
 		this.plugin = plugin;

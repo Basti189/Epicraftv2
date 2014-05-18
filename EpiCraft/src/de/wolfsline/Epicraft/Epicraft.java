@@ -69,6 +69,7 @@ import de.wolfsline.modify.CommandListener;
 import de.wolfsline.modify.DeathListener;
 import de.wolfsline.modify.EventBlocker;
 import de.wolfsline.modify.JoinQuitListener;
+import de.wolfsline.modify.Lava_Water_Controll;
 import de.wolfsline.modify.MECommand;
 import de.wolfsline.permission.PermissionManager;
 import de.wolfsline.register.AuthCommand;
@@ -85,6 +86,7 @@ import de.wolfsline.settings.Settings;
 import de.wolfsline.sign.SaveSign;
 import de.wolfsline.sign.Systemsign;
 import de.wolfsline.statistics.KillCounter;
+import de.wolfsline.teleport.EnderPearlTeleport;
 import de.wolfsline.teleport.SignLift;
 import de.wolfsline.teleport.TeleportBack;
 import de.wolfsline.teleport.WorldManager;
@@ -425,12 +427,20 @@ public class Epicraft extends JavaPlugin{
 		BlockCommand block = new BlockCommand(this, calc);
 		this.getCommand("block").setExecutor(block);
 		
+		//EnderPearl
+		EnderPearlTeleport enderPearlTeleport = new EnderPearlTeleport();
+		pm.registerEvents(enderPearlTeleport, this);
+		
+		//Lava und Wasser Controller
+		Lava_Water_Controll lwControll = new Lava_Water_Controll();
+		pm.registerEvents(lwControll, this);
+		
 		//LogBlock
-		LogBlock logblock = new LogBlock(this);
-		this.getCommand("lb").setExecutor(new LogBlockCommand(this, logblock));
-		pm.registerEvents(new BlockBreakListener(this), this);
-		pm.registerEvents(new BlockPlaceListener(this, logblock), this);
-		pm.registerEvents(new PlayerInteractListener(this, logblock), this);
+		//LogBlock logblock = new LogBlock(this);
+		//this.getCommand("lb").setExecutor(new LogBlockCommand(this, logblock));
+		//pm.registerEvents(new BlockBreakListener(this), this);
+		//pm.registerEvents(new BlockPlaceListener(this, logblock), this);
+		//pm.registerEvents(new PlayerInteractListener(this, logblock), this);
 		
 		//Lädt die Spieler die während eines Reloads online sind auf der Datenbank
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){

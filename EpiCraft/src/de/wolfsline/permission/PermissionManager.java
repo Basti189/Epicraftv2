@@ -38,12 +38,12 @@ public class PermissionManager implements CommandExecutor{
 			//Epicraft
 			p.addAttachment(plugin, "epicraft.permission.gast", true);
 			p.addAttachment(plugin, "epicraft.chat", true);
-			p.addAttachment(plugin, "epicraft.chat.channel", true);;
+			///p.addAttachment(plugin, "epicraft.chat.channel", true);;
 			p.addAttachment(plugin, "epicraft.spawn", true);
-			p.addAttachment(plugin, "epicraft.time", true);
+			//p.addAttachment(plugin, "epicraft.time", true);
 			p.addAttachment(plugin, "epicraft.command.allow", true);
 			p.addAttachment(plugin, "epicraft.auth", true);
-			p.addAttachment(plugin, "epicraft.ticket", true);
+			//p.addAttachment(plugin, "epicraft.ticket", true);
 		}
 		else if(permission.equals("epicraft.permission.spieler")){
 			//Epicraft
@@ -93,6 +93,7 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.home.multiple", true);
 			p.addAttachment(plugin, "epicraft.afk", true);
 			p.addAttachment(plugin, "epicraft.sign.lift", true);
+			p.addAttachment(plugin, "epicraft.teleport.enderpearl", true);
 		}
 		else if(permission.equals("epicraft.permission.guard")){
 			//Epicraft
@@ -118,6 +119,7 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.home.multiple", true);
 			p.addAttachment(plugin, "epicraft.afk", true);
 			p.addAttachment(plugin, "epicraft.sign.lift", true);
+			p.addAttachment(plugin, "epicraft.teleport.enderpearl", true);
 			//Epicraft - Team
 			p.addAttachment(plugin, "epicraft.fly", true);
 			p.addAttachment(plugin, "epicraft.jail", true);
@@ -154,6 +156,7 @@ public class PermissionManager implements CommandExecutor{
 			p.addAttachment(plugin, "epicraft.home.multiple", true);
 			p.addAttachment(plugin, "epicraft.afk", true);
 			p.addAttachment(plugin, "epicraft.sign.lift", true);
+			p.addAttachment(plugin, "epicraft.teleport.enderpearl", true);
 			//Epicraft - Team
 			p.addAttachment(plugin, "epicraft.chest", true);
 			p.addAttachment(plugin, "epicraft.enderchest", true);
@@ -306,7 +309,7 @@ public class PermissionManager implements CommandExecutor{
 		else if(p.hasPermission("epicraft.permission.spieler")){
 			return ChatColor.BLUE;
 		}
-		else if(p.hasPermission("epicraft.permission.spieler")){
+		else if(p.hasPermission("epicraft.permission.stammi")){
 			return ChatColor.DARK_BLUE;
 		}
 		else if(p.hasPermission("epicraft.permission.guard")){
@@ -365,6 +368,8 @@ public class PermissionManager implements CommandExecutor{
 				Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Gast");
 			if(p.hasPermission("epicraft.permission.spieler"))
 				Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Spieler");
+			if(p.hasPermission("epicraft.permission.stammi"))
+				Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Stammspieler");
 			if(p.hasPermission("epicraft.permission.guard"))
 				Bukkit.getServer().broadcastMessage(plugin.namespace + ChatColor.WHITE + p.getName() + " ist Guard");
 			if(p.hasPermission("epicraft.permission.moderator"))

@@ -109,7 +109,7 @@ public class HomeCommand implements CommandExecutor{
 				return true;
 			}
 		}
-		p.sendMessage(plugin.namespace + ChatColor.RED + "/home, listhome, delhome, rehome");
+		p.sendMessage(plugin.namespace + ChatColor.RED + "/home, listhome, rehome");
 		return true;
 	}
 	
