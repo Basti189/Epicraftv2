@@ -3,16 +3,21 @@ package de.wolfsline.security;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Cow;
+import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fish;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Squid;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
@@ -25,7 +30,9 @@ import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
@@ -48,8 +55,9 @@ public class Region implements Listener{
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event){
-		Entity damager = event.getDamager();
+		Entity d = event.getDamager();
 		Entity victim = event.getEntity();
+		Player damager = null;
 		if(victim instanceof Horse ||
 				victim instanceof Pig || 
 				victim instanceof Sheep || 
@@ -59,20 +67,89 @@ public class Region implements Listener{
 				victim instanceof MushroomCow || 
 				victim instanceof Villager || 
 				victim instanceof Ocelot){
-			if(damager instanceof Player){
-				Player p = (Player) damager;
+			if(d instanceof Player){
+				damager = (Player) d;
+			}
+			else if(d instanceof Arrow){
+				Arrow arrow = (Arrow) d;
+				if(arrow.getShooter() instanceof Player){
+					damager = (Player) arrow.getShooter();
+				}
+				else{
+					return;
+				}
+			}
+			else if(d instanceof Fish){
+				Fish fish = (Fish) d;
+				if(fish.getShooter() instanceof Player){
+					damager = (Player) fish.getShooter();
+				}
+				else{
+					return;
+				}
+			}
+			else if(d instanceof Egg){
+				Egg egg = (Egg) d;
+				if(egg.getShooter() instanceof Player){
+					damager = (Player) egg.getShooter();
+				}
+				else{
+					return;
+				}
+			}
+			
+			else if (d instanceof Snowball){ // macht keinen schaden, spieler simuliert schaden
+				Snowball snow = (Snowball) d;
+				if(snow.getShooter() instanceof Player){
+					damager = (Player) snow.getShooter();
+				}
+				else{
+					return;
+				}
+			}
+			else{
+				return;
+			}
+			if(damager != null){
 				Location loc = victim.getLocation();
 				WorldGuardPlugin wgPlugin = plugin.getWorldGuard();
 				if(wgPlugin == null){
 					return;
 				}
-				boolean canBuild = wgPlugin.canBuild(p, loc.getBlock());
+				boolean canBuild = wgPlugin.canBuild(damager, loc.getBlock());
 				if(!canBuild){
 					event.setCancelled(true);
 				}
 			}
 		}
-		
+	}
+	
+	@EventHandler
+	public void onSlpashPotionEvent(PotionSplashEvent event){
+		if(event.getPotion().getShooter() instanceof Player){
+			Player damager = (Player) event.getPotion().getShooter();
+			for(LivingEntity victim : event.getAffectedEntities()){
+				if(victim instanceof Horse ||
+						victim instanceof Pig || 
+						victim instanceof Sheep || 
+						victim instanceof Cow || 
+						victim instanceof Chicken || 
+						victim instanceof Squid || 
+						victim instanceof MushroomCow || 
+						victim instanceof Villager || 
+						victim instanceof Ocelot){
+					Location loc = victim.getLocation();
+					WorldGuardPlugin wgPlugin = plugin.getWorldGuard();
+					if(wgPlugin == null){
+						return;
+					}
+					boolean canBuild = wgPlugin.canBuild(damager, loc.getBlock());
+					if(!canBuild){
+						event.setIntensity(victim, 0.0D);
+					}
+				}
+			}
+		}
 	}
 	
 	@EventHandler
@@ -124,7 +201,7 @@ public class Region implements Listener{
 	@EventHandler
 	public void onPlayerUseTrappedDoor(PlayerInteractEvent event){
 		Player p = event.getPlayer();
-		if(p.hasPermission("epicraft.permission.spieler") || p.hasPermission("epicraft.permission.stammspieler") || p.hasPermission("epicraft.permission.spieler")){
+		if(p.hasPermission("epicraft.permission.spieler") || p.hasPermission("epicraft.permission.stammi") || p.hasPermission("epicraft.permission.spieler")){
 			if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
 				if(event.getClickedBlock() instanceof Block){
 					if(event.getClickedBlock().getType() == Material.TRAP_DOOR){
@@ -177,4 +254,14 @@ public class Region implements Listener{
         	}
 		}
 	}*/
+	
+	private boolean isBadSplashPotion(PotionEffectType effect){
+		if(effect.equals(PotionEffectType.POISON) ||
+		   effect.equals(PotionEffectType.WEAKNESS) ||
+		   effect.equals(PotionEffectType.SLOW) ||
+		   effect.equals(PotionEffectType.HARM) ||
+		   effect.equals(PotionEffectType.INCREASE_DAMAGE))
+			return true;
+		return false;
+	}
 }

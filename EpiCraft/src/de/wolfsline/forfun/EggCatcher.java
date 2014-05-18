@@ -9,6 +9,7 @@ import org.bukkit.entity.Cow;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
@@ -32,7 +33,8 @@ public class EggCatcher implements Listener{
 
 	@EventHandler
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
-		if(event.getDamager() instanceof Egg){
+		Entity damageEntity = event.getDamager();
+		if(damageEntity instanceof Egg){
 			Egg egg = (Egg) event.getDamager();
 			if(egg.getShooter() instanceof Player){
 				Player p = (Player) egg.getShooter();
@@ -48,6 +50,13 @@ public class EggCatcher implements Listener{
 						event.setCancelled(true);
 						targetEntity.remove();
 						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)93);
+					}
+					else if(targetEntity instanceof MushroomCow){//96
+						if(!canPlayerCatchEntity(p, targetEntity))
+							return;
+						event.setCancelled(true);
+						targetEntity.remove();
+						stack = new ItemStack(Material.MONSTER_EGG, 1, (byte)96);
 					}
 					else if(targetEntity instanceof Cow){//92
 						if(!canPlayerCatchEntity(p, targetEntity))
@@ -109,6 +118,7 @@ public class EggCatcher implements Listener{
 				}
 			}
 		}
+		
 	}
 	
 	private boolean canPlayerCatchEntity(Player p, Entity entity){
