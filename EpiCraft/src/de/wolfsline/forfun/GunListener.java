@@ -31,7 +31,7 @@ public class GunListener implements Listener, CommandExecutor{
 	File file = new File("plugins/Epicraft/tntButtons.yml");
 	FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 	
-	private final String WORLD = "world";
+	private final String WORLD = "Survival";
 	
 	public GunListener(Epicraft plugin) {
 		this.plugin = plugin;
