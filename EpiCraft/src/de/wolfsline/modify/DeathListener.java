@@ -11,7 +11,7 @@ public class DeathListener implements Listener{
 
 	private Epicraft plugin;
 	
-	public DeathListener(Epicraft epicraft) {
+	public DeathListener(Epicraft plugin) {
 		this.plugin = plugin;
 	}
 
